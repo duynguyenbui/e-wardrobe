@@ -37,7 +37,7 @@ export const home: RequiredDataFromCollectionSlug<'pages'> = {
                 format: 0,
                 mode: 'normal',
                 style: '',
-                text: 'Payload Website Template',
+                text: 'eWardrobe',
                 version: 1,
               },
             ],
@@ -506,7 +506,7 @@ export const home: RequiredDataFromCollectionSlug<'pages'> = {
     {
       blockName: 'Archive Block',
       blockType: 'archive',
-      categories: [],
+      postCategories: [],
       introContent: {
         root: {
           type: 'root',

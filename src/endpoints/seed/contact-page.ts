@@ -24,7 +24,7 @@ export const contact: Partial<Page> = {
                   format: 0,
                   mode: 'normal',
                   style: '',
-                  text: 'Example contact form:',
+                  text: 'Contact us via form below, we evaluate your concern and get back to you as soon as possible.',
                   version: 1,
                 },
               ],

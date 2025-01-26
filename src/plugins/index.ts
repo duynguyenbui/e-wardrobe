@@ -10,9 +10,10 @@ import { GenerateTitle, GenerateURL } from '@payloadcms/plugin-seo/types'
 import { FixedToolbarFeature, HeadingFeature, lexicalEditor } from '@payloadcms/richtext-lexical'
 import { searchFields } from '@/search/fieldOverrides'
 import { beforeSyncWithSearch } from '@/search/beforeSync'
-
+import { stripePlugin } from '@payloadcms/plugin-stripe'
 import { Page, Post } from '@/payload-types'
 import { getServerSideURL } from '@/utilities/getURL'
+import Stripe from 'stripe'
 
 const generateTitle: GenerateTitle<Post | Page> = ({ doc }) => {
   return doc?.title ? `${doc.title} | Payload Website Template` : 'Payload Website Template'
@@ -87,6 +88,28 @@ export const plugins: Plugin[] = [
     searchOverrides: {
       fields: ({ defaultFields }) => {
         return [...defaultFields, ...searchFields]
+      },
+    },
+  }),
+  stripePlugin({
+    stripeSecretKey: process.env.STRIPE_SECRET_KEY!,
+    stripeWebhooksEndpointSecret: process.env.STRIPE_WEBHOOKS_ENDPOINT_SECRET,
+    webhooks: {
+      'checkout.session.completed': async ({ event, req }) => {
+
+        const { payload } = req
+        const session = event.data.object as Stripe.Checkout.Session
+        const orderId = session?.metadata?.orderId
+
+        if (orderId) {
+          await payload.update({
+            collection: 'orders',
+            id: orderId,
+            data: {
+              isPaid: true,
+            },
+          })
+        }
       },
     },
   }),

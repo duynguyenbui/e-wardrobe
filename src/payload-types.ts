@@ -12,10 +12,20 @@ export interface Config {
   };
   collections: {
     pages: Page;
+    products: Product;
+    productVariants: ProductVariant;
+    orders: Order;
     posts: Post;
     media: Media;
     categories: Category;
+    colors: Color;
+    materials: Material;
+    sizes: Size;
+    addresses: Address;
+    warranties: Warranty;
+    coupons: Coupon;
     users: User;
+    shippingFees: ShippingFee;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -28,10 +38,20 @@ export interface Config {
   collectionsJoins: {};
   collectionsSelect: {
     pages: PagesSelect<false> | PagesSelect<true>;
+    products: ProductsSelect<false> | ProductsSelect<true>;
+    productVariants: ProductVariantsSelect<false> | ProductVariantsSelect<true>;
+    orders: OrdersSelect<false> | OrdersSelect<true>;
     posts: PostsSelect<false> | PostsSelect<true>;
     media: MediaSelect<false> | MediaSelect<true>;
     categories: CategoriesSelect<false> | CategoriesSelect<true>;
+    colors: ColorsSelect<false> | ColorsSelect<true>;
+    materials: MaterialsSelect<false> | MaterialsSelect<true>;
+    sizes: SizesSelect<false> | SizesSelect<true>;
+    addresses: AddressesSelect<false> | AddressesSelect<true>;
+    warranties: WarrantiesSelect<false> | WarrantiesSelect<true>;
+    coupons: CouponsSelect<false> | CouponsSelect<true>;
     users: UsersSelect<false> | UsersSelect<true>;
+    shippingFees: ShippingFeesSelect<false> | ShippingFeesSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -297,6 +317,7 @@ export interface Media {
 export interface Category {
   id: string;
   title: string;
+  description?: string | null;
   slug?: string | null;
   slugLock?: boolean | null;
   parent?: (string | null) | Category;
@@ -318,6 +339,7 @@ export interface Category {
 export interface User {
   id: string;
   name?: string | null;
+  roles: ('admin' | 'user')[];
   updatedAt: string;
   createdAt: string;
   email: string;
@@ -458,8 +480,8 @@ export interface ArchiveBlock {
     [k: string]: unknown;
   } | null;
   populateBy?: ('collection' | 'selection') | null;
-  relationTo?: 'posts' | null;
-  categories?: (string | Category)[] | null;
+  relationTo?: ('posts' | 'colors' | 'categories' | 'materials') | null;
+  postCategories?: (string | Category)[] | null;
   limit?: number | null;
   selectedDocs?:
     | {
@@ -672,6 +694,240 @@ export interface Form {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products".
+ */
+export interface Product {
+  id: string;
+  title: string;
+  description: string;
+  instruction: string;
+  image?: (string | null) | Media;
+  category: string | Category;
+  material: string | Material;
+  published?: boolean | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "materials".
+ */
+export interface Material {
+  id: string;
+  title: string;
+  description?: string | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "productVariants".
+ */
+export interface ProductVariant {
+  id: string;
+  title: string;
+  description?: string | null;
+  image: string | Media;
+  quantity: number;
+  price: number;
+  size: string | Size;
+  color: string | Color;
+  product: string | Product;
+  priceId?: string | null;
+  productId?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sizes".
+ */
+export interface Size {
+  id: string;
+  name: string;
+  description?: string | null;
+  minHeight: number;
+  maxHeight: number;
+  minWeight: number;
+  maxWeight: number;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * Colors for products that are used to group products together
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "colors".
+ */
+export interface Color {
+  id: string;
+  title: string;
+  hex: string;
+  description?: string | null;
+  slug?: string | null;
+  slugLock?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * A summary of all orders on e-wardrobe.
+ *
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders".
+ */
+export interface Order {
+  id: string;
+  lineItems?:
+    | {
+        productVariant: string | ProductVariant;
+        quantityToBuy: number;
+        id?: string | null;
+      }[]
+    | null;
+  customer: string | User;
+  isPaid: boolean;
+  totalPrice?: number | null;
+  shippingFee: number;
+  shippingAddress?: (string | null) | Address;
+  discount?: (string | null) | Coupon;
+  note?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "addresses".
+ */
+export interface Address {
+  id: string;
+  name: string;
+  province:
+    | 'AG'
+    | 'BR-VT'
+    | 'BG'
+    | 'BK'
+    | 'BL'
+    | 'BN'
+    | 'BTR'
+    | 'BDUOG'
+    | 'BDINH'
+    | 'BP'
+    | 'BTN'
+    | 'CM'
+    | 'CT'
+    | 'CB'
+    | 'DN'
+    | 'DALAT'
+    | 'DNONG'
+    | 'DBIEN'
+    | 'DNAI'
+    | 'DTHAP'
+    | 'GL'
+    | 'HAG'
+    | 'HAN'
+    | 'HN'
+    | 'HT'
+    | 'HD'
+    | 'HP'
+    | 'HGI'
+    | 'HB'
+    | 'HCM'
+    | 'HY'
+    | 'KH'
+    | 'KG'
+    | 'KT'
+    | 'LCH'
+    | 'LD'
+    | 'LS'
+    | 'LCA'
+    | 'LA'
+    | 'NAMD'
+    | 'NA'
+    | 'NB'
+    | 'NT'
+    | 'PT'
+    | 'PY'
+    | 'QB'
+    | 'QNA'
+    | 'QNg'
+    | 'QNI'
+    | 'QT'
+    | 'ST'
+    | 'SL'
+    | 'TNINH'
+    | 'TB'
+    | 'TNG'
+    | 'TH'
+    | 'TTH'
+    | 'TG'
+    | 'TV'
+    | 'TQ'
+    | 'VL'
+    | 'VP'
+    | 'YB';
+  district: string;
+  ward: string;
+  detailAddress: string;
+  contactName: string;
+  contactPhone: string;
+  user: string | User;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "coupons".
+ */
+export interface Coupon {
+  id: string;
+  code: string;
+  description?: string | null;
+  minimumPriceToUse: number;
+  currentUse?: number | null;
+  quantity: number;
+  discountType: 'percentage' | 'fixed';
+  discountAmount: number;
+  active?: boolean | null;
+  collectedUsers?: (string | User)[] | null;
+  validFrom: string;
+  validTo: string;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "warranties".
+ */
+export interface Warranty {
+  id: string;
+  title: string;
+  description: string;
+  icon?: string | null;
+  published?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "shippingFees".
+ */
+export interface ShippingFee {
+  id: string;
+  title: string;
+  description?: string | null;
+  minimumPriceToUse: number;
+  fee: number;
+  productId?: string | null;
+  priceId?: string | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -847,6 +1103,18 @@ export interface PayloadLockedDocument {
         value: string | Page;
       } | null)
     | ({
+        relationTo: 'products';
+        value: string | Product;
+      } | null)
+    | ({
+        relationTo: 'productVariants';
+        value: string | ProductVariant;
+      } | null)
+    | ({
+        relationTo: 'orders';
+        value: string | Order;
+      } | null)
+    | ({
         relationTo: 'posts';
         value: string | Post;
       } | null)
@@ -859,8 +1127,36 @@ export interface PayloadLockedDocument {
         value: string | Category;
       } | null)
     | ({
+        relationTo: 'colors';
+        value: string | Color;
+      } | null)
+    | ({
+        relationTo: 'materials';
+        value: string | Material;
+      } | null)
+    | ({
+        relationTo: 'sizes';
+        value: string | Size;
+      } | null)
+    | ({
+        relationTo: 'addresses';
+        value: string | Address;
+      } | null)
+    | ({
+        relationTo: 'warranties';
+        value: string | Warranty;
+      } | null)
+    | ({
+        relationTo: 'coupons';
+        value: string | Coupon;
+      } | null)
+    | ({
         relationTo: 'users';
         value: string | User;
+      } | null)
+    | ({
+        relationTo: 'shippingFees';
+        value: string | ShippingFee;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1042,7 +1338,7 @@ export interface ArchiveBlockSelect<T extends boolean = true> {
   introContent?: T;
   populateBy?: T;
   relationTo?: T;
-  categories?: T;
+  postCategories?: T;
   limit?: T;
   selectedDocs?: T;
   id?: T;
@@ -1058,6 +1354,63 @@ export interface FormBlockSelect<T extends boolean = true> {
   introContent?: T;
   id?: T;
   blockName?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "products_select".
+ */
+export interface ProductsSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  instruction?: T;
+  image?: T;
+  category?: T;
+  material?: T;
+  published?: T;
+  slug?: T;
+  slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "productVariants_select".
+ */
+export interface ProductVariantsSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  image?: T;
+  quantity?: T;
+  price?: T;
+  size?: T;
+  color?: T;
+  product?: T;
+  priceId?: T;
+  productId?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "orders_select".
+ */
+export interface OrdersSelect<T extends boolean = true> {
+  lineItems?:
+    | T
+    | {
+        productVariant?: T;
+        quantityToBuy?: T;
+        id?: T;
+      };
+  customer?: T;
+  isPaid?: T;
+  totalPrice?: T;
+  shippingFee?: T;
+  shippingAddress?: T;
+  discount?: T;
+  note?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
@@ -1189,6 +1542,7 @@ export interface MediaSelect<T extends boolean = true> {
  */
 export interface CategoriesSelect<T extends boolean = true> {
   title?: T;
+  description?: T;
   slug?: T;
   slugLock?: T;
   parent?: T;
@@ -1205,10 +1559,97 @@ export interface CategoriesSelect<T extends boolean = true> {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "colors_select".
+ */
+export interface ColorsSelect<T extends boolean = true> {
+  title?: T;
+  hex?: T;
+  description?: T;
+  slug?: T;
+  slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "materials_select".
+ */
+export interface MaterialsSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  slug?: T;
+  slugLock?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sizes_select".
+ */
+export interface SizesSelect<T extends boolean = true> {
+  name?: T;
+  description?: T;
+  minHeight?: T;
+  maxHeight?: T;
+  minWeight?: T;
+  maxWeight?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "addresses_select".
+ */
+export interface AddressesSelect<T extends boolean = true> {
+  name?: T;
+  province?: T;
+  district?: T;
+  ward?: T;
+  detailAddress?: T;
+  contactName?: T;
+  contactPhone?: T;
+  user?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "warranties_select".
+ */
+export interface WarrantiesSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  icon?: T;
+  published?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "coupons_select".
+ */
+export interface CouponsSelect<T extends boolean = true> {
+  code?: T;
+  description?: T;
+  minimumPriceToUse?: T;
+  currentUse?: T;
+  quantity?: T;
+  discountType?: T;
+  discountAmount?: T;
+  active?: T;
+  collectedUsers?: T;
+  validFrom?: T;
+  validTo?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "users_select".
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
+  roles?: T;
   updatedAt?: T;
   createdAt?: T;
   email?: T;
@@ -1218,6 +1659,20 @@ export interface UsersSelect<T extends boolean = true> {
   hash?: T;
   loginAttempts?: T;
   lockUntil?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "shippingFees_select".
+ */
+export interface ShippingFeesSelect<T extends boolean = true> {
+  title?: T;
+  description?: T;
+  minimumPriceToUse?: T;
+  fee?: T;
+  productId?: T;
+  priceId?: T;
+  updatedAt?: T;
+  createdAt?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

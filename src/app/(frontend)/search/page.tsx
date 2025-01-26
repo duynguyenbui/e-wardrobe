@@ -1,12 +1,12 @@
 import type { Metadata } from 'next/types'
 
-import { CollectionArchive } from '@/components/CollectionArchive'
+import { PostArchive } from '@/components/PostArchive'
 import configPromise from '@payload-config'
 import { getPayload } from 'payload'
 import React from 'react'
 import { Search } from '@/search/Component'
 import PageClient from './page.client'
-import { CardPostData } from '@/components/Card'
+import { CardPostData } from '@/components/PostCard'
 
 type Args = {
   searchParams: Promise<{
@@ -39,17 +39,27 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
                 },
               },
               {
-                'meta.description': {
+                description: {
                   like: query,
                 },
               },
               {
-                'meta.title': {
+                '': {
                   like: query,
                 },
               },
               {
                 slug: {
+                  like: query,
+                },
+              },
+              {
+                'category.title': {
+                  like: query,
+                },
+              },
+              {
+                'material.title': {
                   like: query,
                 },
               },
@@ -67,13 +77,13 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
           <h1 className="mb-8 lg:mb-16">Search</h1>
 
           <div className="max-w-[50rem] mx-auto">
-            <Search />
+            <Search route="search" />
           </div>
         </div>
       </div>
 
       {posts.totalDocs > 0 ? (
-        <CollectionArchive posts={posts.docs as CardPostData[]} />
+        <PostArchive posts={posts.docs as CardPostData[]} />
       ) : (
         <div className="container">No results found.</div>
       )}
@@ -83,6 +93,6 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
 
 export function generateMetadata(): Metadata {
   return {
-    title: `Payload Website Template Search`,
+    title: `eWardrobe Search`,
   }
 }

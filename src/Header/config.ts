@@ -17,7 +17,7 @@ export const Header: GlobalConfig = {
           appearances: false,
         }),
       ],
-      maxRows: 6,
+      maxRows: 15,
       admin: {
         initCollapsed: true,
         components: {

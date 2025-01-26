@@ -16,20 +16,22 @@ import { Header } from './Header/config'
 import { plugins } from './plugins'
 import { defaultLexical } from '@/fields/defaultLexical'
 import { getServerSideURL } from './utilities/getURL'
+import { Colors } from './collections/Colors'
+import { Materials } from './collections/Materials'
+import { Products } from './collections/Products'
+import { Sizes } from './collections/Sizes'
+import { Addresses } from './collections/Addresses'
+import { ProductVariants } from './collections/ProductVariants'
+import { Warranties } from './collections/Warranties'
+import { Orders } from './collections/Orders'
+import { Coupons } from './collections/Coupons'
+import { ShippingFees } from './collections/ShippingFees'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
 
 export default buildConfig({
   admin: {
-    components: {
-      // The `BeforeLogin` component renders a message that you see while logging into your admin panel.
-      // Feel free to delete this at any time. Simply remove the line below and the import `BeforeLogin` statement on line 15.
-      beforeLogin: ['@/components/BeforeLogin'],
-      // The `BeforeDashboard` component renders the 'welcome' block that you see after logging into your admin panel.
-      // Feel free to delete this at any time. Simply remove the line below and the import `BeforeDashboard` statement on line 15.
-      beforeDashboard: ['@/components/BeforeDashboard'],
-    },
     importMap: {
       baseDir: path.resolve(dirname),
     },
@@ -56,13 +58,35 @@ export default buildConfig({
         },
       ],
     },
+    components: {
+      graphics: {
+        Logo: './decorators/Logo/index',
+        Icon: './decorators/Icon/index',
+      },
+    },
   },
   // This config helps us configure global or default features that the other editors can inherit
   editor: defaultLexical,
   db: mongooseAdapter({
     url: process.env.DATABASE_URI || '',
   }),
-  collections: [Pages, Posts, Media, Categories, Users],
+  collections: [
+    Pages,
+    Products,
+    ProductVariants,
+    Orders,
+    Posts,
+    Media,
+    Categories,
+    Colors,
+    Materials,
+    Sizes,
+    Addresses,
+    Warranties,
+    Coupons,
+    Users,
+    ShippingFees,
+  ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],
   plugins: [
@@ -71,6 +95,9 @@ export default buildConfig({
   ],
   secret: process.env.PAYLOAD_SECRET,
   sharp,
+  graphQL: {
+    disable: true,
+  },
   typescript: {
     outputFile: path.resolve(dirname, 'payload-types.ts'),
   },

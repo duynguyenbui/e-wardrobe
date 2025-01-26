@@ -36,7 +36,7 @@ export const Archive: Block = {
           value: 'collection',
         },
         {
-          label: 'Individual Selection',
+          label: 'Individual Selection (For Posts Only)',
           value: 'selection',
         },
       ],
@@ -44,9 +44,6 @@ export const Archive: Block = {
     {
       name: 'relationTo',
       type: 'select',
-      admin: {
-        condition: (_, siblingData) => siblingData.populateBy === 'collection',
-      },
       defaultValue: 'posts',
       label: 'Collections To Show',
       options: [
@@ -54,13 +51,26 @@ export const Archive: Block = {
           label: 'Posts',
           value: 'posts',
         },
+        {
+          label: 'Colors',
+          value: 'colors',
+        },
+        {
+          label: 'Categories',
+          value: 'categories',
+        },
+        {
+          label: 'Materials',
+          value: 'materials',
+        },
       ],
     },
     {
-      name: 'categories',
+      name: 'postCategories',
       type: 'relationship',
       admin: {
-        condition: (_, siblingData) => siblingData.populateBy === 'collection',
+        condition: (_, siblingData) =>
+          siblingData.populateBy === 'collection' && siblingData.relationTo === 'posts',
       },
       hasMany: true,
       label: 'Categories To Show',
@@ -80,7 +90,8 @@ export const Archive: Block = {
       name: 'selectedDocs',
       type: 'relationship',
       admin: {
-        condition: (_, siblingData) => siblingData.populateBy === 'selection',
+        condition: (_, siblingData) =>
+          siblingData.populateBy === 'selection' && siblingData.relationTo === 'posts',
       },
       hasMany: true,
       label: 'Selection',

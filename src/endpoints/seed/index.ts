@@ -1,5 +1,5 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { CollectionSlug, GlobalSlug, Payload, PayloadRequest, File } from 'payload'
-
 import { contactForm as contactFormData } from './contact-form'
 import { contact as contactPageData } from './contact-page'
 import { home } from './home'
@@ -9,6 +9,16 @@ import { imageHero1 } from './image-hero-1'
 import { post1 } from './post-1'
 import { post2 } from './post-2'
 import { post3 } from './post-3'
+import { faker } from '@faker-js/faker'
+import path from 'path'
+import fs from 'fs/promises'
+
+const NUM_COLORS = 20
+const NUM_MATERIALS = 20
+const NUM_CATEGORIES = 17
+const NUM_PRODUCTS = 10
+
+const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1)
 
 const collections: CollectionSlug[] = [
   'categories',
@@ -21,25 +31,10 @@ const collections: CollectionSlug[] = [
 ]
 const globals: GlobalSlug[] = ['header', 'footer']
 
-// Next.js revalidation errors are normal when seeding the database without a server running
-// i.e. running `yarn seed` locally instead of using the admin UI within an active app
-// The app is not running to revalidate the pages and so the API routes are not available
-// These error messages can be ignored: `Error hitting revalidate route for...`
-export const seed = async ({
-  payload,
-  req,
-}: {
-  payload: Payload
-  req: PayloadRequest
-}): Promise<void> => {
+export const seed = async ({ payload, req }: { payload: Payload; req: PayloadRequest }) => {
   payload.logger.info('Seeding database...')
 
-  // we need to clear the media directory before seeding
-  // as well as the collections and globals
-  // this is because while `yarn seed` drops the database
-  // the custom `/api/seed` endpoint does not
   payload.logger.info(`— Clearing collections and globals...`)
-
   // clear the database
   await Promise.all(
     globals.map((global) =>
@@ -73,25 +68,27 @@ export const seed = async ({
     depth: 0,
     where: {
       email: {
-        equals: 'demo-author@example.com',
+        equals: 'demo@ewardrobe.com',
       },
     },
   })
 
-  payload.logger.info(`— Seeding media...`)
-
   const [image1Buffer, image2Buffer, image3Buffer, hero1Buffer] = await Promise.all([
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/main/templates/website/src/endpoints/seed/image-post1.webp',
+    fetchFileByDisk(
+      '/Users/buiduynguyen/Projects/Payload/e-wardrobe/src/endpoints/seed',
+      'image-post1.webp',
     ),
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/main/templates/website/src/endpoints/seed/image-post2.webp',
+    fetchFileByDisk(
+      '/Users/buiduynguyen/Projects/Payload/e-wardrobe/src/endpoints/seed',
+      'image-post2.webp',
     ),
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/main/templates/website/src/endpoints/seed/image-post3.webp',
+    fetchFileByDisk(
+      '/Users/buiduynguyen/Projects/Payload/e-wardrobe/src/endpoints/seed',
+      'image-post3.webp',
     ),
-    fetchFileByURL(
-      'https://raw.githubusercontent.com/payloadcms/payload/refs/heads/main/templates/website/src/endpoints/seed/image-hero1.webp',
+    fetchFileByDisk(
+      '/Users/buiduynguyen/Projects/Payload/e-wardrobe/src/endpoints/seed',
+      'image-hero1.webp',
     ),
   ])
 
@@ -101,18 +98,21 @@ export const seed = async ({
     image2Doc,
     image3Doc,
     imageHomeDoc,
-    technologyCategory,
-    newsCategory,
-    financeCategory,
+    menCategory,
+    womenCategory,
+    kidsCategory,
   ] = await Promise.all([
+    // USERS
     payload.create({
       collection: 'users',
       data: {
-        name: 'Demo Author',
-        email: 'demo-author@example.com',
-        password: 'password',
+        name: 'Demo',
+        email: 'demo@ewardrobe.com',
+        password: 'demo',
+        roles: ['user'],
       },
     }),
+    // MEDIA
     payload.create({
       collection: 'media',
       data: image1,
@@ -133,15 +133,15 @@ export const seed = async ({
       data: imageHero1,
       file: hero1Buffer,
     }),
-
+    // CATEGORIES
     payload.create({
       collection: 'categories',
       data: {
-        title: 'Technology',
+        title: 'Men',
         breadcrumbs: [
           {
-            label: 'Technology',
-            url: '/technology',
+            label: 'Men',
+            url: '/men',
           },
         ],
       },
@@ -150,11 +150,11 @@ export const seed = async ({
     payload.create({
       collection: 'categories',
       data: {
-        title: 'News',
+        title: 'Women',
         breadcrumbs: [
           {
-            label: 'News',
-            url: '/news',
+            label: 'Women',
+            url: '/women',
           },
         ],
       },
@@ -163,11 +163,11 @@ export const seed = async ({
     payload.create({
       collection: 'categories',
       data: {
-        title: 'Finance',
+        title: 'Kids',
         breadcrumbs: [
           {
-            label: 'Finance',
-            url: '/finance',
+            label: 'Kids',
+            url: '/kids',
           },
         ],
       },
@@ -175,24 +175,11 @@ export const seed = async ({
     payload.create({
       collection: 'categories',
       data: {
-        title: 'Design',
+        title: 'Accessories',
         breadcrumbs: [
           {
-            label: 'Design',
-            url: '/design',
-          },
-        ],
-      },
-    }),
-
-    payload.create({
-      collection: 'categories',
-      data: {
-        title: 'Software',
-        breadcrumbs: [
-          {
-            label: 'Software',
-            url: '/software',
+            label: 'Accessories',
+            url: '/accessories',
           },
         ],
       },
@@ -201,11 +188,24 @@ export const seed = async ({
     payload.create({
       collection: 'categories',
       data: {
-        title: 'Engineering',
+        title: 'Footwear',
         breadcrumbs: [
           {
-            label: 'Engineering',
-            url: '/engineering',
+            label: 'Footwear',
+            url: '/footwear',
+          },
+        ],
+      },
+    }),
+
+    payload.create({
+      collection: 'categories',
+      data: {
+        title: 'Outerwear',
+        breadcrumbs: [
+          {
+            label: 'Outerwear',
+            url: '/outerwear',
           },
         ],
       },
@@ -238,7 +238,7 @@ export const seed = async ({
       disableRevalidate: true,
     },
     data: JSON.parse(
-      JSON.stringify({ ...post1, categories: [technologyCategory.id] })
+      JSON.stringify({ ...post1, categories: [menCategory.id] })
         .replace(/"\{\{IMAGE_1\}\}"/g, String(image1ID))
         .replace(/"\{\{IMAGE_2\}\}"/g, String(image2ID))
         .replace(/"\{\{AUTHOR\}\}"/g, String(demoAuthorID)),
@@ -252,7 +252,7 @@ export const seed = async ({
       disableRevalidate: true,
     },
     data: JSON.parse(
-      JSON.stringify({ ...post2, categories: [newsCategory.id] })
+      JSON.stringify({ ...post2, categories: [womenCategory.id] })
         .replace(/"\{\{IMAGE_1\}\}"/g, String(image2ID))
         .replace(/"\{\{IMAGE_2\}\}"/g, String(image3ID))
         .replace(/"\{\{AUTHOR\}\}"/g, String(demoAuthorID)),
@@ -266,7 +266,7 @@ export const seed = async ({
       disableRevalidate: true,
     },
     data: JSON.parse(
-      JSON.stringify({ ...post3, categories: [financeCategory.id] })
+      JSON.stringify({ ...post3, categories: [kidsCategory.id] })
         .replace(/"\{\{IMAGE_1\}\}"/g, String(image3ID))
         .replace(/"\{\{IMAGE_2\}\}"/g, String(image1ID))
         .replace(/"\{\{AUTHOR\}\}"/g, String(demoAuthorID)),
@@ -281,6 +281,7 @@ export const seed = async ({
       relatedPosts: [post2Doc.id, post3Doc.id],
     },
   })
+
   await payload.update({
     id: post2Doc.id,
     collection: 'posts',
@@ -312,7 +313,7 @@ export const seed = async ({
 
   payload.logger.info(`— Seeding pages...`)
 
-  const [_, contactPage] = await Promise.all([
+  const [homePage, contactPage] = await Promise.all([
     payload.create({
       collection: 'pages',
       depth: 0,
@@ -343,9 +344,26 @@ export const seed = async ({
         navItems: [
           {
             link: {
+              type: 'reference',
+              label: 'Home',
+              reference: {
+                relationTo: 'pages',
+                value: homePage.id,
+              },
+            },
+          },
+          {
+            link: {
               type: 'custom',
               label: 'Posts',
               url: '/posts',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              label: 'Products',
+              url: '/products',
             },
           },
           {
@@ -356,6 +374,41 @@ export const seed = async ({
                 relationTo: 'pages',
                 value: contactPage.id,
               },
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              label: 'Chat',
+              url: '/chat',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              label: 'Login',
+              url: '/login',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              label: 'Register',
+              url: '/register',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              label: 'Account',
+              url: '/account',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              label: 'Logout',
+              url: '/logout',
             },
           },
         ],
@@ -372,46 +425,161 @@ export const seed = async ({
               url: '/admin',
             },
           },
-          {
-            link: {
-              type: 'custom',
-              label: 'Source Code',
-              newTab: true,
-              url: 'https://github.com/payloadcms/payload/tree/main/templates/website',
-            },
-          },
-          {
-            link: {
-              type: 'custom',
-              label: 'Payload',
-              newTab: true,
-              url: 'https://payloadcms.com/',
-            },
-          },
         ],
       },
     }),
   ])
 
+  payload.logger.info(`— Seeding materials...`)
+  const createdMaterials = await create(payload, 'materials', materials())
+
+  payload.logger.info(`— Seeding sizes...`)
+  await create(payload, 'sizes', sizes())
+
+  payload.logger.info(`— Seeding colors...`)
+  await create(payload, 'colors', colors())
+
+  payload.logger.info(`— Seeding image products...`)
+  const createdImageBuffer: any[] = []
+
+  for (let i = 1; i <= 30; i++) {
+    const imageBuffer = await fetchFileByDisk(
+      '/Users/buiduynguyen/Projects/Payload/e-wardrobe/pics',
+      `${i}.jpg`,
+    )
+
+    createdImageBuffer.push(imageBuffer)
+  }
+  const createdImages: any[] = []
+
+  await Promise.all(
+    createdImageBuffer.map(async (imageBuffer) => {
+      const createdImage = await payload.create({
+        collection: 'media',
+        data: {
+          alt: faker.commerce.productName(),
+        },
+        file: imageBuffer,
+      })
+
+      createdImages.push(createdImage)
+
+      return createdImage
+    }),
+  )
+
+  payload.logger.info(`— Seeding products...`)
+  const seedProducts = (): any[] => {
+    return Array.from({ length: NUM_PRODUCTS }).map(() => ({
+      title: faker.commerce.productName(),
+      description: faker.commerce.productDescription(),
+      instruction: faker.commerce.productAdjective(),
+      material: faker.helpers.arrayElement(createdMaterials).id,
+      category: faker.helpers.arrayElement([kidsCategory, menCategory, womenCategory]).id,
+      image: faker.helpers.arrayElement(createdImages).id,
+      published: faker.datatype.boolean(),
+    }))
+  }
+
+  await create(payload, 'products', seedProducts())
+
+  payload.logger.info(`— Seeding categories...`)
+
+  await create(payload, 'categories', categories(), true)
+
   payload.logger.info('Seeded database successfully!')
 }
 
-async function fetchFileByURL(url: string): Promise<File> {
-  const res = await fetch(url, {
-    credentials: 'include',
-    method: 'GET',
-  })
-
-  if (!res.ok) {
-    throw new Error(`Failed to fetch file from ${url}, status: ${res.status}`)
-  }
-
-  const data = await res.arrayBuffer()
+const fetchFileByDisk = async (folder: string, url: string): Promise<File> => {
+  const filePath = path.resolve(folder, url)
+  const data = await fs.readFile(filePath)
 
   return {
-    name: url.split('/').pop() || `file-${Date.now()}`,
+    name: path.basename(filePath),
     data: Buffer.from(data),
-    mimetype: `image/${url.split('.').pop()}`,
+    mimetype: `image/${path.extname(filePath).slice(1)}`,
     size: data.byteLength,
   }
 }
+
+const create = async (
+  payload: Payload,
+  collection: any,
+  data: any[],
+  ignoreExistingData: boolean = false,
+) => {
+  const createdData: any[] = []
+
+  const { totalDocs } = await payload.find({
+    collection,
+    pagination: false,
+  })
+
+  if (totalDocs <= 0 || ignoreExistingData) {
+    await Promise.all(
+      data.map(async (item) => {
+        const createdItem = await payload.create({
+          collection,
+          data: item,
+        })
+        createdData.push(createdItem)
+      }),
+    )
+
+    return createdData
+  }
+
+  return createdData
+}
+
+const categories = () =>
+  Array.from({ length: NUM_CATEGORIES }).map(() => {
+    const title = capitalize(faker.commerce.department())
+
+    return {
+      title,
+      breadcrumbs: [
+        {
+          label: title,
+          url: `/${title.toLowerCase().replace(/ /g, '-').trim()}`,
+        },
+      ],
+    }
+  })
+
+const colors = () =>
+  Array.from({ length: NUM_COLORS }).map(() => ({
+    title: capitalize(faker.color.human()),
+    description: capitalize(faker.commerce.productDescription()),
+    hex: faker.color.rgb({ format: 'hex' }),
+  }))
+
+const sizes = () =>
+  Array.from([
+    ['XXXS', 120, 140, 25, 35],
+    ['XXS', 130, 150, 35, 45],
+    ['XS', 140, 160, 40, 50],
+    ['S', 150, 170, 45, 60],
+    ['M', 160, 180, 55, 75],
+    ['L', 170, 190, 65, 85],
+    ['XL', 180, 200, 75, 100],
+    ['XXL', 185, 210, 85, 120],
+    ['3XL', 190, 220, 100, 150],
+    ['4XL', 195, 230, 120, 180],
+    ['5XL', 200, 240, 140, 210],
+    ['6XL', 205, 250, 160, 240],
+    ['7XL', 210, 260, 180, 280],
+  ]).map(([name, minHeight, maxHeight, minWeight, maxWeight]) => ({
+    name,
+    description: `Size ${name}, suitable for height ${minHeight}-${maxHeight}cm and weight ${minWeight}-${maxWeight}kg.`,
+    minHeight,
+    maxHeight,
+    minWeight,
+    maxWeight,
+  }))
+
+const materials = () =>
+  Array.from({ length: NUM_MATERIALS }).map(() => ({
+    title: capitalize(faker.commerce.productMaterial()),
+    description: capitalize(faker.lorem.sentence({ min: 20, max: 30 })),
+  }))
