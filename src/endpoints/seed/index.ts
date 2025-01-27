@@ -12,11 +12,12 @@ import { post3 } from './post-3'
 import { faker } from '@faker-js/faker'
 import path from 'path'
 import fs from 'fs/promises'
+import { uuidv4 } from '@/utilities/uuid'
 
 const NUM_COLORS = 20
 const NUM_MATERIALS = 20
 const NUM_CATEGORIES = 17
-const NUM_PRODUCTS = 10
+const NUM_PRODUCTS = 5
 
 const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1)
 
@@ -146,7 +147,6 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
         ],
       },
     }),
-
     payload.create({
       collection: 'categories',
       data: {
@@ -159,7 +159,6 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
         ],
       },
     }),
-
     payload.create({
       collection: 'categories',
       data: {
@@ -184,7 +183,6 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
         ],
       },
     }),
-
     payload.create({
       collection: 'categories',
       data: {
@@ -197,7 +195,6 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
         ],
       },
     }),
-
     payload.create({
       collection: 'categories',
       data: {
@@ -368,19 +365,23 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
           },
           {
             link: {
-              type: 'reference',
-              label: 'Contact',
-              reference: {
-                relationTo: 'pages',
-                value: contactPage.id,
-              },
+              type: 'custom',
+              label: 'Chat',
+              url: '/chat',
             },
           },
           {
             link: {
               type: 'custom',
-              label: 'Chat',
-              url: '/chat',
+              label: 'Coupons',
+              url: '/coupons',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
+              label: 'Orders',
+              url: '/orders',
             },
           },
           {
@@ -409,6 +410,16 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
               type: 'custom',
               label: 'Logout',
               url: '/logout',
+            },
+          },
+          {
+            link: {
+              type: 'reference',
+              label: 'Contact',
+              reference: {
+                relationTo: 'pages',
+                value: contactPage.id,
+              },
             },
           },
         ],
@@ -442,9 +453,9 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
   payload.logger.info(`— Seeding image products...`)
   const createdImageBuffer: any[] = []
 
-  for (let i = 1; i <= 30; i++) {
+  for (let i = 1; i <= 50; i++) {
     const imageBuffer = await fetchFileByDisk(
-      '/Users/buiduynguyen/Projects/Payload/e-wardrobe/pics',
+      '/Users/buiduynguyen/Projects/Payload/e-wardrobe/pics', // Change it depends on your local path
       `${i}.jpg`,
     )
 
@@ -478,6 +489,7 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
       category: faker.helpers.arrayElement([kidsCategory, menCategory, womenCategory]).id,
       image: faker.helpers.arrayElement(createdImages).id,
       published: faker.datatype.boolean(),
+      embedding: uuidv4(),
     }))
   }
 

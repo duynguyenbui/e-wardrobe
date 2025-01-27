@@ -4,6 +4,9 @@ import { anyone } from '../../access/anyone'
 import { authenticated } from '../../access/authenticated'
 import { slugField } from '@/fields/slug'
 import { revalidatePath } from 'next/cache'
+import { uuidv4 } from '@/utilities/uuid'
+import { deleteIndex } from './hooks/deleteIndex'
+import { indexProduct } from './hooks/indexProduct'
 
 export const Products: CollectionConfig = {
   slug: 'products',
@@ -17,6 +20,17 @@ export const Products: CollectionConfig = {
     afterChange: [
       async () => {
         revalidatePath('/products')
+      },
+      indexProduct, // change it if you want to use vector database
+    ],
+    afterDelete: [deleteIndex], // change it if you want to use vector database
+    beforeChange: [
+      async ({ data }) => {
+        if (!data.embedding) {
+          data.embedding = uuidv4()
+        }
+
+        return data
       },
     ],
   },
@@ -73,6 +87,15 @@ export const Products: CollectionConfig = {
       label: 'Published',
       type: 'checkbox',
       defaultValue: false,
+    },
+    {
+      name: 'embedding',
+      label: 'Embedding',
+      type: 'text',
+      admin: {
+        disableListFilter: true,
+        description: 'This field is automatically generated',
+      },
     },
     ...slugField(),
   ],

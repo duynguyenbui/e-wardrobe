@@ -1,4 +1,4 @@
-import { OrderForm } from '@/components/OrderForm'
+import { OrderForm } from '@/components/Forms/OrderForm'
 import { getServerSideUser } from '@/get-serverside-user'
 import { redirect } from 'next/navigation'
 import { Fragment } from 'react'

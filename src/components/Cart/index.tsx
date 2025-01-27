@@ -21,7 +21,7 @@ export function Cart() {
               size="icon"
               className="border-border size-8 shrink-0 border relative"
             >
-              <CartIcon className="size-4" />
+              <CartIcon className="size-4 dark:text-white text-black" />
               {totalItems > 0 && (
                 <span className="absolute -top-2 -right-2 bg-primary text-primary-foreground text-xs rounded-full w-5 h-5 flex items-center justify-center">
                   {totalItems}
@@ -32,7 +32,7 @@ export function Cart() {
           </TooltipTrigger>
         </SheetTrigger>
         <TooltipContent align="end">Cart ({totalItems} items)</TooltipContent>
-        <SheetContent side="right" className="flex w-full flex-col gap-6 p-6 pt-14 md:w-3/4">
+        <SheetContent side="right" className="flex w-[600px] sm:w-[700px] flex-col gap-1 p-3 pt-14">
           <SheetTitle></SheetTitle>
           {items.length === 0 ? (
             <div className="text-center">Your cart is empty.</div>

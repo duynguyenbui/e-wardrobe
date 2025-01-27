@@ -58,7 +58,7 @@ const ProductVariantCard: React.FC<{
             <h3 className="text-lg font-semibold line-clamp-1">{title}</h3>
             <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{description}</p>
           </div>
-          <Badge className="w-20">Qty: {quantity}</Badge>
+          <Badge className="w-28">Qty: {quantity}</Badge>
         </div>
         <div className="flex items-center justify-between">
           <span className="text-2xl font-bold">${price.toFixed(2)}</span>

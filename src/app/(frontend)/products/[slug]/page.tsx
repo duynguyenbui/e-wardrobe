@@ -4,6 +4,7 @@ import { getPayloadClient } from '@/get-payload'
 import { redirect } from 'next/navigation'
 import { ProductCard } from '@/components/ProductCard'
 import Variants from '@/components/Variants'
+import { cn } from '@/utilities/ui'
 
 type Args = {
   params: Promise<{
@@ -15,7 +16,7 @@ const ProductPage = async ({ params }: Args) => {
   const { slug } = await params
 
   if (!slug) {
-    return redirect('/products')
+    redirect('/products')
   }
 
   const payload = await getPayloadClient()
@@ -35,20 +36,24 @@ const ProductPage = async ({ params }: Args) => {
     }),
   ])
 
+  if (!product) {
+    redirect('/products')
+  }
+
   const { docs: variants } = variantsResult
 
   return (
-    <article className="pt-16 pb-16">
+    <div className={cn('container mt-5')}>
       <PageClient />
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 container gap-5">
-        <div className="col-span-1">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+        <div className="col-span-1 pb-20">
           <ProductCard doc={product} goInto={false} relationTo="products" />
         </div>
-        <div className="col-span-1">
+        <div className="col-span-2">
           <Variants variants={variants} />
         </div>
       </div>
-    </article>
+    </div>
   )
 }
 

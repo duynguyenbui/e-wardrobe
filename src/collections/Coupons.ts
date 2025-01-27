@@ -31,8 +31,9 @@ export const Coupons: CollectionConfig = {
     },
     {
       name: 'currentUse',
-      type: 'number',
-      defaultValue: 0,
+      type: 'relationship',
+      relationTo: 'users',
+      hasMany: true,
     },
     {
       name: 'quantity',

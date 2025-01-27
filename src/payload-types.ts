@@ -705,6 +705,10 @@ export interface Product {
   category: string | Category;
   material: string | Material;
   published?: boolean | null;
+  /**
+   * This field is automatically generated
+   */
+  embedding?: string | null;
   slug?: string | null;
   slugLock?: boolean | null;
   updatedAt: string;
@@ -887,7 +891,7 @@ export interface Coupon {
   code: string;
   description?: string | null;
   minimumPriceToUse: number;
-  currentUse?: number | null;
+  currentUse?: (string | User)[] | null;
   quantity: number;
   discountType: 'percentage' | 'fixed';
   discountAmount: number;
@@ -1367,6 +1371,7 @@ export interface ProductsSelect<T extends boolean = true> {
   category?: T;
   material?: T;
   published?: T;
+  embedding?: T;
   slug?: T;
   slugLock?: T;
   updatedAt?: T;

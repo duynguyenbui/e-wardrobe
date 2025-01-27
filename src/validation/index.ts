@@ -59,7 +59,7 @@ export const CreateOrderValidator = z.object({
     message: 'User must not be blank.',
   }),
   addressId: z.string().min(1, {
-    message: 'Address must not be blank.',
+    message: 'Please select an address, or create a new one.',
   }),
   lineItems: z.array(
     z.object({
@@ -71,6 +71,7 @@ export const CreateOrderValidator = z.object({
       }),
     }),
   ),
+  couponId: z.string().optional(),
   note: z.string().optional(),
 })
 

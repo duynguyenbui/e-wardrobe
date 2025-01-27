@@ -1,25 +1,33 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React from 'react'
 import PageClient from './page.client'
-import { Search } from '@/search/Component'
 import { getPayload } from 'payload'
 import configPromise from '@payload-config'
 import { cn } from '@/utilities/ui'
 import { ProductCard } from '@/components/ProductCard'
+import ProductFilter from '@/components/ProductFilter'
+import { getMaterials } from '@/actions/materials'
+import { getCategories } from '@/actions/categories'
 
 type Args = {
   searchParams: Promise<{
     q: string
+    category: string
+    material: string
+    pageSize: number
+    pageIndex: number
   }>
 }
 export default async function Page({ searchParams: searchParamsPromise }: Args) {
-  const { q: query } = await searchParamsPromise
-  const payload = await getPayload({ config: configPromise })
+  const { q: query, category, material, pageIndex = 1, pageSize = 4 } = await searchParamsPromise
 
+  const payload = await getPayload({ config: configPromise })
+  const [materials, categories] = await Promise.all([getMaterials(), getCategories()])
   const where: any = {
     published: {
       equals: true,
     },
+    or: [],
   }
 
   if (query) {
@@ -39,21 +47,32 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
           like: query,
         },
       },
-      {
-        slug: {
-          like: query,
-        },
-      },
     ]
   }
 
-  const { docs: products } = await payload.find({
+  if (category) {
+    where.or.push({
+      'category.title': {
+        like: category,
+      },
+    })
+  }
+
+  if (material) {
+    where.or.push({
+      'material.title': {
+        like: material,
+      },
+    })
+  }
+
+  const { docs: products, totalDocs } = await payload.find({
     collection: 'products',
-    depth: 1,
-    limit: 8,
-    // pagination: false reduces overhead if you don't need totalDocs
-    pagination: false,
+    limit: pageSize,
+    page: pageIndex,
+    pagination: true,
     where,
+    sort: ['-createdAt'],
   })
 
   return (
@@ -61,20 +80,22 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
       <PageClient />
       <div className="container mb-2">
         <div className="prose dark:prose-invert max-w-none text-center">
-          <h1 className="mb-2">Tag Line</h1>
-          <div className="max-w-[50rem] mx-auto">
-            <Search route="products" />
-          </div>
+          <ProductFilter
+            materials={materials}
+            categories={categories}
+            route="products"
+            totalDocs={totalDocs}
+          />
         </div>
       </div>
 
       <div className={cn('container mt-5')}>
         <div>
-          <div className="grid grid-cols-4 sm:grid-cols-8 lg:grid-cols-12 gap-y-2 gap-x-2 lg:gap-y-3 lg:gap-x-4 xl:gap-x-4">
+          <div className="grid grid-cols-3 md:grid-cols-6 lg:grid-cols-12 gap-2">
             {products?.map((result, index) => {
               if (typeof result === 'object' && result !== null) {
                 return (
-                  <div className="col-span-4" key={index}>
+                  <div className="col-span-3" key={index}>
                     <ProductCard
                       className="h-full"
                       doc={result}

@@ -11,11 +11,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import type { Address } from '@/payload-types'
+import type { Address, Coupon } from '@/payload-types'
 import { useAuth } from '@/providers/Auth'
 import { useCart } from '@/stores/useCart'
 import { cn } from '@/utilities/ui'
-import { Flag, PiggyBank, Trash2Icon } from 'lucide-react'
+import { Flag, Minus, PiggyBank, Plus, Trash2Icon } from 'lucide-react'
 import Link from 'next/link'
 import { Fragment, useEffect, useState, useTransition } from 'react'
 import { useForm, Controller } from 'react-hook-form'
@@ -30,19 +30,22 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import Spinner from '../Spinner'
+import Spinner from '../../Spinner'
 import { createOrder } from '@/actions/orders'
 import { toast } from 'sonner'
 import { useRouter } from 'next/navigation'
 import { getShippingFee } from '@/actions/shippingFee'
-import { Badge } from '../ui/badge'
+import { Badge } from '../../ui/badge'
+import { getCollectedCoupons } from '@/actions/coupons'
+import { capitalize } from '@/utilities/capitalize'
 
 type AddressExcludeUser = Omit<Address, 'user'>
 
 export const OrderForm = () => {
   const { user } = useAuth()
-  const { items, remove } = useCart()
+  const { items, remove, minus, plus } = useCart()
   const [addresses, setAddresses] = useState<AddressExcludeUser[]>([])
+  const [coupons, setCoupons] = useState<Coupon[]>([])
   const [shippingFee, setShippingFee] = useState(0)
   const [isPending, startTransition] = useTransition()
   const router = useRouter()
@@ -60,9 +63,16 @@ export const OrderForm = () => {
         productVariantId: item.id,
         quantityToBuy: item.quantityToBuy,
       })),
+      couponId: '',
       note: '',
     },
   })
+
+  useEffect(() => {
+    if (items.length === 0) {
+      router.push('/orders/list')
+    }
+  }, [items.length, router])
 
   useEffect(() => {
     getAddresses().then((res) => {
@@ -76,8 +86,19 @@ export const OrderForm = () => {
     getShippingFee(totalPrice).then((fee) => setShippingFee(fee))
   }, [items])
 
+  useEffect(() => {
+    getCollectedCoupons().then((data) => {
+      if (data) setCoupons(data || [])
+      else setCoupons([])
+    })
+  }, [])
+
   const onSubmit = (data: TCreateOrderValidator) => {
-    console.log(data)
+    if (!data.addressId) {
+      toast.error('Please select an address')
+      return
+    }
+
     startTransition(async () => {
       const { success, message } = await createOrder(data)
 
@@ -87,16 +108,12 @@ export const OrderForm = () => {
     })
   }
 
-  if (isPending) {
+  if (isPending || items.length === 0) {
     return (
       <div className="flex items-center justify-center min-h-screen">
         <Spinner />
       </div>
     )
-  }
-
-  if (!items.length) {
-    router.push('/products')
   }
 
   return (
@@ -108,6 +125,7 @@ export const OrderForm = () => {
             className="flex flex-col md:grid md:grid-cols-6 gap-6"
           >
             <div className="md:col-span-4 lg:col-span-3 xl:col-span-4 flex flex-col gap-6">
+              {/* ORDER SUMMARY */}
               <Card>
                 <CardHeader>
                   <CardTitle>Order Summary</CardTitle>
@@ -141,7 +159,7 @@ export const OrderForm = () => {
                         <TableHead className="max-w-[80px]">Price</TableHead>
                         <TableHead>Quantity</TableHead>
                         <TableHead>Total</TableHead>
-                        <TableHead>
+                        <TableHead className="flex items-center justify-center">
                           <Flag className="size-6" />
                         </TableHead>
                       </TableRow>
@@ -153,9 +171,25 @@ export const OrderForm = () => {
                           <TableCell className="font-medium">$ {item.price}</TableCell>
                           <TableCell>{item.quantityToBuy}</TableCell>
                           <TableCell>$ {item.quantityToBuy * item.price}</TableCell>
-                          <TableCell>
+                          <TableCell className="gap-2 flex justify-center">
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              onClick={() => minus(item.id)}
+                              disabled={item.quantityToBuy <= 1}
+                            >
+                              <Minus className="size-2" />
+                            </Button>
                             <Button size="icon" onClick={() => remove(item)}>
                               <Trash2Icon className="size-5" />
+                            </Button>
+                            <Button
+                              size="icon"
+                              variant="ghost"
+                              onClick={() => plus(item.id)}
+                              disabled={item.quantityToBuy >= item.quantity}
+                            >
+                              <Plus className="size-2" />
                             </Button>
                           </TableCell>
                         </TableRow>
@@ -164,10 +198,16 @@ export const OrderForm = () => {
                   </Table>
                 </CardContent>
               </Card>
+              {/* SHPPING FEE */}
               <Card>
                 <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <h5 className="text-sm text-muted-foreground font-bold">Shipping Fee (depends on your total price)</h5>
+                  <CardTitle className="flex space-x-2">
+                    <div>
+                      Shipping Fee{' '}
+                      <span className="text-sm text-muted-foreground">
+                        (Free shipping for orders over $100)
+                      </span>
+                    </div>
                     <Badge className="ml-2" color="green">
                       ${shippingFee}
                     </Badge>
@@ -179,7 +219,7 @@ export const OrderForm = () => {
                     control={control}
                     render={({ field }) => (
                       <div className="space-y-2">
-                        <Label htmlFor="addressId">Shipping Address</Label>
+                        <Label htmlFor="addressId">Address</Label>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <SelectTrigger>
                             <SelectValue placeholder="Select an address" />
@@ -203,6 +243,36 @@ export const OrderForm = () => {
               </Card>
             </div>
             <div className="md:col-span-2 lg:col-span-3 xl:col-span-2 flex flex-col gap-6">
+              {/* COUPONS */}
+              <Card>
+                <CardHeader>
+                  <CardTitle>Coupons</CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm">
+                  <Controller
+                    name="couponId"
+                    control={control}
+                    render={({ field }) => (
+                      <div className="space-y-2">
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select a coupon" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {coupons.map((coupon) => (
+                              <SelectItem key={coupon.id} value={coupon.id}>
+                                {coupon.code} - {capitalize(coupon.discountType)},{' '}
+                                {coupon.discountAmount}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    )}
+                  />
+                </CardContent>
+              </Card>
+              {/* CUSTOMER INFORMATION */}
               <Card>
                 <CardHeader>
                   <CardTitle>Customer Information</CardTitle>

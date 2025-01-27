@@ -39,27 +39,7 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
                 },
               },
               {
-                description: {
-                  like: query,
-                },
-              },
-              {
-                '': {
-                  like: query,
-                },
-              },
-              {
                 slug: {
-                  like: query,
-                },
-              },
-              {
-                'category.title': {
-                  like: query,
-                },
-              },
-              {
-                'material.title': {
                   like: query,
                 },
               },

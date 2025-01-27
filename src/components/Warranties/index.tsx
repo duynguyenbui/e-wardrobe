@@ -14,7 +14,7 @@ export default function Warranties() {
   }, [])
 
   return (
-    <div className="mt-4">
+    <div className="mt-4 mb-4">
       {warranties?.map((warranty, idx) => (
         <div className="flex gap-3 rounded-lg md:block md:p-2" key={idx}>
           <div>

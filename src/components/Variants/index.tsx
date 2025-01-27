@@ -15,6 +15,7 @@ import { ModalType } from '@/types'
 import { PaintRollerIcon } from 'lucide-react'
 import type { ProductVariant } from '@/payload-types'
 import Warranties from '../Warranties'
+import { useRouter } from 'next/navigation'
 
 interface VariantsProps {
   variants: ProductVariant[]
@@ -22,6 +23,7 @@ interface VariantsProps {
 
 export default function Variants({ variants }: VariantsProps) {
   const { open } = useModals()
+  const router = useRouter()
 
   return (
     <div className="flex flex-col space-y-6">
@@ -49,14 +51,19 @@ export default function Variants({ variants }: VariantsProps) {
         <p className="text-center text-gray-500">No variants available</p>
       )}
 
-      <Button
-        variant="secondary"
-        onClick={() => open({ modal: ModalType.SIZE_SELECTOR })}
-        className="flex items-center justify-center"
-      >
-        Size Recommendation
-        <PaintRollerIcon className="w-5 h-5 ml-2" />
-      </Button>
+      <div className="flex space-x-2 items-center justify-center">
+        <Button
+          variant="secondary"
+          onClick={() => open({ modal: ModalType.SIZE_SELECTOR })}
+          className="flex items-center justify-center"
+        >
+          Size Recommendation
+          <PaintRollerIcon className="w-5 h-5 ml-2" />
+        </Button>
+        <Button variant="default" onClick={() => router.push('/chat')}>
+          Chat With AI Stylist
+        </Button>
+      </div>
       <Warranties />
     </div>
   )
