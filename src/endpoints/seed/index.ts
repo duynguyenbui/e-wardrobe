@@ -489,7 +489,6 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
       category: faker.helpers.arrayElement([kidsCategory, menCategory, womenCategory]).id,
       image: faker.helpers.arrayElement(createdImages).id,
       published: faker.datatype.boolean(),
-      embedding: uuidv4(),
     }))
   }
 
@@ -534,6 +533,8 @@ const create = async (
           collection,
           data: item,
         })
+        // wait for 1s to avoid the same `createdAt` time
+        await new Promise((resolve) => setTimeout(resolve, 1000))
         createdData.push(createdItem)
       }),
     )
