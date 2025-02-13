@@ -218,7 +218,7 @@ export default async function OrderDetailsPage({ params: paramsPromise }: Args) 
                   <div className="flex items-center">
                     <div>Amount:</div>
                     <div className="ml-auto">
-                      {formatTHB((order.discount as any)?.discountAmount)} -
+                      {formatTHB((order.discount as any)?.discountAmount)}{' '}
                       {(order.discount as any)?.discountType}
                     </div>
                   </div>
