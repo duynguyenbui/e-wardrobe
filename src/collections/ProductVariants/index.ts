@@ -4,6 +4,7 @@ import { anyone } from '@/access/anyone'
 import { authenticated } from '@/access/authenticated'
 import { populateStripe } from './hooks/populateStripe'
 import { deactivateProduct } from '../Hooks/deactivateProduct'
+import { revalidatePath } from 'next/cache'
 
 export const ProductVariants: CollectionConfig = {
   slug: 'productVariants',
@@ -16,6 +17,11 @@ export const ProductVariants: CollectionConfig = {
   hooks: {
     beforeChange: [populateStripe],
     afterDelete: [deactivateProduct],
+    afterChange: [
+      () => {
+        revalidatePath('/products')
+      },
+    ],
   },
   admin: {
     useAsTitle: 'title',

@@ -27,6 +27,7 @@ export const revalidatePage: CollectionAfterChangeHook<Page> = ({
 
       revalidatePath(oldPath)
       revalidateTag('pages-sitemap')
+      revalidatePath(`/${doc.slug}`)
     }
   }
   return doc

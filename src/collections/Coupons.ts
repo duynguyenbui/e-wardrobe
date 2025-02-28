@@ -2,6 +2,7 @@ import type { CollectionConfig } from 'payload'
 
 import { anyone } from '../access/anyone'
 import { authenticated } from '../access/authenticated'
+import { revalidatePath } from 'next/cache'
 
 export const Coupons: CollectionConfig = {
   slug: 'coupons',
@@ -13,6 +14,13 @@ export const Coupons: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'code',
+  },
+  hooks: {
+    afterChange: [
+      () => {
+        revalidatePath('/coupons')
+      },
+    ],
   },
   fields: [
     {

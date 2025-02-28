@@ -39,7 +39,11 @@ export const LoginForm = () => {
       try {
         const user = await login(values)
         if (user) {
-          router.push(redirect.current || '/home')
+          if (user.roles.includes('admin')) {
+            router.push('/admin')
+          } else {
+            router.push(redirect.current || '/home')
+          }
         } else {
           toast.error('There was an error with the credentials provided. Please try again.')
         }

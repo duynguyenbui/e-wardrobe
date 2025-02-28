@@ -33,7 +33,7 @@ import {
 import Spinner from '../../Spinner'
 import { createOrder } from '@/actions/orders'
 import { toast } from 'sonner'
-import { useRouter } from 'next/navigation'
+import { redirect, useRouter } from 'next/navigation'
 import { getShippingFee } from '@/actions/shippingFee'
 import { Badge } from '../../ui/badge'
 import { getCollectedCoupons } from '@/actions/coupons'
@@ -43,7 +43,7 @@ type AddressExcludeUser = Omit<Address, 'user'>
 
 export const OrderForm = () => {
   const { user } = useAuth()
-  const { items, remove, minus, plus } = useCart()
+  const { items, remove, minus, plus, clear } = useCart()
   const [addresses, setAddresses] = useState<AddressExcludeUser[]>([])
   const [coupons, setCoupons] = useState<Coupon[]>([])
   const [shippingFee, setShippingFee] = useState(0)
@@ -65,6 +65,7 @@ export const OrderForm = () => {
       })),
       couponId: '',
       note: '',
+      type: 'online',
     },
   })
 
@@ -100,10 +101,15 @@ export const OrderForm = () => {
     }
 
     startTransition(async () => {
-      const { success, message } = await createOrder(data)
+      const { success, message, data: createdOrder } = await createOrder(data)
 
       if (!success) {
         toast.error(message)
+      }
+
+      if (success && createdOrder?.type === 'cod') {
+        clear()
+        router.push('/orders/list')
       }
     })
   }
@@ -202,12 +208,7 @@ export const OrderForm = () => {
               <Card>
                 <CardHeader>
                   <CardTitle className="flex space-x-2">
-                    <div>
-                      Shipping Fee{' '}
-                      <span className="text-sm text-muted-foreground">
-                        (Free shipping for orders over $100)
-                      </span>
-                    </div>
+                    <div>Shipping Fee </div>
                     <Badge className="ml-2" color="green">
                       ${shippingFee}
                     </Badge>
@@ -265,6 +266,34 @@ export const OrderForm = () => {
                                 {coupon.discountAmount}
                               </SelectItem>
                             ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    )}
+                  />
+                </CardContent>
+              </Card>
+              <Card>
+                <CardHeader>
+                  <CardTitle>Payment method</CardTitle>
+                </CardHeader>
+                <CardContent className="text-sm">
+                  <Controller
+                    name="type"
+                    control={control}
+                    render={({ field }) => (
+                      <div className="space-y-2">
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <SelectTrigger>
+                            <SelectValue placeholder="Select type of payment" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem key="cod" value="cod">
+                              Ship COD
+                            </SelectItem>
+                            <SelectItem key="online" value="online">
+                              Online Payment
+                            </SelectItem>
                           </SelectContent>
                         </Select>
                       </div>

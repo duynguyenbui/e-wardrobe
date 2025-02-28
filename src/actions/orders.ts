@@ -14,12 +14,12 @@ export const createOrder = async (data: TCreateOrderValidator) => {
 
   if (!success) return { success: false, message: 'Invalid data' }
 
-  const { addressId, userId, lineItems, note, couponId } = safeData
+  const { addressId, userId, lineItems, note, couponId, type } = safeData
 
   const payload = await getPayloadClient()
   const transactionID = await payload.db.beginTransaction()
 
-  let session: Stripe.Response<Stripe.Checkout.Session> | undefined
+  let session: Stripe.Response<Stripe.Checkout.Session> | undefined = undefined
 
   try {
     // get address from server
@@ -154,6 +154,7 @@ export const createOrder = async (data: TCreateOrderValidator) => {
         isPaid: false,
         shippingFee: shippingFee,
         note,
+        type: type,
       },
       req: {
         transactionID: transactionID!,
@@ -180,6 +181,10 @@ export const createOrder = async (data: TCreateOrderValidator) => {
         })
       }),
     )
+
+    await payload.db.commitTransaction(transactionID!)
+
+    if (type === 'cod') return { success: true, message: 'Create order successfully!', data: order }
 
     // stripe session
     const stripeLineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = []
@@ -243,8 +248,6 @@ export const createOrder = async (data: TCreateOrderValidator) => {
         message: 'Failed to create session. Please check in your orders to continue',
       }
     }
-
-    await payload.db.commitTransaction(transactionID!)
   } catch (error) {
     console.log(error)
     await payload.db.rollbackTransaction(transactionID!)
@@ -309,6 +312,7 @@ export const getOrders = async () => {
       shippingFee: true,
       note: true,
       createdAt: true,
+      type: true,
     },
   })
 

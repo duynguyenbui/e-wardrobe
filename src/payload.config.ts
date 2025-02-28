@@ -30,6 +30,7 @@ import { Warranties } from './collections/Warranties'
 import { Orders } from './collections/Orders'
 import { Coupons } from './collections/Coupons'
 import { ShippingFees } from './collections/ShippingFees'
+import { ShippingStatuses } from './collections/ShippingStatus'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -103,6 +104,7 @@ export default buildConfig({
     Coupons,
     Users,
     ShippingFees,
+    ShippingStatuses,
   ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],

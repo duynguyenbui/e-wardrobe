@@ -27,8 +27,11 @@ export const revalidatePost: CollectionAfterChangeHook<Post> = ({
 
       revalidatePath(oldPath)
       revalidateTag('posts-sitemap')
+      revalidatePath(`posts/${doc.slug}`)
     }
   }
+
+  revalidatePath('/posts')
   return doc
 }
 

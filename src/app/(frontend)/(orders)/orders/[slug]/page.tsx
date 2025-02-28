@@ -75,7 +75,9 @@ export default async function OrderDetailsPage({ params: paramsPromise }: Args) 
                     </div>
                     <div className="flex items-center">
                       <div>Date:</div>
-                      <div className="ml-auto">{moment(order.createdAt).format('LL')}</div>
+                      <div className="ml-auto">
+                        {moment(order.createdAt).format('YYYY-MM-DD HH:mm:ss')}
+                      </div>
                     </div>
                     <div className="flex items-center">
                       <div>Status:</div>
@@ -88,6 +90,10 @@ export default async function OrderDetailsPage({ params: paramsPromise }: Args) 
                     <div className="flex items-center">
                       <div>Note:</div>
                       <div className="ml-auto">{order.note}</div>
+                    </div>
+                    <div className="flex items-center">
+                      <div>Payment Method:</div>
+                      <div className="ml-auto">{order.type?.toUpperCase()}</div>
                     </div>
                   </div>
                 </CardContent>
@@ -147,6 +153,10 @@ export default async function OrderDetailsPage({ params: paramsPromise }: Args) 
                   <div className="flex items-center">
                     <div>Contact Phone:</div>
                     <div className="ml-auto">{(order.shippingAddress as any).contactPhone}</div>
+                  </div>
+                  <div className="flex items-center">
+                    <div>Shipping Status:</div>
+                    <div className="ml-auto">{(order.shippingStatus as any).name || 'N/A'}</div>
                   </div>
                 </CardContent>
               </Card>

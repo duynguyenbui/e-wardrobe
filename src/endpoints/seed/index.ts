@@ -12,7 +12,6 @@ import { post3 } from './post-3'
 import { faker } from '@faker-js/faker'
 import path from 'path'
 import fs from 'fs/promises'
-import { uuidv4 } from '@/utilities/uuid'
 
 const NUM_COLORS = 20
 const NUM_MATERIALS = 20
@@ -75,22 +74,10 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
   })
 
   const [image1Buffer, image2Buffer, image3Buffer, hero1Buffer] = await Promise.all([
-    fetchFileByDisk(
-      '/Users/buiduynguyen/Projects/Payload/e-wardrobe/src/endpoints/seed',
-      'image-post1.webp',
-    ),
-    fetchFileByDisk(
-      '/Users/buiduynguyen/Projects/Payload/e-wardrobe/src/endpoints/seed',
-      'image-post2.webp',
-    ),
-    fetchFileByDisk(
-      '/Users/buiduynguyen/Projects/Payload/e-wardrobe/src/endpoints/seed',
-      'image-post3.webp',
-    ),
-    fetchFileByDisk(
-      '/Users/buiduynguyen/Projects/Payload/e-wardrobe/src/endpoints/seed',
-      'image-hero1.webp',
-    ),
+    fetchFileByDisk('D:/Projects/PayloadCMS/e-wardrobe/src/endpoints/seed', 'image-post1.webp'),
+    fetchFileByDisk('D:/Projects/PayloadCMS/e-wardrobe/src/endpoints/seed', 'image-post2.webp'),
+    fetchFileByDisk('D:/Projects/PayloadCMS/e-wardrobe/src/endpoints/seed', 'image-post3.webp'),
+    fetchFileByDisk('D:/Projects/PayloadCMS/e-wardrobe/src/endpoints/seed', 'image-hero1.webp'),
   ])
 
   const [
@@ -425,20 +412,6 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
         ],
       },
     }),
-    payload.updateGlobal({
-      slug: 'footer',
-      data: {
-        navItems: [
-          {
-            link: {
-              type: 'custom',
-              label: 'Admin',
-              url: '/admin',
-            },
-          },
-        ],
-      },
-    }),
   ])
 
   payload.logger.info(`— Seeding materials...`)
@@ -450,12 +423,15 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
   payload.logger.info(`— Seeding colors...`)
   await create(payload, 'colors', colors())
 
+  payload.logger.info(`— Seeding shipping statuses...`)
+  await create(payload, 'shippingStatuses', shippingStatuses())
+
   payload.logger.info(`— Seeding image products...`)
   const createdImageBuffer: any[] = []
 
   for (let i = 1; i <= 50; i++) {
     const imageBuffer = await fetchFileByDisk(
-      '/Users/buiduynguyen/Projects/Payload/e-wardrobe/pics', // Change it depends on your local path
+      'D:/Projects/PayloadCMS/e-wardrobe/pics', // Change it depends on your local path
       `${i}.jpg`,
     )
 
@@ -502,7 +478,7 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
 }
 
 const fetchFileByDisk = async (folder: string, url: string): Promise<File> => {
-  const filePath = path.resolve(folder, url)
+  const filePath = path.join(folder, url)
   const data = await fs.readFile(filePath)
 
   return {
@@ -596,3 +572,10 @@ const materials = () =>
     title: capitalize(faker.commerce.productMaterial()),
     description: capitalize(faker.lorem.sentence({ min: 20, max: 30 })),
   }))
+
+const shippingStatuses = () => {
+  return ['Pending', 'Shipped', 'Delivered'].map((data) => ({
+    name: capitalize(data),
+    description: capitalize(faker.git.commitMessage()),
+  }))
+}

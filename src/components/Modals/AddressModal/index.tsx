@@ -43,7 +43,7 @@ export const AddressModal = () => {
     defaultValues: {
       name: 'Home',
       contactName: 'Nhu Nhan',
-      contactPhone: '0944755822',
+      contactPhone: '0908080808',
       province: '',
       district: 'Long Phu',
       ward: 'Hau Thanh',

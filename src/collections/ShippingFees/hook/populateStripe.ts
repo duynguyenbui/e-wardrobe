@@ -9,7 +9,7 @@ export const populateStripe: CollectionBeforeChangeHook = async ({
 }) => {
   const { title, minimumPriceToUse, fee } = data
 
-  if (!title || !minimumPriceToUse) return data
+  if (!title || minimumPriceToUse < 0) return data
 
   if (operation === 'create') {
     const createdStripeProduct = await stripe.products.create({

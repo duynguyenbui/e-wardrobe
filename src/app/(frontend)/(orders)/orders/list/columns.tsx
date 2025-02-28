@@ -22,6 +22,7 @@ export type OrderTableType = {
   isPaid: 'Paid' | 'Unpaid'
   note: string
   createdAt: string
+  type: string
 }
 
 export const columns: ColumnDef<OrderTableType>[] = [
@@ -44,6 +45,10 @@ export const columns: ColumnDef<OrderTableType>[] = [
   {
     accessorKey: 'note',
     header: 'Note',
+  },
+  {
+    accessorKey: 'type',
+    header: 'Type',
   },
   {
     accessorKey: 'createdAt',

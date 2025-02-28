@@ -48,6 +48,9 @@ export const Orders: CollectionConfig = {
       type: 'checkbox',
       defaultValue: false,
       required: true,
+      admin: {
+        position: 'sidebar',
+      },
     },
     {
       name: 'totalPrice',
@@ -56,6 +59,7 @@ export const Orders: CollectionConfig = {
       defaultValue: 0,
       admin: {
         condition: (_, siblingData) => siblingData?.customer && siblingData?.lineItems.length > 0,
+        position: 'sidebar',
       },
     },
     {
@@ -80,11 +84,42 @@ export const Orders: CollectionConfig = {
       relationTo: 'coupons',
       hasMany: false,
       required: false,
+      admin: {
+        position: 'sidebar',
+      },
     },
     {
       name: 'note',
       type: 'textarea',
       required: false,
+    },
+    {
+      name: 'shippingStatus',
+      type: 'relationship',
+      relationTo: 'shippingStatuses',
+      hasMany: false,
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
+      name: 'type',
+      type: 'select',
+      admin: {
+        isClearable: true,
+        isSortable: true, // use mouse to drag and drop different values, and sort them according to your choice
+        position: 'sidebar',
+      },
+      options: [
+        {
+          label: 'Ship COD',
+          value: 'cod',
+        },
+        {
+          label: 'Online Payment',
+          value: 'online',
+        },
+      ],
     },
   ],
 }
