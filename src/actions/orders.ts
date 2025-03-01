@@ -7,6 +7,8 @@ import { stripe } from '@/stripe'
 import Stripe from 'stripe'
 import { redirect } from 'next/navigation'
 import { Coupon } from '@/payload-types'
+import { revalidatePath } from 'next/cache'
+import { SHIPPING_STATUS } from '@/constants'
 
 export const createOrder = async (data: TCreateOrderValidator) => {
   // parse data
@@ -333,8 +335,53 @@ export const getOrders = async () => {
       note: true,
       createdAt: true,
       type: true,
+      shippingStatus: true,
     },
   })
 
   return { success: true, data: orders }
+}
+
+export const isReceivedOrder = async (orderId: string) => {
+  const payload = await getPayloadClient()
+
+  const { user: currentUser } = await getServerSideUser()
+
+  if (!currentUser) return { success: false, message: 'User not found' }
+
+  const order = await payload.findByID({
+    collection: 'orders',
+    id: orderId,
+  })
+
+  if (!order) return { success: false, message: 'Order not found' }
+
+  if (
+    typeof order.customer === 'object'
+      ? order.customer.id !== currentUser.id
+      : order.customer !== currentUser.id
+  ) {
+    return { success: false, message: 'User not authorized' }
+  }
+
+  const { docs: shippingStatuses } = await payload.find({
+    collection: 'shippingStatuses',
+    where: {
+      name: {
+        like: SHIPPING_STATUS.Delivered,
+      },
+    },
+    pagination: false,
+  })
+
+  await payload.update({
+    collection: 'orders',
+    id: orderId,
+    data: {
+      shippingStatus: shippingStatuses[0],
+    },
+  })
+
+  revalidatePath('/orders/list')
+  return { success: true }
 }

@@ -13,6 +13,9 @@ import {
   DropdownMenuTrigger,
 } from '@/components/ui/dropdown-menu'
 import Link from 'next/link'
+import { isReceivedOrder } from '@/actions/orders'
+import { toast } from 'sonner'
+import ChangeOrderStatus from '@/components/ChangeOrderStatus'
 // This type is used to define the shape of our data.
 // You can use a Zod schema here if you want.
 export type OrderTableType = {
@@ -23,6 +26,7 @@ export type OrderTableType = {
   note: string
   createdAt: string
   type: string
+  shippingStatus: string
 }
 
 export const columns: ColumnDef<OrderTableType>[] = [
@@ -51,12 +55,16 @@ export const columns: ColumnDef<OrderTableType>[] = [
     header: 'Type',
   },
   {
+    accessorKey: 'shippingStatus',
+    header: 'Shipping Status',
+  },
+  {
     accessorKey: 'createdAt',
     header: 'Created At',
   },
   {
     id: 'actions',
-    cell: ({ row }) => {
+    cell: async ({ row }) => {
       const order = row.original
 
       return (

@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { buttonVariants } from '@/components/ui/button'
+import { Button, buttonVariants } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardContent } from '@/components/ui/card'
 import {
   Table,
@@ -17,6 +17,8 @@ import { cn } from '@/utilities/ui'
 import { getOrder } from '@/actions/orders'
 import { getServerSideUser } from '@/get-serverside-user'
 import { notFound } from 'next/navigation'
+import { PiggyBank } from 'lucide-react'
+import ChangeOrderStatus from '@/components/ChangeOrderStatus'
 
 type Args = {
   params: Promise<{
@@ -53,12 +55,12 @@ export default async function OrderDetailsPage({ params: paramsPromise }: Args) 
       <div className="flex flex-col">
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
           <div className="flex items-center gap-4">
-            <h1 className="font-semibold text-lg md:text-xl">
+            <h1 className="font-semibold text-lg md:text-xl items-center">
               Order #{order.id}
               <span className="font-normal text-gray-500 dark:text-gray-400">
-                {' '}
                 on {moment(order.createdAt).format('LL')}
               </span>
+              <ChangeOrderStatus order={order!} />
             </h1>
           </div>
           <div className="flex flex-col md:grid md:grid-cols-6 gap-6">

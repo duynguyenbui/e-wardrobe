@@ -11,6 +11,12 @@ export const endpoints: string[] = [
   'admin',
 ]
 
+export enum SHIPPING_STATUS {
+  Pending = 'Pending',
+  Shipped = 'Shipped',
+  Delivered = 'Delivered',
+}
+
 export const provinces: any[] = [
   { label: 'An Giang', value: 'AG' },
   { label: 'Ba Ria - Vung Tau', value: 'BR-VT' },

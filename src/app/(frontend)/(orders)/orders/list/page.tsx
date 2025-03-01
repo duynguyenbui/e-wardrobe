@@ -27,6 +27,7 @@ export default async function Page() {
           note: order.note ?? '',
           createdAt: moment(order.createdAt).format('LL'),
           type: order.type?.toUpperCase() || 'N/A',
+          shippingStatus: (order.shippingStatus as any)?.name || 'N/A',
         }),
     )
   }
