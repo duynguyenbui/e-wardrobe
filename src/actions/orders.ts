@@ -143,6 +143,16 @@ export const createOrder = async (data: TCreateOrderValidator) => {
 
     if (couponId && !discount) return { success: false, message: 'Coupon not found' }
 
+    const { docs: shippingStatuses } = await payload.find({
+      collection: 'shippingStatuses',
+      where: {
+        name: {
+          like: 'pending',
+        },
+      },
+      pagination: false,
+    })
+
     const order = await payload.create({
       collection: 'orders',
       data: {
@@ -155,6 +165,7 @@ export const createOrder = async (data: TCreateOrderValidator) => {
         shippingFee: shippingFee,
         note,
         type: type,
+        shippingStatus: shippingStatuses[0] ?? null,
       },
       req: {
         transactionID: transactionID!,
@@ -182,81 +193,90 @@ export const createOrder = async (data: TCreateOrderValidator) => {
       }),
     )
 
-    await payload.db.commitTransaction(transactionID!)
+    if (type === 'online') {
+      // stripe session
+      const stripeLineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = []
 
-    if (type === 'cod') return { success: true, message: 'Create order successfully!', data: order }
+      productVariants.map((productVariant) => {
+        const lineItem = lineItems.find(
+          (lineItem) => lineItem.productVariantId === productVariant.id,
+        )
 
-    // stripe session
-    const stripeLineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = []
-
-    productVariants.map((productVariant) => {
-      const lineItem = lineItems.find((lineItem) => lineItem.productVariantId === productVariant.id)
-
-      stripeLineItems.push({
-        quantity: lineItem!.quantityToBuy,
-        price: productVariant.priceId!,
+        stripeLineItems.push({
+          quantity: lineItem!.quantityToBuy,
+          price: productVariant.priceId!,
+        })
       })
-    })
 
-    if (shippingFee > 0) {
-      stripeLineItems.push({
-        quantity: 1,
-        price: shippingFees[0]!.priceId!,
-      })
-    }
-
-    let stripeCoupon: Stripe.Coupon | undefined
-    if (couponId && discount) {
-      let stripeCouponData: Stripe.CouponCreateParams = {
-        name: `${discount.code}`,
-      }
-
-      if (discount.discountType === 'fixed') {
-        stripeCouponData = {
-          ...stripeCouponData,
-          amount_off: discount.discountAmount,
-          currency: 'THB',
-        }
-      } else {
-        stripeCouponData = {
-          ...stripeCouponData,
-          percent_off: discount.discountAmount,
-        }
-
-        stripeCoupon = await stripe.coupons.create({
-          name: discount.code,
+      if (shippingFee > 0) {
+        stripeLineItems.push({
+          quantity: 1,
+          price: shippingFees[0]!.priceId!,
         })
       }
 
-      stripeCoupon = await stripe.coupons.create(stripeCouponData)
-    }
+      let stripeCoupon: Stripe.Coupon | undefined
+      if (couponId && discount) {
+        let stripeCouponData: Stripe.CouponCreateParams = {
+          name: `${discount.code}`,
+        }
 
-    session = await stripe.checkout.sessions.create({
-      line_items: stripeLineItems,
-      mode: 'payment',
-      metadata: {
-        orderId: order.id,
-      },
-      discounts: stripeCoupon ? [{ coupon: stripeCoupon.id }] : [],
-      cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/orders/cancel?orderId=${order.id}`,
-      success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/orders/success?orderId=${order.id}`,
-    })
+        if (discount.discountType === 'fixed') {
+          stripeCouponData = {
+            ...stripeCouponData,
+            amount_off: discount.discountAmount,
+            currency: 'THB',
+          }
+        } else {
+          stripeCouponData = {
+            ...stripeCouponData,
+            percent_off: discount.discountAmount,
+          }
 
-    if (!session || !session.url) {
-      return {
-        success: false,
-        message: 'Failed to create session. Please check in your orders to continue',
+          stripeCoupon = await stripe.coupons.create({
+            name: discount.code,
+          })
+        }
+
+        stripeCoupon = await stripe.coupons.create(stripeCouponData)
+      }
+
+      session = await stripe.checkout.sessions.create({
+        line_items: stripeLineItems,
+        mode: 'payment',
+        metadata: {
+          orderId: order.id,
+        },
+        discounts: stripeCoupon ? [{ coupon: stripeCoupon.id }] : [],
+        cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/orders/cancel?orderId=${order.id}`,
+        success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/orders/success?orderId=${order.id}`,
+      })
+
+      if (!session || !session.url) {
+        return {
+          success: false,
+          message: 'Failed to create session. Please check in your orders to continue',
+        }
       }
     }
-  } catch (error) {
-    console.log(error)
+
+    await payload.db.commitTransaction(transactionID!)
+  } catch (_) {
     await payload.db.rollbackTransaction(transactionID!)
     return { success: false, message: 'Failed to create order' }
   } finally {
     if (session?.url) {
       redirect(session.url)
+    } else if (type === 'cod') {
+      return {
+        success: true,
+        message: 'Create order successfully!',
+      }
     } else {
-      return { success: false, message: 'Failed to create order' }
+      return {
+        success: false,
+        message: 'Failed to create a new session for this order! Please try again later!',
+      }
     }
   }
 }

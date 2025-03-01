@@ -33,7 +33,7 @@ import {
 import Spinner from '../../Spinner'
 import { createOrder } from '@/actions/orders'
 import { toast } from 'sonner'
-import { redirect, useRouter } from 'next/navigation'
+import {  useRouter } from 'next/navigation'
 import { getShippingFee } from '@/actions/shippingFee'
 import { Badge } from '../../ui/badge'
 import { getCollectedCoupons } from '@/actions/coupons'
@@ -88,11 +88,12 @@ export const OrderForm = () => {
   }, [items])
 
   useEffect(() => {
-    getCollectedCoupons().then((data) => {
+    const totalPrice = items.reduce((acc, item) => acc + item.price * item.quantityToBuy, 0)
+    getCollectedCoupons(totalPrice).then((data) => {
       if (data) setCoupons(data || [])
       else setCoupons([])
     })
-  }, [])
+  }, [items])
 
   const onSubmit = (data: TCreateOrderValidator) => {
     if (!data.addressId) {
@@ -101,13 +102,15 @@ export const OrderForm = () => {
     }
 
     startTransition(async () => {
-      const { success, message, data: createdOrder } = await createOrder(data)
+      const { success, message } = await createOrder(data)
 
       if (!success) {
         toast.error(message)
+        return
       }
 
-      if (success && createdOrder?.type === 'cod') {
+      if (success) {
+        toast.success(message)
         clear()
         router.push('/orders/list')
       }

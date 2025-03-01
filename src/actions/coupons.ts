@@ -4,7 +4,7 @@
 import { getPayloadClient } from '@/get-payload'
 import { getServerSideUser } from '@/get-serverside-user'
 
-export const getCollectedCoupons = async () => {
+export const getCollectedCoupons = async (minimumPriceToUse: number) => {
   const payload = await getPayloadClient()
 
   const { user: currentUser } = await getServerSideUser()
@@ -36,6 +36,11 @@ export const getCollectedCoupons = async () => {
         {
           active: {
             equals: true,
+          },
+        },
+        {
+          minimumPriceToUse: {
+            less_than_equal: minimumPriceToUse,
           },
         },
       ],

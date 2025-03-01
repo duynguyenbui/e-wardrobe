@@ -7,7 +7,6 @@ import type { Footer } from '@/payload-types'
 import { ThemeSelector } from '@/providers/Theme/ThemeSelector'
 import { CMSLink } from '@/components/Link'
 import { Logo } from '@/components/Logo/Logo'
-import { getServerSideUser } from '@/get-serverside-user'
 import AdminIndicator from '@/components/Indicators'
 
 export async function Footer() {

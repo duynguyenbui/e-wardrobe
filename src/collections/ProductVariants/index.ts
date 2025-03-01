@@ -18,8 +18,8 @@ export const ProductVariants: CollectionConfig = {
     beforeChange: [populateStripe],
     afterDelete: [deactivateProduct],
     afterChange: [
-      () => {
-        revalidatePath('/products')
+      ({ doc }) => {
+        revalidatePath(`$/products/${doc.id}`)
       },
     ],
   },

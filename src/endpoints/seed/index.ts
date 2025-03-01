@@ -13,9 +13,9 @@ import { faker } from '@faker-js/faker'
 import path from 'path'
 import fs from 'fs/promises'
 
-const NUM_COLORS = 20
-const NUM_MATERIALS = 20
-const NUM_CATEGORIES = 17
+const NUM_COLORS = 10
+const NUM_MATERIALS = 8
+const NUM_CATEGORIES = 8
 const NUM_PRODUCTS = 5
 
 const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1)

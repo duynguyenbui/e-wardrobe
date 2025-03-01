@@ -20,6 +20,7 @@ import {
   OverviewField,
   PreviewField,
 } from '@payloadcms/plugin-seo/fields'
+import { preventDefaultRoutes } from '@/hooks/preventDefaultRoutes'
 
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
@@ -124,7 +125,7 @@ export const Pages: CollectionConfig<'pages'> = {
   ],
   hooks: {
     afterChange: [revalidatePage],
-    beforeChange: [populatePublishedAt],
+    beforeChange: [populatePublishedAt, preventDefaultRoutes],
     afterDelete: [revalidateDelete],
   },
   versions: {

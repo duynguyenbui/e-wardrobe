@@ -1,12 +1,14 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 export const endpoints: string[] = [
-  '/login',
-  '/logout',
-  '/register',
-  '/account',
-  '/chat',
-  '/products',
-  '/orders',
+  'login',
+  'logout',
+  'register',
+  'account',
+  'chat',
+  'products',
+  'orders',
+  'posts',
+  'admin',
 ]
 
 export const provinces: any[] = [
