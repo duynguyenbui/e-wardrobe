@@ -3,10 +3,6 @@ import type { CollectionConfig } from 'payload'
 import { anyone } from '../../access/anyone'
 import { authenticated } from '../../access/authenticated'
 import { slugField } from '@/fields/slug'
-import { revalidatePath } from 'next/cache'
-import { uuidv4 } from '@/utilities/uuid'
-import { deleteIndex } from './hooks/deleteIndex'
-import { indexProduct } from './hooks/indexProduct'
 
 export const Products: CollectionConfig = {
   slug: 'products',

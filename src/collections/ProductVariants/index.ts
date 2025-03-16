@@ -51,12 +51,14 @@ export const ProductVariants: CollectionConfig = {
       type: 'textarea',
     },
     {
-      name: 'image',
+      name: 'images',
       label: {
-        vi: 'Ảnh',
+        vi: 'Hình ảnh (sản phẩm sẽ có nhiều hình ảnh)',
       },
       type: 'upload',
       relationTo: 'media',
+      hasMany: true,
+      minRows: 1,
       required: true,
     },
     {

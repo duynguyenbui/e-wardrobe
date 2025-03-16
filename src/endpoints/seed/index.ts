@@ -224,6 +224,8 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
         name: 'User',
         email: 'user@ewardrobe.com',
         password: 'user',
+        gender: 'male',
+        birthday: '1990-01-01',
         roles: ['user'],
       },
     }),
@@ -233,6 +235,8 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
         name: 'Demo',
         email: 'demo@ewardrobe.com',
         password: 'demo',
+        gender: 'male',
+        birthday: '1990-01-01',
         roles: ['user'],
       },
     }),
@@ -433,7 +437,7 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
 
   payload.logger.info(`Seeding pages...`)
 
-  const [homePage, contactPage] = await Promise.all([
+  const [_, contactPage] = await Promise.all([
     payload.create({
       collection: 'pages',
       depth: 0,
@@ -464,12 +468,9 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
         navItems: [
           {
             link: {
-              type: 'reference',
+              type: 'custom',
               label: 'Trang chủ',
-              reference: {
-                relationTo: 'pages',
-                value: homePage.id,
-              },
+              url: '/',
             },
           },
           {
@@ -1078,7 +1079,7 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
       product: createdProducts[0],
       size: createdSizes[Math.floor(Math.random() * createdSizes.length)],
       color: createdColors[Math.floor(Math.random() * createdColors.length)],
-      image: createdImages[Math.floor(Math.random() * createdImages.length)],
+      images: createdImages.slice(0, 2),
     },
     {
       title: 'Áo thun cotton màu đen',
@@ -1088,7 +1089,7 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
       product: createdProducts[0],
       size: createdSizes[Math.floor(Math.random() * createdSizes.length)],
       color: createdColors[Math.floor(Math.random() * createdColors.length)],
-      image: createdImages[Math.floor(Math.random() * createdImages.length)],
+      images: createdImages.slice(1, 3),
     },
     {
       title: 'Áo thun cotton màu xám',
@@ -1098,7 +1099,7 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
       product: createdProducts[0],
       size: createdSizes[Math.floor(Math.random() * createdSizes.length)],
       color: createdColors[Math.floor(Math.random() * createdColors.length)],
-      image: createdImages[Math.floor(Math.random() * createdImages.length)],
+      images: createdImages.slice(2, 4),
     },
   ]
 
@@ -1113,7 +1114,7 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
       product: createdProducts[1],
       size: createdSizes[Math.floor(Math.random() * createdSizes.length)],
       color: createdColors[Math.floor(Math.random() * createdColors.length)],
-      image: createdImages[Math.floor(Math.random() * createdImages.length)],
+      images: createdImages.slice(3, 5),
     },
     {
       title: 'Áo sơ mi công sở màu xanh dương',
@@ -1123,7 +1124,7 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
       product: createdProducts[1],
       size: createdSizes[Math.floor(Math.random() * createdSizes.length)],
       color: createdColors[Math.floor(Math.random() * createdColors.length)],
-      image: createdImages[Math.floor(Math.random() * createdImages.length)],
+      images: createdImages.slice(4, 6),
     },
   ]
 
@@ -1138,7 +1139,7 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
       product: createdProducts[2],
       size: createdSizes[Math.floor(Math.random() * createdSizes.length)],
       color: createdColors[Math.floor(Math.random() * createdColors.length)],
-      image: createdImages[Math.floor(Math.random() * createdImages.length)],
+      images: createdImages.slice(5, 7),
     },
     {
       title: 'Quần jean nam màu đen',
@@ -1148,7 +1149,7 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
       product: createdProducts[2],
       size: createdSizes[Math.floor(Math.random() * createdSizes.length)],
       color: createdColors[Math.floor(Math.random() * createdColors.length)],
-      image: createdImages[Math.floor(Math.random() * createdImages.length)],
+      images: createdImages.slice(6, 8),
     },
   ]
 
@@ -1163,7 +1164,7 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
       product: createdProducts[3],
       size: createdSizes[Math.floor(Math.random() * createdSizes.length)],
       color: createdColors[Math.floor(Math.random() * createdColors.length)],
-      image: createdImages[Math.floor(Math.random() * createdImages.length)],
+      images: createdImages.slice(7, 9),
     },
     {
       title: 'Váy maxi nữ màu đỏ',
@@ -1173,7 +1174,7 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
       product: createdProducts[3],
       size: createdSizes[Math.floor(Math.random() * createdSizes.length)],
       color: createdColors[Math.floor(Math.random() * createdColors.length)],
-      image: createdImages[Math.floor(Math.random() * createdImages.length)],
+      images: createdImages.slice(8, 10),
     },
   ]
 
@@ -1188,7 +1189,7 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
       product: createdProducts[4],
       size: createdSizes[Math.floor(Math.random() * createdSizes.length)],
       color: createdColors[Math.floor(Math.random() * createdColors.length)],
-      image: createdImages[Math.floor(Math.random() * createdImages.length)],
+      images: createdImages.slice(9, 11),
     },
   ]
 

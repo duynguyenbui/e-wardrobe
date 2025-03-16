@@ -5,12 +5,13 @@ import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import type { ProductVariant } from '@/payload-types'
 import { parseObject } from '@/utilities/parseObject'
-import { Media } from '../Media'
 import { useCart } from '@/stores/useCart'
 import { Button } from '../ui/button'
 import { ShoppingBasket } from 'lucide-react'
 import { useModals } from '@/stores/useModals'
 import { ModalType } from '@/types'
+import ImageSlider from '../ImageSlider'
+import { formatVND } from '@/utilities/currency'
 
 export type ProductVariantCardProps = Omit<ProductVariant, 'product'> & {
   showImage?: boolean
@@ -28,7 +29,7 @@ const ProductVariantCard: React.FC<{
     description,
     price,
     quantity,
-    image,
+    images,
     size: sizePrimitive,
     color: colorPrimitive,
   } = productVariant
@@ -41,12 +42,7 @@ const ProductVariantCard: React.FC<{
     <Card className="w-full max-w-sm overflow-hidden group">
       {showImage && (
         <div className="relative aspect-square overflow-hidden">
-          <Media
-            resource={image}
-            fill
-            alt={title}
-            className="object-cover transition-transform duration-300"
-          />{' '}
+          <ImageSlider images={images} />
         </div>
       )}
       <CardContent className="p-4 space-y-4">
@@ -58,10 +54,10 @@ const ProductVariantCard: React.FC<{
             <h3 className="text-lg font-semibold line-clamp-1">{title}</h3>
             <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{description}</p>
           </div>
-          <Badge className="w-28">Số lượng: {quantity}</Badge>
+          <Badge className="w-28">SL: {quantity}</Badge>
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-2xl font-bold">${price.toFixed(2)}</span>
+          <span className="text-2xl font-bold">{formatVND(price)}</span>
           <div className="flex items-center space-x-2">
             <div className="text-sm">
               <span className="font-semibold">Kích thước:</span> {size.name}

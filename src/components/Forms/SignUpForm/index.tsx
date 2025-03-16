@@ -10,14 +10,27 @@ import {
   FormLabel,
   FormMessage,
 } from '@/components/ui/form'
+import { format } from 'date-fns'
 import React, { useCallback } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { PayloadUserSignUpValidator, TPayloadUserSignUpValidator } from '@/validation'
 import Link from 'next/link'
-import { Logo } from '@/components/Logo/Logo'
+
 import { toast } from 'sonner'
 import { useAuth } from '@/providers/Auth'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
+import { Calendar } from '@/components/ui/calendar'
+import { CalendarIcon } from 'lucide-react'
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
+import { cn } from '@/utilities/ui'
+import { CloudLightningIcon } from 'lucide-react'
 
 const SignUpForm = () => {
   const { create } = useAuth()
@@ -27,6 +40,8 @@ const SignUpForm = () => {
       email: 'nhu@ewardrobe.com',
       password: 'nhu',
       name: 'Nhu',
+      gender: 'male',
+      birthday: new Date('1990-01-01'),
     },
   })
 
@@ -54,7 +69,7 @@ const SignUpForm = () => {
         <div className="flex flex-col gap-4">
           <div className="mx-auto w-full max-w-sm rounded-md p-6 shadow-xl border">
             <div className="mb-6 flex flex-col items-center space-y-2">
-              <Logo />
+              <CloudLightningIcon className="h-10 w-10 text-blue-700" />
               <p className="text-muted-foreground">Đăng ký tài khoản trong vòng 2 phút.</p>
             </div>
             <div>
@@ -86,7 +101,68 @@ const SignUpForm = () => {
                       </FormItem>
                     )}
                   />
-
+                  <FormField
+                    control={form.control}
+                    name="gender"
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>Giới tính</FormLabel>
+                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                            <SelectTrigger>
+                              <SelectValue placeholder="Chọn giới tính của bạn" />
+                            </SelectTrigger>
+                          </FormControl>
+                          <SelectContent>
+                            <SelectItem value="male">Nam</SelectItem>
+                            <SelectItem value="female">Nữ</SelectItem>
+                          </SelectContent>
+                        </Select>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                  <FormField
+                    control={form.control}
+                    name="birthday"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-col">
+                        <FormLabel>Ngày sinh</FormLabel>
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <FormControl>
+                              <Button
+                                variant={'outline'}
+                                className={cn(
+                                  'w-full pl-3 text-left font-normal',
+                                  !field.value && 'text-muted-foreground',
+                                )}
+                              >
+                                {field.value ? (
+                                  format(field.value, 'PPP')
+                                ) : (
+                                  <span>Chọn ngày sinh</span>
+                                )}
+                                <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                              </Button>
+                            </FormControl>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={field.value}
+                              onSelect={field.onChange}
+                              disabled={(date) =>
+                                date > new Date() || date < new Date('1900-01-01')
+                              }
+                              initialFocus
+                            />
+                          </PopoverContent>
+                        </Popover>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
                   <FormField
                     control={form.control}
                     name="password"

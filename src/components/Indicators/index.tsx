@@ -9,5 +9,5 @@ export default function AdminIndicator() {
 
   if (!user) return null
 
-  return user?.roles.includes('admin') && <Link href="/admin">Trang quản trị</Link>
+  return user?.roles.includes('admin') && <Link href="/admin" className="text-blue-700">Trang quản trị</Link>
 }

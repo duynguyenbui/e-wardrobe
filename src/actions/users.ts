@@ -12,7 +12,7 @@ export const updateUser = async (values: TPayloadUserSettingsValidator) => {
     return { success: false, message: error.message }
   }
 
-  const { email, name, password } = data
+  const { email, name, password, birthday, gender } = data
 
   const { user: currentUser } = await getServerSideUser()
 
@@ -38,6 +38,8 @@ export const updateUser = async (values: TPayloadUserSettingsValidator) => {
       name,
       email,
       ...(password && password.length > 0 && { password }),
+      ...(birthday && { birthday: birthday.toISOString() }),
+      ...(gender && { gender }),
     },
   })
 

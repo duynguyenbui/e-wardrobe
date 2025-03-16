@@ -19,7 +19,7 @@ import { useAuth } from '@/providers/Auth'
 import { toast } from 'sonner'
 import { useCallback, useRef } from 'react'
 import Link from 'next/link'
-import { Logo } from '@/components/Logo/Logo'
+import { CloudLightningIcon } from 'lucide-react'
 
 export const LoginForm = () => {
   const { login } = useAuth()
@@ -60,7 +60,7 @@ export const LoginForm = () => {
         <div className="flex flex-col gap-4">
           <div className="mx-auto w-full max-w-sm rounded-md p-6 shadow-xl border">
             <div className="mb-6 flex flex-col items-center space-y-2">
-              <Logo />
+              <CloudLightningIcon className="h-10 w-10 text-blue-700" />
               <p className="text-muted-foreground">Đăng nhập vào tài khoản của bạn.</p>
             </div>
             <div>

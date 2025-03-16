@@ -19,7 +19,7 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
   const filteredNavItems = navItems.filter(({ link }) => {
     return user
       ? !['/login', '/register'].includes(link.url || '')
-      : !['/logout', '/account', '/register'].includes(link.url || '')
+      : !['/logout', '/account', '/register', '/orders', '/chat'].includes(link.url || '')
   })
 
   return (

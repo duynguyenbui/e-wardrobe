@@ -396,6 +396,8 @@ export interface Category {
 export interface User {
   id: string;
   name?: string | null;
+  gender: 'male' | 'female';
+  birthday: string;
   roles: ('admin' | 'user')[];
   updatedAt: string;
   createdAt: string;
@@ -792,7 +794,7 @@ export interface ProductVariant {
   id: string;
   title: string;
   description?: string | null;
-  image: string | Media;
+  images: (string | Media)[];
   quantity: number;
   price: number;
   size: string | Size;
@@ -1458,7 +1460,7 @@ export interface ProductsSelect<T extends boolean = true> {
 export interface ProductVariantsSelect<T extends boolean = true> {
   title?: T;
   description?: T;
-  image?: T;
+  images?: T;
   quantity?: T;
   price?: T;
   size?: T;
@@ -1729,6 +1731,8 @@ export interface CouponsSelect<T extends boolean = true> {
  */
 export interface UsersSelect<T extends boolean = true> {
   name?: T;
+  gender?: T;
+  birthday?: T;
   roles?: T;
   updatedAt?: T;
   createdAt?: T;

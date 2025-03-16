@@ -37,6 +37,41 @@ export const Users: CollectionConfig = {
       type: 'text',
     },
     {
+      name: 'gender',
+      label: {
+        vi: 'Giới tính',
+      },
+      type: 'select',
+      options: [
+        {
+          label: {
+            vi: 'Nam',
+          },
+          value: 'male',
+        },
+        {
+          label: {
+            vi: 'Nữ',
+          },
+          value: 'female',
+        },
+      ],
+      required: true,
+    },
+    {
+      name: 'birthday',
+      label: {
+        vi: 'Ngày sinh',
+      },
+      type: 'date',
+      admin: {
+        date: {
+          pickerAppearance: 'dayOnly',
+        },
+      },
+      required: true,
+    },
+    {
       name: 'roles',
       label: {
         vi: 'Vai trò',

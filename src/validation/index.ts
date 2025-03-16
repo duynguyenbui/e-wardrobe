@@ -12,6 +12,8 @@ export const PayloadUserSignUpValidator = z.object({
   password: z.string().min(3, {
     message: 'Mật khẩu phải có ít nhất 3 ký tự.',
   }),
+  gender: z.enum(['male', 'female']),
+  birthday: z.date(),
   name: z.string().min(1, {
     message: 'Tên không được để trống.',
   }),
@@ -23,6 +25,8 @@ export const PayloadUserSettingsValidator = z.object({
   name: z.string().min(1, {
     message: 'Tên không được để trống.',
   }),
+  birthday: z.date().optional(),
+  gender: z.enum(['male', 'female']).optional(),
 })
 
 export const CreateAddressValidator = z.object({

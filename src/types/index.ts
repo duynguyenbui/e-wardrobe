@@ -1,4 +1,4 @@
-import {  User } from '@/payload-types'
+import { User } from '@/payload-types'
 import type { Permissions } from 'payload'
 
 export type ResetPassword = (args: {
@@ -13,6 +13,8 @@ export type Create = (args: {
   name: string
   email: string
   password: string
+  gender: string
+  birthday: Date
 }) => Promise<User | string>
 
 export type Login = (args: { email: string; password: string }) => Promise<User>
