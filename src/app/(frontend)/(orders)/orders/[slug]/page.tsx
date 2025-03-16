@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/table'
 import { Badge } from '@/components/ui/badge'
 import moment from 'moment'
-import { formatTHB } from '@/utilities/currency'
+import { formatVND } from '@/utilities/currency'
 import Link from 'next/link'
 import { cn } from '@/utilities/ui'
 import { getOrder } from '@/actions/orders'
@@ -122,10 +122,10 @@ export default async function OrderDetailsPage({ params: paramsPromise }: Args) 
                           <TableCell>{item.quantityToBuy}</TableCell>
                           <TableCell>
                             {typeof item.productVariant === 'object' &&
-                              formatTHB((item.productVariant as any).price || 0)}
+                              formatVND((item.productVariant as any).price || 0)}
                           </TableCell>
                           <TableCell>
-                            {formatTHB((item.productVariant as any).price * item.quantityToBuy)}
+                            {formatVND((item.productVariant as any).price * item.quantityToBuy)}
                           </TableCell>
                         </TableRow>
                       ))}
@@ -149,15 +149,15 @@ export default async function OrderDetailsPage({ params: paramsPromise }: Args) 
                   </div>
                   <div className="flex items-center">
                     <div>Tên liên hệ:</div>
-                    <div className="ml-auto">{(order.shippingAddress as any).contactName}</div>
+                    <div className="ml-auto">{(order.shippingAddress as any)?.contactName}</div>
                   </div>
                   <div className="flex items-center">
                     <div>Số điện thoại liên hệ:</div>
-                    <div className="ml-auto">{(order.shippingAddress as any).contactPhone}</div>
+                    <div className="ml-auto">{(order.shippingAddress as any)?.contactPhone}</div>
                   </div>
                   <div className="flex items-center">
                     <div>Trạng thái giao hàng:</div>
-                    <div className="ml-auto">{(order.shippingStatus as any).name || 'N/A'}</div>
+                    <div className="ml-auto">{(order.shippingStatus as any)?.name || 'N/A'}</div>
                   </div>
                 </CardContent>
               </Card>
@@ -189,25 +189,29 @@ export default async function OrderDetailsPage({ params: paramsPromise }: Args) 
                 <CardContent className="grid gap-4">
                   <div className="flex items-center">
                     <div>Tổng phụ:</div>
-                    <div className="ml-auto">{formatTHB((order as any).totalPrice || 0)}</div>
+                    <div className="ml-auto">{formatVND((order as any).totalPrice || 0)}</div>
                   </div>
                   <div className="flex items-center">
                     <div>Phí vận chuyển:</div>
-                    <div className="ml-auto">{formatTHB(order.shippingFee)}</div>
+                    <div className="ml-auto">{formatVND(order.shippingFee)}</div>
                   </div>
                   <div className="flex items-center">
                     <div>Giảm giá:</div>
                     <div className="ml-auto">
-                      -{formatTHB((order as any)?.discount?.discountAmount || 0)}
+                      -{formatVND((order as any)?.discount?.discountAmount || 0)}
                     </div>
                   </div>
                   <div className="flex items-center font-bold">
                     <div>Tổng cộng:</div>
                     <div className="ml-auto">
-                      {formatTHB(
-                        (order as any)!.totalPrice +
-                          order.shippingFee -
-                          ((order?.discount as any)?.discountAmount || 0),
+                      {formatVND(
+                        parseFloat(
+                          (
+                            (order as any)!.totalPrice +
+                            order.shippingFee -
+                            ((order?.discount as any)?.discountAmount || 0)
+                          ).toFixed(2),
+                        ),
                       )}
                     </div>
                   </div>
@@ -229,7 +233,7 @@ export default async function OrderDetailsPage({ params: paramsPromise }: Args) 
                   <div className="flex items-center">
                     <div>Số tiền:</div>
                     <div className="ml-auto">
-                      {formatTHB((order.discount as any)?.discountAmount)}{' '}
+                      {formatVND((order.discount as any)?.discountAmount)}{' '}
                       {(order.discount as any)?.discountType}
                     </div>
                   </div>

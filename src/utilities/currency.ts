@@ -1,8 +1,8 @@
-export function formatTHB(amount?: number): string {
-  return new Intl.NumberFormat('th-TH', {
+export function formatVND(amount?: number): string {
+  return new Intl.NumberFormat('vi-VN', {
     style: 'currency',
-    currency: 'THB',
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2,
+    currency: 'VND',
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
   }).format(amount || 0)
 }

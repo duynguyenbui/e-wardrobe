@@ -148,8 +148,8 @@ export const createOrder = async (data: TCreateOrderValidator) => {
     const { docs: shippingStatuses } = await payload.find({
       collection: 'shippingStatuses',
       where: {
-        name: {
-          like: 'pending',
+        code: {
+          like: SHIPPING_STATUS.Pending,
         },
       },
       pagination: false,
@@ -368,7 +368,7 @@ export const isReceivedOrder = async (orderId: string) => {
     collection: 'shippingStatuses',
     where: {
       code: {
-        like: SHIPPING_STATUS.Pending,
+        like: SHIPPING_STATUS.Received,
       },
     },
     pagination: false,
