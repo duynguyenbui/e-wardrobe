@@ -39,12 +39,12 @@ export function CouponCard({ coupon }: CouponCardProps) {
 
   const onCollectCoupon = async () => {
     if (!currentUser) {
-      toast.error('You need to login to collect this coupon')
+      toast.error('Bạn cần đăng nhập để thu thập mã giảm giá này')
       return
     }
 
     if (isCollected) {
-      toast.error('You have already collected this coupon')
+      toast.error('Bạn đã thu thập mã giảm giá này')
       return
     }
 
@@ -61,7 +61,7 @@ export function CouponCard({ coupon }: CouponCardProps) {
       <CardHeader>
         <div className="flex justify-between items-center">
           <CardTitle className="text-2xl font-bold">{coupon.code}</CardTitle>
-          <Badge variant="default">Active</Badge>
+          <Badge variant="default">Hoạt động</Badge>
         </div>
         <CardDescription>{coupon.description}</CardDescription>
       </CardHeader>
@@ -70,31 +70,31 @@ export function CouponCard({ coupon }: CouponCardProps) {
           <Ticket className="h-5 w-5 text-muted-foreground" />
           <span>
             {coupon.discountType === 'fixed'
-              ? `$${coupon.discountAmount} off`
-              : `${coupon.discountAmount}% off`}
+              ? `Giảm ${coupon.discountAmount} VNĐ`
+              : `Giảm ${coupon.discountAmount}%`}
           </span>
         </div>
         <div className="flex items-center space-x-2">
           <DollarSign className="h-5 w-5 text-muted-foreground" />
-          <span>Minimum purchase: ${coupon.minimumPriceToUse}</span>
+          <span>Mua tối thiểu: ${coupon.minimumPriceToUse} VNĐ</span>
         </div>
         <div className="flex items-center space-x-2">
           <Users className="h-5 w-5 text-muted-foreground" />
           <span>
-            {coupon.collectedUsers?.length ?? 0} / {coupon.quantity} available
+            {coupon.collectedUsers?.length ?? 0} / {coupon.quantity} còn lại
           </span>
         </div>
         <div className="flex items-center text-sm space-x-2 text-muted-foreground">
           <Clock className="h-5 w-5 text-muted-foreground" />
           <span>
-            Valid: {moment(coupon.validFrom).format('DD/MM/YYYY, h:mm')} -{' '}
+            HSD: {moment(coupon.validFrom).format('DD/MM/YYYY, h:mm')} -{' '}
             {moment(coupon.validTo).format('DD/MM/YYYY, h:mm')}
           </span>
         </div>
       </CardContent>
       <CardFooter>
         <Button className="w-full" disabled={isCollected || false} onClick={onCollectCoupon}>
-          {isCollected ? 'Coupon Collected' : 'Collect Coupon'}
+          {isCollected ? 'Đã thu thập' : 'Thu thập'}
         </Button>
       </CardFooter>
     </Card>

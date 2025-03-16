@@ -17,7 +17,7 @@ export const CategoryArchive = (props: Props) => {
           categories.map((category, index) => (
             <CategoryCard
               title={category.title}
-              description={category?.description || 'No description available'}
+              description={category?.description || 'Không có mô tả'}
               key={index}
             />
           ))}

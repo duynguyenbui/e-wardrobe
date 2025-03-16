@@ -58,13 +58,13 @@ const ProductVariantCard: React.FC<{
             <h3 className="text-lg font-semibold line-clamp-1">{title}</h3>
             <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{description}</p>
           </div>
-          <Badge className="w-28">Qty: {quantity}</Badge>
+          <Badge className="w-28">Số lượng: {quantity}</Badge>
         </div>
         <div className="flex items-center justify-between">
           <span className="text-2xl font-bold">${price.toFixed(2)}</span>
           <div className="flex items-center space-x-2">
             <div className="text-sm">
-              <span className="font-semibold">Size:</span> {size.name}
+              <span className="font-semibold">Kích thước:</span> {size.name}
             </div>
             <div className="flex items-center space-x-1">
               <span className="w-4 h-4 rounded-full" style={{ backgroundColor: color.hex }}></span>
@@ -77,7 +77,7 @@ const ProductVariantCard: React.FC<{
             onClick={() => add({ id, title, price, quantity, quantityToBuy: 1 })}
             className="w-full"
           >
-            Add to Cart
+            Thêm vào giỏ hàng
             <ShoppingBasket className="size-4" />
           </Button>
         )}

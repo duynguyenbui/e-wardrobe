@@ -16,23 +16,34 @@ import { MediaBlock } from '../MediaBlock/config'
 const columnFields: Field[] = [
   {
     name: 'size',
+    label: {
+      vi: 'Kích thước',
+    },
     type: 'select',
     defaultValue: 'oneThird',
     options: [
       {
-        label: 'One Third',
+        label: {
+          vi: 'Một phần ba',
+        },
         value: 'oneThird',
       },
       {
-        label: 'Half',
+        label: {
+          vi: 'Một phần hai',
+        },
         value: 'half',
       },
       {
-        label: 'Two Thirds',
+        label: {
+          vi: 'Hai phần ba',
+        },
         value: 'twoThirds',
       },
       {
-        label: 'Full',
+        label: {
+          vi: 'Toàn bộ',
+        },
         value: 'full',
       },
     ],
@@ -55,6 +66,9 @@ const columnFields: Field[] = [
   },
   {
     name: 'enableLink',
+    label: {
+      vi: 'Cho phép liên kết',
+    },
     type: 'checkbox',
   },
   link({
@@ -68,10 +82,21 @@ const columnFields: Field[] = [
 
 export const Content: Block = {
   slug: 'content',
+  labels: {
+    singular: {
+      vi: 'Nội dung',
+    },
+    plural: {
+      vi: 'Nội dung',
+    },
+  },
   interfaceName: 'ContentBlock',
   fields: [
     {
       name: 'columns',
+      label: {
+        vi: 'Cột',
+      },
       type: 'array',
       admin: {
         initCollapsed: true,

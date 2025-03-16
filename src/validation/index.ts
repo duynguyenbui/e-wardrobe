@@ -3,17 +3,17 @@ import { z } from 'zod'
 export const PayloadUserLoginValidator = z.object({
   email: z.string().email(),
   password: z.string().min(1, {
-    message: 'Password must not be blank.',
+    message: 'Mật khẩu không được để trống.',
   }),
 })
 
 export const PayloadUserSignUpValidator = z.object({
   email: z.string().email(),
   password: z.string().min(3, {
-    message: 'Password must be 3 characters.',
+    message: 'Mật khẩu phải có ít nhất 3 ký tự.',
   }),
   name: z.string().min(1, {
-    message: 'First name must not be blank.',
+    message: 'Tên không được để trống.',
   }),
 })
 
@@ -21,31 +21,31 @@ export const PayloadUserSettingsValidator = z.object({
   email: z.string().email(),
   password: z.string().optional(),
   name: z.string().min(1, {
-    message: 'Name must not be blank.',
+    message: 'Tên không được để trống.',
   }),
 })
 
 export const CreateAddressValidator = z.object({
   name: z.string().min(1, {
-    message: 'Name must not be blank.',
+    message: 'Tên không được để trống.',
   }),
   province: z.string().min(1, {
-    message: 'Province must not be blank.',
+    message: 'Tỉnh không được để trống.',
   }),
   district: z.string().min(1, {
-    message: 'District must not be blank.',
+    message: 'Quận/Huyện không được để trống.',
   }),
   ward: z.string().min(1, {
-    message: 'Ward must not be blank.',
+    message: 'Phường/Xã không được để trống.',
   }),
   contactName: z.string().min(1, {
-    message: 'Contact name must not be blank.',
+    message: 'Tên liên hệ không được để trống.',
   }),
   contactPhone: z.string().min(1, {
-    message: 'Contact phone must not be blank.',
+    message: 'Số điện thoại liên hệ không được để trống.',
   }),
   detailAddress: z.string().min(1, {
-    message: 'Detail address must not be blank.',
+    message: 'Địa chỉ chi tiết không được để trống.',
   }),
 })
 
@@ -56,18 +56,18 @@ export const UserRecommedSizeValidator = z.object({
 
 export const CreateOrderValidator = z.object({
   userId: z.string().min(1, {
-    message: 'User must not be blank.',
+    message: 'Người dùng không được để trống.',
   }),
   addressId: z.string().min(1, {
-    message: 'Please select an address, or create a new one.',
+    message: 'Vui lòng chọn địa chỉ hoặc tạo mới.',
   }),
   lineItems: z.array(
     z.object({
       productVariantId: z.string().min(1, {
-        message: 'Product variant must not be blank.',
+        message: 'Biến thể sản phẩm không được để trống.',
       }),
       quantityToBuy: z.number().min(1, {
-        message: 'Quantity must be greater than 0.',
+        message: 'Số lượng phải lớn hơn 0.',
       }),
     }),
   ),

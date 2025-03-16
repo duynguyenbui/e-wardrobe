@@ -758,12 +758,12 @@ export interface Product {
   title: string;
   description: string;
   instruction: string;
-  image?: (string | null) | Media;
+  image: string | Media;
   category: string | Category;
   material: string | Material;
   published?: boolean | null;
   /**
-   * This field is automatically generated
+   * Trường này được tự động tạo
    */
   embedding?: string | null;
   slug?: string | null;
@@ -819,7 +819,7 @@ export interface Size {
   createdAt: string;
 }
 /**
- * Colors for products that are used to group products together
+ * Màu sắc cho sản phẩm được sử dụng để nhóm sản phẩm lại với nhau
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "colors".
@@ -835,7 +835,7 @@ export interface Color {
   createdAt: string;
 }
 /**
- * A summary of all orders on e-wardrobe.
+ * Tổng quan tất cả đơn hàng trên e-wardrobe.
  *
  * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "orders".
@@ -968,6 +968,7 @@ export interface Coupon {
 export interface ShippingStatus {
   id: string;
   name: string;
+  code: string;
   description?: string | null;
   updatedAt: string;
   createdAt: string;
@@ -980,7 +981,6 @@ export interface Warranty {
   id: string;
   title: string;
   description: string;
-  icon?: string | null;
   published?: boolean | null;
   updatedAt: string;
   createdAt: string;
@@ -1700,7 +1700,6 @@ export interface AddressesSelect<T extends boolean = true> {
 export interface WarrantiesSelect<T extends boolean = true> {
   title?: T;
   description?: T;
-  icon?: T;
   published?: T;
   updatedAt?: T;
   createdAt?: T;
@@ -1761,6 +1760,7 @@ export interface ShippingFeesSelect<T extends boolean = true> {
  */
 export interface ShippingStatusesSelect<T extends boolean = true> {
   name?: T;
+  code?: T;
   description?: T;
   updatedAt?: T;
   createdAt?: T;

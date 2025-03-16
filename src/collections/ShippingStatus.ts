@@ -1,12 +1,21 @@
 import type { CollectionConfig } from 'payload'
 import { admins } from '@/access/admin'
+import { anyone } from '@/access/anyone'
 
 export const ShippingStatuses: CollectionConfig = {
   slug: 'shippingStatuses',
+  labels: {
+    singular: {
+      vi: 'Trạng thái vận chuyển (Hệ thống)',
+    },
+    plural: {
+      vi: 'Trạng thái vận chuyển (Hệ thống)',
+    },
+  },
   access: {
     create: admins,
-    read: () => true,
-    update: admins,
+    read: anyone,
+    update: () => false,
     delete: admins,
   },
   admin: {
@@ -15,13 +24,25 @@ export const ShippingStatuses: CollectionConfig = {
   fields: [
     {
       name: 'name',
-      label: 'Name',
+      label: {
+        vi: 'Tên trạng thái vận chuyển',
+      },
+      type: 'text',
+      required: true,
+    },
+    {
+      name: 'code',
+      label: {
+        vi: 'Mã trạng thái vận chuyển',
+      },
       type: 'text',
       required: true,
     },
     {
       name: 'description',
-      label: 'Description',
+      label: {
+        vi: 'Mô tả',
+      },
       type: 'textarea',
     },
   ],

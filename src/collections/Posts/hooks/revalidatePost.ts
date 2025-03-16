@@ -31,7 +31,6 @@ export const revalidatePost: CollectionAfterChangeHook<Post> = ({
     }
   }
 
-  revalidatePath('/posts')
   return doc
 }
 

@@ -29,6 +29,14 @@ import { slugField } from '@/fields/slug'
 
 export const Posts: CollectionConfig<'posts'> = {
   slug: 'posts',
+  labels: {
+    singular: {
+      vi: 'Bài viết',
+    },
+    plural: {
+      vi: 'Bài viết',
+    },
+  },
   access: {
     create: authenticated,
     delete: authenticated,
@@ -71,6 +79,9 @@ export const Posts: CollectionConfig<'posts'> = {
   fields: [
     {
       name: 'title',
+      label: {
+        vi: 'Tiêu đề',
+      },
       type: 'text',
       required: true,
     },
@@ -81,6 +92,9 @@ export const Posts: CollectionConfig<'posts'> = {
           fields: [
             {
               name: 'heroImage',
+              label: {
+                vi: 'Ảnh bìa',
+              },
               type: 'upload',
               relationTo: 'media',
             },
@@ -110,6 +124,9 @@ export const Posts: CollectionConfig<'posts'> = {
             {
               name: 'relatedPosts',
               type: 'relationship',
+              label: {
+                vi: 'Bài viết liên quan',
+              },
               admin: {
                 position: 'sidebar',
               },
@@ -125,6 +142,9 @@ export const Posts: CollectionConfig<'posts'> = {
             },
             {
               name: 'categories',
+              label: {
+                vi: 'Danh mục',
+              },
               type: 'relationship',
               admin: {
                 position: 'sidebar',
@@ -166,6 +186,9 @@ export const Posts: CollectionConfig<'posts'> = {
     },
     {
       name: 'publishedAt',
+      label: {
+        vi: 'Ngày đăng',
+      },
       type: 'date',
       admin: {
         date: {
@@ -187,6 +210,9 @@ export const Posts: CollectionConfig<'posts'> = {
     {
       name: 'authors',
       type: 'relationship',
+      label: {
+        vi: 'Tác giả',
+      },
       admin: {
         position: 'sidebar',
       },
@@ -199,6 +225,9 @@ export const Posts: CollectionConfig<'posts'> = {
     {
       name: 'populatedAuthors',
       type: 'array',
+      label: {
+        vi: 'Tác giả',
+      },
       access: {
         update: () => false,
       },
@@ -210,9 +239,15 @@ export const Posts: CollectionConfig<'posts'> = {
         {
           name: 'id',
           type: 'text',
+          label: {
+            vi: 'ID',
+          },
         },
         {
           name: 'name',
+          label: {
+            vi: 'Tên',
+          },
           type: 'text',
         },
       ],

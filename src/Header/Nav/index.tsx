@@ -17,10 +17,9 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
   const [open, setOpen] = useState(false)
 
   const filteredNavItems = navItems.filter(({ link }) => {
-    const label = link.label.toLowerCase()
     return user
-      ? !['login', 'register'].includes(label)
-      : !['logout', 'account', 'register'].includes(label)
+      ? !['/login', '/register'].includes(link.url || '')
+      : !['/logout', '/account', '/register'].includes(link.url || '')
   })
 
   return (
@@ -31,7 +30,7 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
           <CMSLink key={i} {...link} appearance="link" />
         ))}
         <Link href="/search">
-          <span className="sr-only">Search</span>
+          <span className="sr-only">Tìm kiếm</span>
           <SearchIcon className="w-5 text-primary" />
         </Link>
         <Cart />
@@ -44,7 +43,7 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
           <SheetTrigger asChild>
             <Button variant="outline" size="icon">
               <Menu className="h-6 w-6 dark:text-white" />
-              <span className="sr-only">Open menu</span>
+              <span className="sr-only">Mở menu</span>
             </Button>
           </SheetTrigger>
           <SheetContent className="w-[300px] sm:w-[200pxpx]">

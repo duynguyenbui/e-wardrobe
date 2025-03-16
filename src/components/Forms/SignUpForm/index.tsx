@@ -37,12 +37,12 @@ const SignUpForm = () => {
       try {
         const res = await create(values)
         if (typeof res === 'object') {
-          toast.success('Your account has been created successfully.')
+          toast.success('Tài khoản của bạn đã được tạo thành công.')
         } else {
           toast.error(res)
         }
       } catch (_) {
-        toast.error('Something went wrong when creating your account.')
+        toast.error('Đã xảy ra lỗi khi tạo tài khoản của bạn.')
       }
     },
     [create],
@@ -55,7 +55,7 @@ const SignUpForm = () => {
           <div className="mx-auto w-full max-w-sm rounded-md p-6 shadow-xl border">
             <div className="mb-6 flex flex-col items-center space-y-2">
               <Logo />
-              <p className="text-muted-foreground">Sign up your account within 2 minutes.</p>
+              <p className="text-muted-foreground">Đăng ký tài khoản trong vòng 2 phút.</p>
             </div>
             <div>
               <Form {...form}>
@@ -65,9 +65,9 @@ const SignUpForm = () => {
                     name="name"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Name</FormLabel>
+                        <FormLabel>Tên</FormLabel>
                         <FormControl>
-                          <Input placeholder="Enter your name" {...field} required />
+                          <Input placeholder="Nhập tên của bạn" {...field} required />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -78,9 +78,9 @@ const SignUpForm = () => {
                     name="email"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Email</FormLabel>
+                        <FormLabel>Thư điện tử</FormLabel>
                         <FormControl>
-                          <Input placeholder="Enter your email" {...field} required />
+                          <Input placeholder="Nhập email của bạn" {...field} required />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -92,10 +92,10 @@ const SignUpForm = () => {
                     name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Password</FormLabel>
+                        <FormLabel>Mật khẩu</FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="Enter your password"
+                            placeholder="Nhập mật khẩu của bạn"
                             type="password"
                             {...field}
                             required
@@ -106,14 +106,14 @@ const SignUpForm = () => {
                     )}
                   />
                   <Button type="submit" className="mt-2 w-full" disabled={isSubmitting}>
-                    Sign up
+                    Đăng ký
                   </Button>
                 </form>
               </Form>
               <div className="mx-auto mt-8 flex justify-center gap-1 text-sm text-muted-foreground">
-                <p>Already have an account?</p>
+                <p>Đã có tài khoản?</p>
                 <Link href="/login" className="font-medium text-primary">
-                  Click here
+                  Nhấn vào đây
                 </Link>
               </div>
             </div>

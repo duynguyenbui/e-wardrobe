@@ -25,9 +25,10 @@ export const CartModal = () => {
   return (
     <Dialog open={type === ModalType.ADD_TO_CART && isOpen} onOpenChange={close}>
       <DialogContent className="sm:max-w-[425px]">
-        <DialogTitle className="text-center text-2xl font-bold">Add to Cart</DialogTitle>
+        <DialogTitle className="text-center text-2xl font-bold">Thêm vào giỏ hàng</DialogTitle>
         <DialogDescription>
-          Add this item to your cart. You can adjust the quantity in your cart before checking out
+          Thêm sản phẩm này vào giỏ hàng. Bạn có thể điều chỉnh số lượng trong giỏ hàng trước khi
+          thanh toán
         </DialogDescription>
         {data && (
           <Fragment>
@@ -45,7 +46,7 @@ export const CartModal = () => {
                 className="w-20"
               />
               <Button onClick={addToCart} className="flex-grow">
-                Add to Cart
+                Thêm vào giỏ hàng
               </Button>
             </div>
           </Fragment>

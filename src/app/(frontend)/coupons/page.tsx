@@ -9,7 +9,7 @@ export default async function Page() {
     <div className="container">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {coupons && coupons.map((coupon) => <CouponCard key={coupon.id} coupon={coupon} />)}
-        {coupons.length <= 0 && <div className="text-2xl font-bold mt-2">No coupons available</div>}
+        {coupons.length <= 0 && <div className="text-2xl font-bold mt-2">Không có mã giảm giá</div>}
       </div>
     </div>
   )

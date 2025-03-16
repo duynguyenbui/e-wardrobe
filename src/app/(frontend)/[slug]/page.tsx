@@ -47,7 +47,7 @@ type Args = {
 
 export default async function Page({ params: paramsPromise }: Args) {
   const { isEnabled: draft } = await draftMode()
-  const { slug = 'home' } = await paramsPromise
+  const { slug = 'trang-chu' } = await paramsPromise
   const url = '/' + slug
 
   let page: PageType | null
@@ -57,7 +57,7 @@ export default async function Page({ params: paramsPromise }: Args) {
   })
 
   // Remove this code once your website is seeded
-  if (!page && slug === 'home') {
+  if (!page && slug === 'trang-chu') {
     page = homeStatic
   }
 
@@ -82,7 +82,7 @@ export default async function Page({ params: paramsPromise }: Args) {
 }
 
 export async function generateMetadata({ params: paramsPromise }: Args): Promise<Metadata> {
-  const { slug = 'home' } = await paramsPromise
+  const { slug = 'trang-chu' } = await paramsPromise
   const page = await queryPageBySlug({
     slug,
   })

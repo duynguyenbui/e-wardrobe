@@ -35,9 +35,7 @@ export const ColorArchive = ({ colors, className }: Props) => {
                   <Card>
                     <CardHeader>
                       <CardTitle>{color.title}</CardTitle>
-                      <CardDescription>
-                        {color.description || 'No description available'}
-                      </CardDescription>
+                      <CardDescription>{color.description || 'Không có mô tả'}</CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="flex items-center space-x-4">
@@ -48,17 +46,17 @@ export const ColorArchive = ({ colors, className }: Props) => {
                         <div>
                           <p className="font-medium">Hex: {color.hex}</p>
                           <p className="text-sm text-muted-foreground">
-                            Slug: {color.slug || 'N/A'}
+                            Phích cắm: {color.slug || 'N/A'}
                           </p>
                         </div>
                       </div>
                     </CardContent>
                     <CardFooter className="flex justify-between">
                       <p className="text-sm text-muted-foreground">
-                        Created: {new Date(color.createdAt).toLocaleDateString()}
+                        Tạo: {new Date(color.createdAt).toLocaleDateString()}
                       </p>
                       <p className="text-sm text-muted-foreground">
-                        Updated: {new Date(color.updatedAt).toLocaleDateString()}
+                        Cập nhật: {new Date(color.updatedAt).toLocaleDateString()}
                       </p>
                     </CardFooter>
                   </Card>

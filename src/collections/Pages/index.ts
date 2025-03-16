@@ -24,6 +24,14 @@ import { preventDefaultRoutes } from '@/hooks/preventDefaultRoutes'
 
 export const Pages: CollectionConfig<'pages'> = {
   slug: 'pages',
+  labels: {
+    singular: {
+      vi: 'Trang Web',
+    },
+    plural: {
+      vi: 'Trang Web',
+    },
+  },
   access: {
     create: authenticated,
     delete: authenticated,
@@ -61,6 +69,9 @@ export const Pages: CollectionConfig<'pages'> = {
   fields: [
     {
       name: 'title',
+      label: {
+        vi: 'Tiêu đề',
+      },
       type: 'text',
       required: true,
     },
@@ -69,7 +80,9 @@ export const Pages: CollectionConfig<'pages'> = {
       tabs: [
         {
           fields: [hero],
-          label: 'Hero',
+          label: {
+            vi: 'Hero',
+          },
         },
         {
           fields: [
@@ -83,7 +96,9 @@ export const Pages: CollectionConfig<'pages'> = {
               },
             },
           ],
-          label: 'Content',
+          label: {
+            vi: 'Nội dung',
+          },
         },
         {
           name: 'meta',
@@ -116,6 +131,9 @@ export const Pages: CollectionConfig<'pages'> = {
     },
     {
       name: 'publishedAt',
+      label: {
+        vi: 'Ngày đăng',
+      },
       type: 'date',
       admin: {
         position: 'sidebar',

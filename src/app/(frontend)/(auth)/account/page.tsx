@@ -21,8 +21,8 @@ export default async function Page() {
       <PageClient />
       <Tabs defaultValue="account" className="max-w-7xl mx-auto">
         <TabsList className="grid w-full grid-cols-2">
-          <TabsTrigger value="account">Account</TabsTrigger>
-          <TabsTrigger value="address">Address</TabsTrigger>
+          <TabsTrigger value="account">Tài khoản</TabsTrigger>
+          <TabsTrigger value="address">Địa chỉ</TabsTrigger>
         </TabsList>
         <TabsContent value="account">
           <AccountForm user={user} />

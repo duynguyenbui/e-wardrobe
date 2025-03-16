@@ -42,13 +42,13 @@ export const LoginForm = () => {
           if (user.roles.includes('admin')) {
             router.push('/admin')
           } else {
-            router.push(redirect.current || '/home')
+            router.push(redirect.current || '/')
           }
         } else {
-          toast.error('There was an error with the credentials provided. Please try again.')
+          toast.error('Thông tin đăng nhập không chính xác. Vui lòng thử lại.')
         }
       } catch (_) {
-        toast.error('Something went wrong.')
+        toast.error('Đã xảy ra lỗi.')
       }
     },
     [login, router],
@@ -61,7 +61,7 @@ export const LoginForm = () => {
           <div className="mx-auto w-full max-w-sm rounded-md p-6 shadow-xl border">
             <div className="mb-6 flex flex-col items-center space-y-2">
               <Logo />
-              <p className="text-muted-foreground">Login to your account.</p>
+              <p className="text-muted-foreground">Đăng nhập vào tài khoản của bạn.</p>
             </div>
             <div>
               <Form {...form}>
@@ -74,13 +74,13 @@ export const LoginForm = () => {
                         <FormLabel>Email</FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="Enter your email"
+                            placeholder="Nhập email của bạn"
                             {...field}
                             required
                             className="rounded-md"
                           />
                         </FormControl>
-                        <FormDescription>This is your public display name.</FormDescription>
+                        <FormDescription>Đây là tên hiển thị công khai của bạn.</FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
@@ -90,37 +90,37 @@ export const LoginForm = () => {
                     name="password"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>Password</FormLabel>
+                        <FormLabel>Mật khẩu</FormLabel>
                         <FormControl>
                           <Input
-                            placeholder="Enter your password"
+                            placeholder="Nhập mật khẩu của bạn"
                             type="password"
                             {...field}
                             required
                             className="rounded-md"
                           />
                         </FormControl>
-                        <FormDescription>This is your password.</FormDescription>
+                        <FormDescription>Đây là mật khẩu của bạn.</FormDescription>
                         <FormMessage />
                       </FormItem>
                     )}
                   />
                   <Button type="submit" className="mt-2 w-full">
-                    Login
+                    Đăng nhập
                   </Button>
                 </form>
               </Form>
               <div className="mx-auto mt-8 flex flex-col items-center gap-1 text-sm text-muted-foreground">
                 <div className="flex space-x-2">
-                  <p>Continue as seller?</p>
+                  <p>Tiếp tục với tư cách người bán?</p>
                   <Link href="/admin" className="font-medium text-primary text-blue-500">
-                    Click here
+                    Nhấn vào đây
                   </Link>
                 </div>
                 <div className="flex space-x-2">
-                  <p>Don&apos;t have an account?</p>
+                  <p>Chưa có tài khoản?</p>
                   <Link href="/register" className="font-medium text-primary text-blue-500">
-                    Register
+                    Đăng ký
                   </Link>
                 </div>
               </div>

@@ -31,8 +31,8 @@ const Page = () => {
         <Card className="max-w-md w-full space-y-6 p-6 rounded-lg shadow-lg">
           <div className="flex flex-col items-center">
             <XCircle className="text-red-500 h-16 w-16" />
-            <h1 className="text-3xl font-bold mt-4">Payment Cancelled</h1>
-            <p className="mt-2">Your payment has been cancelled.</p>
+            <h1 className="text-3xl font-bold mt-4">Thanh toán đã bị hủy</h1>
+            <p className="mt-2">Thanh toán của bạn đã bị hủy.</p>
           </div>
 
           <div className="flex justify-center">
@@ -41,7 +41,7 @@ const Page = () => {
               className={cn(buttonVariants(), 'mt-4')}
               prefetch={false}
             >
-              View your order
+              Xem đơn hàng của bạn
             </Link>
           </div>
         </Card>

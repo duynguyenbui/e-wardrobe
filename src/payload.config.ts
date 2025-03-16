@@ -8,8 +8,7 @@ import { fileURLToPath } from 'url'
 // import { nodemailerAdapter } from '@payloadcms/email-nodemailer'
 // import nodemailer from 'nodemailer'
 // import { vi } from '@payloadcms/translations/languages/vi'
-import { en } from '@payloadcms/translations/languages/en'
-
+import { vi } from '@payloadcms/translations/languages/vi'
 import { Categories } from './collections/Categories'
 import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
@@ -136,7 +135,7 @@ export default buildConfig({
     tasks: [],
   },
   i18n: {
-    supportedLanguages: { en },
-    fallbackLanguage: 'en',
+    supportedLanguages: { vi },
+    fallbackLanguage: 'vi',
   },
 })

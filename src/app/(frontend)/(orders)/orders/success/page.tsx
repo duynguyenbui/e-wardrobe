@@ -31,8 +31,8 @@ const Page = () => {
         <Card className="max-w-md w-full space-y-6 p-6 rounded-lg shadow-lg ">
           <div className="flex flex-col items-center">
             <CircleCheckIcon className="text-green-500 h-16 w-16" />
-            <h1 className="text-3xl font-bold mt-4">Payment Successful</h1>
-            <p className="mt-2">Thank you for your payment.</p>
+            <h1 className="text-3xl font-bold mt-4">Thanh toán thành công</h1>
+            <p className="mt-2">Cảm ơn bạn đã thanh toán.</p>
           </div>
 
           <div className="flex justify-center">
@@ -41,7 +41,7 @@ const Page = () => {
               className={cn(buttonVariants(), 'mt-4')}
               prefetch={false}
             >
-              View your order
+              Xem đơn hàng của bạn
             </Link>
           </div>
         </Card>

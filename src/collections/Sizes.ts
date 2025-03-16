@@ -3,6 +3,14 @@ import { admins } from '@/access/admin'
 
 export const Sizes: CollectionConfig = {
   slug: 'sizes',
+  labels: {
+    singular: {
+      vi: 'Kích cỡ',
+    },
+    plural: {
+      vi: 'Kích cỡ',
+    },
+  },
   access: {
     create: admins,
     read: () => true,
@@ -15,18 +23,24 @@ export const Sizes: CollectionConfig = {
   fields: [
     {
       name: 'name',
-      label: 'Name',
+      label: {
+        vi: 'Tên kích cỡ',
+      },
       type: 'text',
       required: true,
     },
     {
       name: 'description',
-      label: 'Description',
+      label: {
+        vi: 'Mô tả',
+      },
       type: 'textarea',
     },
     {
       name: 'minHeight',
-      label: 'Minimum Height (cm)',
+      label: {
+        vi: 'Chiều cao tối thiểu (cm)',
+      },
       type: 'number',
       required: true,
       admin: {
@@ -35,7 +49,9 @@ export const Sizes: CollectionConfig = {
     },
     {
       name: 'maxHeight',
-      label: 'Maximum Height (cm)',
+      label: {
+        vi: 'Chiều cao tối đa (cm)',
+      },
       type: 'number',
       required: true,
       admin: {
@@ -44,7 +60,9 @@ export const Sizes: CollectionConfig = {
     },
     {
       name: 'minWeight',
-      label: 'Minimum Weight (kg)',
+      label: {
+        vi: 'Cân nặng tối thiểu (kg)',
+      },
       type: 'number',
       required: true,
       admin: {
@@ -53,7 +71,9 @@ export const Sizes: CollectionConfig = {
     },
     {
       name: 'maxWeight',
-      label: 'Maximum Weight (kg)',
+      label: {
+        vi: 'Cân nặng tối đa (kg)',
+      },
       type: 'number',
       required: true,
       admin: {

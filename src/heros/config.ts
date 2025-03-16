@@ -20,19 +20,27 @@ export const hero: Field = {
       label: 'Type',
       options: [
         {
-          label: 'None',
+          label: {
+            vi: 'Không có',
+          },
           value: 'none',
         },
         {
-          label: 'High Impact',
+          label: {
+            vi: 'Nền cao',
+          },
           value: 'highImpact',
         },
         {
-          label: 'Medium Impact',
+          label: {
+            vi: 'Nền trung bình',
+          },
           value: 'mediumImpact',
         },
         {
-          label: 'Low Impact',
+          label: {
+            vi: 'Nền thấp',
+          },
           value: 'lowImpact',
         },
       ],
@@ -60,6 +68,9 @@ export const hero: Field = {
     }),
     {
       name: 'media',
+      label: {
+        vi: 'Hình ảnh',
+      },
       type: 'upload',
       admin: {
         condition: (_, { type } = {}) => ['highImpact', 'mediumImpact'].includes(type),

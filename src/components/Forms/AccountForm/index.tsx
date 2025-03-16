@@ -37,9 +37,9 @@ export function AccountForm({ user }: { user: User }) {
   return (
     <Card className="max-w-5xl lg:w-[700px]">
       <CardHeader>
-        <CardTitle>Account</CardTitle>
+        <CardTitle>Tài khoản</CardTitle>
         <CardDescription>
-          Make changes to your account here. Click save when you&apos;re done.
+          Thay đổi thông tin tài khoản của bạn tại đây. Nhấn lưu khi bạn hoàn tất.
         </CardDescription>
       </CardHeader>
       <CardContent>
@@ -64,9 +64,9 @@ export function AccountForm({ user }: { user: User }) {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Họ tên</FormLabel>
                   <FormControl>
-                    <Input placeholder="John" {...field} />
+                    <Input placeholder="Nguyễn Văn A" {...field} />
                   </FormControl>
                 </FormItem>
               )}
@@ -76,14 +76,14 @@ export function AccountForm({ user }: { user: User }) {
               name="password"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Password</FormLabel>
+                  <FormLabel>Mật khẩu</FormLabel>
                   <FormControl>
                     <Input type="password" {...field} placeholder="***" />
                   </FormControl>
                 </FormItem>
               )}
             />
-            <Button type="submit">Save Changes</Button>
+            <Button type="submit">Lưu thay đổi</Button>
           </form>
         </Form>
       </CardContent>

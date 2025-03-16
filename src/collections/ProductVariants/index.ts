@@ -8,6 +8,14 @@ import { revalidatePath } from 'next/cache'
 
 export const ProductVariants: CollectionConfig = {
   slug: 'productVariants',
+  labels: {
+    singular: {
+      vi: 'Biến thể sản phẩm',
+    },
+    plural: {
+      vi: 'Biến thể sản phẩm',
+    },
+  },
   access: {
     create: authenticated,
     delete: authenticated,
@@ -15,8 +23,8 @@ export const ProductVariants: CollectionConfig = {
     update: authenticated,
   },
   hooks: {
-    beforeChange: [populateStripe],
-    afterDelete: [deactivateProduct],
+    // beforeChange: [populateStripe],
+    // afterDelete: [deactivateProduct],
     afterChange: [
       ({ doc }) => {
         revalidatePath(`$/products/${doc.id}`)
@@ -29,31 +37,49 @@ export const ProductVariants: CollectionConfig = {
   fields: [
     {
       name: 'title',
+      label: {
+        vi: 'Tên biến thể sản phẩm',
+      },
       type: 'text',
       required: true,
     },
     {
       name: 'description',
+      label: {
+        vi: 'Mô tả',
+      },
       type: 'textarea',
     },
     {
       name: 'image',
+      label: {
+        vi: 'Ảnh',
+      },
       type: 'upload',
       relationTo: 'media',
       required: true,
     },
     {
       name: 'quantity',
+      label: {
+        vi: 'Số lượng',
+      },
       type: 'number',
       required: true,
     },
     {
       name: 'price',
+      label: {
+        vi: 'Giá',
+      },
       type: 'number',
       required: true,
     },
     {
       name: 'size',
+      label: {
+        vi: 'Kích cỡ',
+      },
       type: 'relationship',
       relationTo: 'sizes',
       hasMany: false,
@@ -64,6 +90,9 @@ export const ProductVariants: CollectionConfig = {
     },
     {
       name: 'color',
+      label: {
+        vi: 'Màu sắc',
+      },
       type: 'relationship',
       relationTo: 'colors',
       hasMany: false,
@@ -74,6 +103,9 @@ export const ProductVariants: CollectionConfig = {
     },
     {
       name: 'product',
+      label: {
+        vi: 'Sản phẩm',
+      },
       type: 'relationship',
       relationTo: 'products',
       hasMany: false,
@@ -84,6 +116,9 @@ export const ProductVariants: CollectionConfig = {
     },
     {
       name: 'priceId',
+      label: {
+        vi: 'Giá sản phẩm Stripe ID',
+      },
       type: 'text',
       admin: {
         readOnly: true,
@@ -91,6 +126,9 @@ export const ProductVariants: CollectionConfig = {
     },
     {
       name: 'productId',
+      label: {
+        vi: 'Sản phẩm Stripe ID',
+      },
       type: 'text',
       admin: {
         readOnly: true,

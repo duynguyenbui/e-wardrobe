@@ -10,6 +10,14 @@ import { indexProduct } from './hooks/indexProduct'
 
 export const Products: CollectionConfig = {
   slug: 'products',
+  labels: {
+    singular: {
+      vi: 'Sản phẩm',
+    },
+    plural: {
+      vi: 'Sản phẩm',
+    },
+  },
   access: {
     create: authenticated,
     delete: authenticated,
@@ -17,22 +25,21 @@ export const Products: CollectionConfig = {
     update: authenticated,
   },
   hooks: {
-    afterChange: [
-      async () => {
-        revalidatePath('/products')
-      },
-      indexProduct, // change it if you want to use vector database
-    ],
-    afterDelete: [deleteIndex], // change it if you want to use vector database
-    beforeChange: [
-      async ({ data }) => {
-        if (!data.embedding) {
-          data.embedding = uuidv4()
-        }
-
-        return data
-      },
-    ],
+    // afterChange: [
+    //   async () => {
+    //     revalidatePath('/products')
+    //   },
+    //   indexProduct, // change it if you want to use vector database
+    // ],
+    // afterDelete: [deleteIndex], // change it if you want to use vector database
+    // beforeChange: [
+    //   async ({ data }) => {
+    //     if (!data.embedding) {
+    //       data.embedding = uuidv4()
+    //     }
+    //     return data
+    //   },
+    // ],
   },
   admin: {
     useAsTitle: 'title',
@@ -40,29 +47,42 @@ export const Products: CollectionConfig = {
   fields: [
     {
       name: 'title',
+      label: {
+        vi: 'Tên sản phẩm',
+      },
       type: 'text',
       required: true,
     },
     {
       name: 'description',
+      label: {
+        vi: 'Mô tả',
+      },
       type: 'textarea',
       required: true,
     },
     {
       name: 'instruction',
-      label: 'Instruction',
+      label: {
+        vi: 'Hướng dẫn sử dụng',
+      },
       type: 'textarea',
       required: true,
     },
     {
       name: 'image',
+      label: {
+        vi: 'Ảnh',
+      },
       type: 'upload',
       relationTo: 'media',
-      required: false,
+      required: true,
     },
     {
       name: 'category',
-      label: 'Category',
+      label: {
+        vi: 'Danh mục',
+      },
       type: 'relationship',
       relationTo: 'categories',
       hasMany: false,
@@ -73,7 +93,9 @@ export const Products: CollectionConfig = {
     },
     {
       name: 'material',
-      label: 'Material',
+      label: {
+        vi: 'Chất liệu',
+      },
       type: 'relationship',
       relationTo: 'materials',
       hasMany: false,
@@ -84,17 +106,20 @@ export const Products: CollectionConfig = {
     },
     {
       name: 'published',
-      label: 'Published',
+      label: {
+        vi: 'Công khai',
+      },
       type: 'checkbox',
-      defaultValue: false,
     },
     {
       name: 'embedding',
-      label: 'Embedding',
+      label: {
+        vi: 'Vector nhúng',
+      },
       type: 'text',
       admin: {
         disableListFilter: true,
-        description: 'This field is automatically generated',
+        description: 'Trường này được tự động tạo',
       },
     },
     ...slugField(),

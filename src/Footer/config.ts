@@ -5,12 +5,18 @@ import { revalidateFooter } from './hooks/revalidateFooter'
 
 export const Footer: GlobalConfig = {
   slug: 'footer',
+  label: {
+    vi: 'Chân trang',
+  },
   access: {
     read: () => true,
   },
   fields: [
     {
       name: 'navItems',
+      label: {
+        vi: 'Mục menu',
+      },
       type: 'array',
       fields: [
         link({

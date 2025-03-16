@@ -2,23 +2,40 @@ import type { Block } from 'payload'
 
 export const Code: Block = {
   slug: 'code',
+  labels: {
+    singular: {
+      vi: 'Mã lập trình',
+    },
+    plural: {
+      vi: 'Mã lập trình',
+    },
+  },
   interfaceName: 'CodeBlock',
   fields: [
     {
       name: 'language',
+      label: {
+        vi: 'Ngôn ngữ lập trình',
+      },
       type: 'select',
       defaultValue: 'typescript',
       options: [
         {
-          label: 'Typescript',
+          label: {
+            vi: 'Typescript',
+          },
           value: 'typescript',
         },
         {
-          label: 'Javascript',
+          label: {
+            vi: 'Javascript',
+          },
           value: 'javascript',
         },
         {
-          label: 'CSS',
+          label: {
+            vi: 'CSS',
+          },
           value: 'css',
         },
       ],

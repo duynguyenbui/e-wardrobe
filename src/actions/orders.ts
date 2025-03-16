@@ -367,8 +367,8 @@ export const isReceivedOrder = async (orderId: string) => {
   const { docs: shippingStatuses } = await payload.find({
     collection: 'shippingStatuses',
     where: {
-      name: {
-        like: SHIPPING_STATUS.Delivered,
+      code: {
+        like: SHIPPING_STATUS.Pending,
       },
     },
     pagination: false,

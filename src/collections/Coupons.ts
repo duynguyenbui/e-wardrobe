@@ -6,6 +6,14 @@ import { revalidatePath } from 'next/cache'
 
 export const Coupons: CollectionConfig = {
   slug: 'coupons',
+  labels: {
+    singular: {
+      vi: 'Mã giảm giá',
+    },
+    plural: {
+      vi: 'Mã giảm giá',
+    },
+  },
   access: {
     create: authenticated,
     delete: authenticated,
@@ -25,26 +33,41 @@ export const Coupons: CollectionConfig = {
   fields: [
     {
       name: 'code',
+      label: {
+        vi: 'Mã CODE',
+      },
       type: 'text',
       required: true,
     },
     {
       name: 'description',
+      label: {
+        vi: 'Mô tả',
+      },
       type: 'textarea',
     },
     {
       name: 'minimumPriceToUse',
+      label: {
+        vi: 'Giá trị tối thiểu để sử dụng',
+      },
       type: 'number',
       required: true,
     },
     {
       name: 'currentUse',
+      label: {
+        vi: 'Người đã sử dụng(s)',
+      },
       type: 'relationship',
       relationTo: 'users',
       hasMany: true,
     },
     {
       name: 'quantity',
+      label: {
+        vi: 'Số lượng',
+      },
       type: 'number',
       required: true,
       admin: {
@@ -53,6 +76,9 @@ export const Coupons: CollectionConfig = {
     },
     {
       name: 'discountType',
+      label: {
+        vi: 'Loại giảm giá',
+      },
       type: 'select',
       options: [
         { label: 'Percentage', value: 'percentage' },
@@ -62,6 +88,9 @@ export const Coupons: CollectionConfig = {
     },
     {
       name: 'discountAmount',
+      label: {
+        vi: 'Giá trị giảm',
+      },
       type: 'number',
       required: true,
       admin: {
@@ -70,20 +99,28 @@ export const Coupons: CollectionConfig = {
     },
     {
       name: 'active',
+      label: {
+        vi: 'Trạng thái',
+      },
       type: 'checkbox',
-      defaultValue: false,
       admin: {
         position: 'sidebar',
       },
     },
     {
       name: 'collectedUsers',
+      label: {
+        vi: 'Người đã thu thập(s)',
+      },
       type: 'relationship',
       relationTo: 'users',
       hasMany: true,
     },
     {
       name: 'validFrom',
+      label: {
+        vi: 'Ngày bắt đầu',
+      },
       type: 'date',
       required: true,
       admin: {
@@ -95,6 +132,9 @@ export const Coupons: CollectionConfig = {
     },
     {
       name: 'validTo',
+      label: {
+        vi: 'Ngày kết thúc',
+      },
       type: 'date',
       required: true,
       admin: {

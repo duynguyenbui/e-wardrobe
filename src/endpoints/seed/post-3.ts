@@ -1,7 +1,7 @@
 import type { Post } from '@/payload-types'
 
 export const post3: Partial<Post> = {
-  slug: 'dollar-and-sense-the-financial-forecast',
+  slug: 'dong-dong-la-va-su-nhan-thuc-du-bao-tai-chinh',
   _status: 'published',
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -13,7 +13,7 @@ export const post3: Partial<Post> = {
         {
           type: 'block',
           fields: {
-            blockName: 'Disclaimer',
+            blockName: 'Tuyên bố từ chối trách nhiệm',
             blockType: 'banner',
             content: {
               root: {
@@ -28,7 +28,7 @@ export const post3: Partial<Post> = {
                         format: 1,
                         mode: 'normal',
                         style: '',
-                        text: 'Disclaimer: ',
+                        text: 'Tuyên bố từ chối trách nhiệm: ',
                         version: 1,
                       },
                       {
@@ -37,7 +37,7 @@ export const post3: Partial<Post> = {
                         format: 0,
                         mode: 'normal',
                         style: '',
-                        text: 'This content is fabricated and for demonstration purposes only. To edit this post, ',
+                        text: 'Nội dung này được tạo ra và chỉ dành cho mục đích minh họa. Để chỉnh sửa bài viết này, ',
                         version: 1,
                       },
                       {
@@ -49,7 +49,7 @@ export const post3: Partial<Post> = {
                             format: 0,
                             mode: 'normal',
                             style: '',
-                            text: 'navigate to the admin dashboard.',
+                            text: 'điều hướng đến bảng điều khiển quản trị.',
                             version: 1,
                           },
                         ],
@@ -91,7 +91,7 @@ export const post3: Partial<Post> = {
               format: 0,
               mode: 'normal',
               style: '',
-              text: "Money isn't just currency; ",
+              text: 'Tiền không chỉ là tiền tệ; ',
               version: 1,
             },
             {
@@ -100,7 +100,7 @@ export const post3: Partial<Post> = {
               format: 2,
               mode: 'normal',
               style: '',
-              text: "it's a language. ",
+              text: 'nó là một ngôn ngữ. ',
               version: 1,
             },
             {
@@ -109,7 +109,7 @@ export const post3: Partial<Post> = {
               format: 0,
               mode: 'normal',
               style: '',
-              text: 'Dive deep into its nuances, where strategy meets intuition in the vast sea of finance.',
+              text: 'Khám phá sâu vào những sắc thái của nó, nơi chiến lược gặp gỡ trực giác trong biển tài chính rộng lớn.',
               version: 1,
             },
           ],
@@ -128,7 +128,7 @@ export const post3: Partial<Post> = {
               format: 0,
               mode: 'normal',
               style: '',
-              text: "Money, in its essence, transcends the mere concept of coins and paper notes; it becomes a profound language that speaks of value, trust, and societal structures. Like any language, it possesses intricate nuances and subtleties that require a discerning understanding. It's in these depths where the calculated world of financial strategy collides with the raw, instinctive nature of human intuition. Just as a seasoned linguist might dissect the syntax and semantics of a sentence, a financial expert navigates the vast and tumultuous ocean of finance, guided not only by logic and data but also by gut feelings and foresight. Every transaction, investment, and financial decision becomes a dialogue in this expansive lexicon of commerce and value.",
+              text: 'Tiền, trong bản chất của nó, vượt qua khái niệm đơn thuần về đồng xu và tờ giấy; nó trở thành một ngôn ngữ sâu sắc nói về giá trị, niềm tin và cấu trúc xã hội. Giống như bất kỳ ngôn ngữ nào, nó có những sắc thái và tinh tế phức tạp đòi hỏi sự hiểu biết tinh tường. Chính trong những độ sâu này, thế giới tính toán của chiến lược tài chính va chạm với bản chất thô sơ, bản năng của trực giác con người. Giống như một nhà ngôn ngữ học dày dạn có thể phân tích cú pháp và ngữ nghĩa của một câu, một chuyên gia tài chính điều hướng đại dương tài chính rộng lớn và đầy biến động, được dẫn dắt không chỉ bởi logic và dữ liệu mà còn bởi cảm giác và tầm nhìn. Mỗi giao dịch, đầu tư và quyết định tài chính trở thành một cuộc đối thoại trong từ vựng rộng lớn này của thương mại và giá trị.',
               version: 1,
             },
           ],
@@ -157,7 +157,7 @@ export const post3: Partial<Post> = {
               format: 0,
               mode: 'normal',
               style: '',
-              text: 'Stock Market Dynamics: Bulls, Bears, and the Uncertain Middle',
+              text: 'Động lực Thị trường Chứng khoán: Bò, Gấu và Trung gian Không chắc chắn',
               version: 1,
             },
           ],
@@ -176,7 +176,7 @@ export const post3: Partial<Post> = {
               format: 0,
               mode: 'normal',
               style: '',
-              text: 'The stock market is a realm of vast opportunity but also poses risks. Discover the forces that drive market trends and the strategies employed by top traders to navigate this complex ecosystem. From market analysis to understanding investor psychology, get a comprehensive insight into the world of stocks.',
+              text: 'Thị trường chứng khoán là một lĩnh vực có cơ hội lớn nhưng cũng tiềm ẩn rủi ro. Khám phá các lực lượng thúc đẩy xu hướng thị trường và các chiến lược được các nhà giao dịch hàng đầu sử dụng để điều hướng hệ sinh thái phức tạp này. Từ phân tích thị trường đến hiểu tâm lý nhà đầu tư, có được cái nhìn toàn diện về thế giới cổ phiếu.',
               version: 1,
             },
           ],
@@ -195,7 +195,7 @@ export const post3: Partial<Post> = {
               format: 0,
               mode: 'normal',
               style: '',
-              text: "The stock market, often visualized as a bustling arena of numbers and ticker tapes, is as much about human behavior as it is about economics. It's a place where optimism, represented by the bullish rally, meets the caution of bearish downturns, with each vying to dictate the market's direction. But between these two extremes lies an uncertain middle ground, a zone populated by traders and investors who constantly weigh hope against fear. Successful navigation requires more than just financial acumen; it demands an understanding of collective sentiments and the ability to predict not just market movements, but also the reactions of other market participants. In this intricate dance of numbers and nerves, the most astute players are those who master both the hard data and the soft nuances of human behavior.",
+              text: 'Thị trường chứng khoán, thường được hình dung như một đấu trường nhộn nhịp của các con số và băng chuyền, cũng liên quan đến hành vi con người nhiều như kinh tế học. Đó là nơi mà sự lạc quan, được đại diện bởi sự tăng giá của thị trường, gặp gỡ sự thận trọng của sự suy giảm, với mỗi bên cố gắng định hướng thị trường. Nhưng giữa hai cực này là một vùng trung gian không chắc chắn, một khu vực được lấp đầy bởi các nhà giao dịch và nhà đầu tư luôn cân nhắc giữa hy vọng và sợ hãi. Điều hướng thành công đòi hỏi không chỉ sự hiểu biết về tài chính mà còn đòi hỏi sự hiểu biết về tình cảm tập thể và khả năng dự đoán không chỉ các chuyển động của thị trường mà còn cả phản ứng của các thành viên khác trong thị trường. Trong điệu nhảy phức tạp của các con số và thần kinh này, những người chơi tinh tế nhất là những người làm chủ cả dữ liệu cứng và những sắc thái mềm của hành vi con người.',
               version: 1,
             },
           ],
@@ -208,7 +208,7 @@ export const post3: Partial<Post> = {
         {
           type: 'block',
           fields: {
-            blockName: 'Dynamic components',
+            blockName: 'Thành phần động',
             blockType: 'banner',
             content: {
               root: {
@@ -223,7 +223,7 @@ export const post3: Partial<Post> = {
                         format: 0,
                         mode: 'normal',
                         style: '',
-                        text: "This content above is completely dynamic using custom layout building blocks configured in the CMS. This can be anything you'd like from rich text and images, to highly designed, complex components.",
+                        text: 'Nội dung trên hoàn toàn động bằng cách sử dụng các khối xây dựng bố cục tùy chỉnh được cấu hình trong CMS. Điều này có thể là bất cứ điều gì bạn muốn từ văn bản phong phú và hình ảnh, đến các thành phần phức tạp, được thiết kế cao.',
                         version: 1,
                       },
                     ],
@@ -256,12 +256,12 @@ export const post3: Partial<Post> = {
   // @ts-ignore
   heroImage: '{{IMAGE_1}}',
   meta: {
-    description: `Money isn't just currency; it's a language. Dive deep into its nuances, where strategy meets intuition in the vast sea of finance.`,
+    description: `Tiền không chỉ là tiền tệ; nó là một ngôn ngữ. Khám phá sâu vào những sắc thái của nó, nơi chiến lược gặp gỡ trực giác trong biển tài chính rộng lớn.`,
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     image: '{{IMAGE_1}}',
-    title: 'Dollar and Sense: The Financial Forecast',
+    title: 'Đồng Đô La và Sự Nhận Thức: Dự Báo Tài Chính',
   },
   relatedPosts: [], // this is populated by the seed script
-  title: 'Dollar and Sense: The Financial Forecast',
+  title: 'Đồng Đô La và Sự Nhận Thức: Dự Báo Tài Chính',
 }

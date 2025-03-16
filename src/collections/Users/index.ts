@@ -8,6 +8,14 @@ import { admins } from '@/access/admin'
 
 export const Users: CollectionConfig = {
   slug: 'users',
+  labels: {
+    singular: {
+      vi: 'Người dùng',
+    },
+    plural: {
+      vi: 'Người dùng',
+    },
+  },
   access: {
     admin: ({ req: { user } }) => checkRole(['admin'], user ?? undefined),
     create: anyone,
@@ -23,10 +31,16 @@ export const Users: CollectionConfig = {
   fields: [
     {
       name: 'name',
+      label: {
+        vi: 'Tên người dùng',
+      },
       type: 'text',
     },
     {
       name: 'roles',
+      label: {
+        vi: 'Vai trò',
+      },
       type: 'select',
       hasMany: true,
       saveToJWT: true,
@@ -36,11 +50,15 @@ export const Users: CollectionConfig = {
       },
       options: [
         {
-          label: 'Admin',
+          label: {
+            vi: 'Quản trị viên',
+          },
           value: 'admin',
         },
         {
-          label: 'User',
+          label: {
+            vi: 'Người dùng',
+          },
           value: 'user',
         },
       ],

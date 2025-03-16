@@ -4,6 +4,14 @@ import { slugField } from '@/fields/slug'
 
 export const Colors: CollectionConfig = {
   slug: 'colors',
+  labels: {
+    singular: {
+      vi: 'Màu sắc',
+    },
+    plural: {
+      vi: 'Màu sắc',
+    },
+  },
   access: {
     create: admins,
     read: () => true,
@@ -12,18 +20,22 @@ export const Colors: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'title',
-    description: 'Colors for products that are used to group products together',
+    description: 'Màu sắc cho sản phẩm được sử dụng để nhóm sản phẩm lại với nhau',
   },
   fields: [
     {
       name: 'title',
-      label: 'Title',
+      label: {
+        vi: 'Tên màu sắc',
+      },
       type: 'text',
       required: true,
     },
     {
       name: 'hex',
-      label: 'Hex',
+      label: {
+        vi: 'Mã hex',
+      },
       type: 'text',
       required: true,
       admin: {
@@ -32,7 +44,9 @@ export const Colors: CollectionConfig = {
     },
     {
       name: 'description',
-      label: 'Description',
+      label: {
+        vi: 'Mô tả',
+      },
       type: 'textarea',
     },
     ...slugField(),

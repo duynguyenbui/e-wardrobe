@@ -22,7 +22,7 @@ export const SizeSelectorModal = () => {
 
   const onSubmit = useCallback(async () => {
     if (!height || !weight) {
-      toast.error('Please enter both height and weight')
+      toast.error('Vui lòng nhập cả chiều cao và cân nặng')
       return
     }
 
@@ -42,7 +42,7 @@ export const SizeSelectorModal = () => {
       }
     } catch (_) {
       setSizes([])
-      toast.error('An error occurred while calculating size')
+      toast.error('Đã xảy ra lỗi khi tính toán kích thước')
     } finally {
       setIsLoading(false)
     }
@@ -51,10 +51,10 @@ export const SizeSelectorModal = () => {
   return (
     <Dialog open={type === ModalType.SIZE_SELECTOR && isOpen} onOpenChange={close}>
       <DialogContent className="sm:max-w-[425px]">
-        <DialogTitle className="text-center text-2xl font-bold">Size Selector</DialogTitle>
+        <DialogTitle className="text-center text-2xl font-bold">Chọn Size</DialogTitle>
         <div className="mt-4">
           <p className="text-center text-sm text-muted-foreground">
-            Enter your measurements for a personalized size recommendation
+            Nhập số đo của bạn để nhận được gợi ý size phù hợp
           </p>
           <form
             onSubmit={(e) => {
@@ -67,7 +67,7 @@ export const SizeSelectorModal = () => {
               <div className="space-y-2">
                 <Label htmlFor="height" className="flex items-center gap-2">
                   <Ruler className="w-4 h-4" />
-                  Height (cm)
+                  Chiều cao (cm)
                 </Label>
                 <Input
                   id="height"
@@ -81,7 +81,7 @@ export const SizeSelectorModal = () => {
               <div className="space-y-2">
                 <Label htmlFor="weight" className="flex items-center gap-2">
                   <Weight className="w-4 h-4" />
-                  Weight (kg)
+                  Cân nặng (kg)
                 </Label>
                 <Input
                   id="weight"
@@ -94,13 +94,13 @@ export const SizeSelectorModal = () => {
               </div>
             </div>
             <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? <Spinner /> : 'Calculate Size'}
+              {isLoading ? <Spinner /> : 'Tính Size'}
             </Button>
           </form>
         </div>
         {sizes.length > 0 && (
           <div className="w-full space-y-4 mt-6">
-            <h3 className="text-lg font-semibold text-center">Recommended Sizes</h3>
+            <h3 className="text-lg font-semibold text-center">Size Được Đề Xuất</h3>
             {sizes.map((size) => (
               <div key={size.id} className="bg-secondary p-4 rounded-md">
                 <h4 className="font-medium">{size.name}</h4>

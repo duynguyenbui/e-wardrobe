@@ -6,7 +6,7 @@ import { TUserRecommedSizeValidator, UserRecommedSizeValidator } from '@/validat
 export const recommendSizes = async (values: TUserRecommedSizeValidator) => {
   const { data } = await UserRecommedSizeValidator.safeParse(values)
 
-  if (!data) return { success: false, message: 'Invalid data' }
+  if (!data) return { success: false, message: 'Không tìm thấy dữ liệu' }
 
   const { weight, height } = data
 
@@ -49,13 +49,13 @@ export const recommendSizes = async (values: TUserRecommedSizeValidator) => {
   if (filteredSizes.length > 0) {
     return {
       success: true,
-      message: 'Sizes found',
+      message: 'Tìm thấy kích cỡ phù hợp',
       data: filteredSizes,
     }
   }
 
   return {
     success: false,
-    message: 'No sizes found for the given measurements',
+    message: 'Không tìm thấy kích cỡ phù hợp',
   }
 }

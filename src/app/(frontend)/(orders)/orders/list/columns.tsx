@@ -32,35 +32,35 @@ export type OrderTableType = {
 export const columns: ColumnDef<OrderTableType>[] = [
   {
     accessorKey: 'id',
-    header: 'ID',
+    header: 'Mã đơn hàng',
   },
   {
     accessorKey: 'totalPrice',
-    header: 'Total Price',
+    header: 'Tổng tiền',
   },
   {
     accessorKey: 'isPaid',
-    header: 'Is Paid',
+    header: 'Trạng thái thanh toán',
   },
   {
     accessorKey: 'shippingFee',
-    header: 'Shipping Fee',
+    header: 'Phí vận chuyển',
   },
   {
     accessorKey: 'note',
-    header: 'Note',
+    header: 'Ghi chú',
   },
   {
     accessorKey: 'type',
-    header: 'Type',
+    header: 'Loại đơn hàng',
   },
   {
     accessorKey: 'shippingStatus',
-    header: 'Shipping Status',
+    header: 'Trạng thái vận chuyển',
   },
   {
     accessorKey: 'createdAt',
-    header: 'Created At',
+    header: 'Ngày tạo',
   },
   {
     id: 'actions',
@@ -71,18 +71,18 @@ export const columns: ColumnDef<OrderTableType>[] = [
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="ghost" className="h-8 w-8 p-0">
-              <span className="sr-only">Open menu</span>
+              <span className="sr-only">Mở menu</span>
               <MoreHorizontal className="h-4 w-4" />
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
+            <DropdownMenuLabel>Hành động</DropdownMenuLabel>
             <DropdownMenuItem onClick={() => navigator.clipboard.writeText(order.id)}>
-              Copy order ID
+              Sao chép mã đơn hàng
             </DropdownMenuItem>
             <DropdownMenuSeparator />
             <DropdownMenuItem>
-              <Link href={`/orders/${order.id}`}>View order detail</Link>
+              <Link href={`/orders/${order.id}`}>Xem chi tiết đơn hàng</Link>
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

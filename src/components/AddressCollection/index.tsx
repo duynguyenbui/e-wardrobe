@@ -17,8 +17,6 @@ import { useModals } from '@/stores/useModals'
 import { ModalType } from '@/types'
 import { deleteAddress } from '@/actions/addresses'
 import { toast } from 'sonner'
-// import { toast } from 'sonner'
-// import { deleteAddress } from '@/server/addresses'
 
 export const AddressCollection = ({ addresses = [] }: { addresses: Address[] }) => {
   const { open } = useModals()
@@ -26,8 +24,8 @@ export const AddressCollection = ({ addresses = [] }: { addresses: Address[] }) 
   const onDelete = async (addressId: string) => {
     const res = await deleteAddress(addressId)
 
-    if (res.success) toast.success(`Address - ${addressId} has been deleted`)
-    else toast.error('Failed to delete address')
+    if (res.success) toast.success(`Địa chỉ - ${addressId} đã được xóa`)
+    else toast.error('Không thể xóa địa chỉ')
   }
 
   return (
@@ -39,18 +37,18 @@ export const AddressCollection = ({ addresses = [] }: { addresses: Address[] }) 
             className="flex gap-2"
             onClick={() => open({ modal: ModalType.ADD_ADDRESS })}
           >
-            Add <Plus className="size-4 ml-2" />
+            Thêm <Plus className="size-4 ml-2" />
           </Button>
         </TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">Name</TableHead>
-            <TableHead className="w-[100px]">Province</TableHead>
-            <TableHead className="hidden md:table-cell w-[100px]">District</TableHead>
-            <TableHead className="hidden lg:table-cell w-[100px]">Ward</TableHead>
-            <TableHead className="hidden lg:table-cell w-[150px]">Name</TableHead>
-            <TableHead className="w-[120px]">Phone</TableHead>
-            <TableHead className="hidden xl:table-cell">Detail</TableHead>
+            <TableHead className="w-[100px]">Tên</TableHead>
+            <TableHead className="w-[100px]">Tỉnh/TP</TableHead>
+            <TableHead className="hidden md:table-cell w-[100px]">Quận/Huyện</TableHead>
+            <TableHead className="hidden lg:table-cell w-[100px]">Phường/Xã</TableHead>
+            <TableHead className="hidden lg:table-cell w-[150px]">Người nhận</TableHead>
+            <TableHead className="w-[120px]">Số điện thoại</TableHead>
+            <TableHead className="hidden xl:table-cell">Chi tiết</TableHead>
             <TableHead>
               <Flag className="size-5" />
             </TableHead>

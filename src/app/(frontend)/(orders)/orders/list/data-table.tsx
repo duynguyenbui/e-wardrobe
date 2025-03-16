@@ -42,10 +42,10 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
 
   return (
     <div>
-      <h1 className="text-2xl font-semibold mb-4">Orders</h1>
+      <h1 className="text-2xl font-semibold mb-4">Đơn hàng</h1>
       <div className="flex items-center py-4">
         <Input
-          placeholder="Filter emails..."
+          placeholder="Tìm kiếm đơn hàng..."
           value={(table.getColumn('note')?.getFilterValue() as string) ?? ''}
           onChange={(event) => table.getColumn('note')?.setFilterValue(event.target.value)}
           className="max-w-sm"
@@ -82,7 +82,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
             ) : (
               <TableRow>
                 <TableCell colSpan={columns.length} className="h-24 text-center">
-                  No results.
+                  Không có kết quả.
                 </TableCell>
               </TableRow>
             )}
@@ -96,7 +96,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
         >
-          Previous
+          Trang trước
         </Button>
         <Button
           variant="outline"
@@ -104,7 +104,7 @@ export function DataTable<TData, TValue>({ columns, data }: DataTableProps<TData
           onClick={() => table.nextPage()}
           disabled={!table.getCanNextPage()}
         >
-          Next
+          Trang tiếp
         </Button>
       </div>
     </div>

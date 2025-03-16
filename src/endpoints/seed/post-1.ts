@@ -1,7 +1,7 @@
 import type { Post } from '@/payload-types'
 
 export const post1: Partial<Post> = {
-  slug: 'digital-horizons',
+  slug: 'chieu-kien-so',
   _status: 'published',
   // eslint-disable-next-line @typescript-eslint/ban-ts-comment
   // @ts-ignore
@@ -19,7 +19,7 @@ export const post1: Partial<Post> = {
               format: 0,
               mode: 'normal',
               style: '',
-              text: 'Dive into the marvels of modern innovation, where the only constant is change. A journey where pixels and data converge to craft the future.',
+              text: 'Khám phá những điều kỳ diệu của sự đổi mới hiện đại, nơi duy nhất không thay đổi là sự thay đổi. Một hành trình nơi các điểm ảnh và dữ liệu hội tụ để tạo nên tương lai.',
               version: 1,
             },
           ],
@@ -32,7 +32,7 @@ export const post1: Partial<Post> = {
         {
           type: 'block',
           fields: {
-            blockName: 'Disclaimer',
+            blockName: 'Tuyên bố từ chối trách nhiệm',
             blockType: 'banner',
             content: {
               root: {
@@ -47,7 +47,7 @@ export const post1: Partial<Post> = {
                         format: 1,
                         mode: 'normal',
                         style: '',
-                        text: 'Disclaimer:',
+                        text: 'Tuyên bố từ chối trách nhiệm:',
                         version: 1,
                       },
                       {
@@ -56,7 +56,7 @@ export const post1: Partial<Post> = {
                         format: 0,
                         mode: 'normal',
                         style: '',
-                        text: ' This content is fabricated and for demonstration purposes only. To edit this post, ',
+                        text: ' Nội dung này được tạo ra và chỉ dành cho mục đích minh họa. Để chỉnh sửa bài viết này, ',
                         version: 1,
                       },
                       {
@@ -68,7 +68,7 @@ export const post1: Partial<Post> = {
                             format: 0,
                             mode: 'normal',
                             style: '',
-                            text: 'navigate to the admin dashboard',
+                            text: 'điều hướng đến bảng điều khiển quản trị',
                             version: 1,
                           },
                         ],
@@ -119,7 +119,7 @@ export const post1: Partial<Post> = {
               format: 0,
               mode: 'normal',
               style: '',
-              text: 'The Rise of AI and Machine Learning',
+              text: 'Sự Trỗi Dậy của AI và Học Máy',
               version: 1,
             },
           ],
@@ -138,7 +138,7 @@ export const post1: Partial<Post> = {
               format: 0,
               mode: 'normal',
               style: '',
-              text: 'We find ourselves in a transformative era where artificial intelligence (AI) stands at the forefront of technological evolution. The ripple effects of its advancements are reshaping industries at an unprecedented pace. No longer are businesses bound by the limitations of tedious, manual processes. Instead, sophisticated machines, fueled by vast amounts of historical data, are now capable of making decisions previously left to human intuition. These intelligent systems are not only optimizing operations but also pioneering innovative approaches, heralding a new age of business transformation worldwide. ',
+              text: 'Chúng ta đang sống trong một thời đại chuyển đổi, nơi trí tuệ nhân tạo (AI) đứng ở vị trí tiên phong của sự tiến hóa công nghệ. Những tác động lan tỏa của những tiến bộ này đang định hình lại các ngành công nghiệp với tốc độ chưa từng có. Không còn là những quy trình thủ công tẻ nhạt, các doanh nghiệp giờ đây được hỗ trợ bởi những cỗ máy tinh vi, được cung cấp bởi lượng dữ liệu lịch sử khổng lồ, có khả năng đưa ra quyết định mà trước đây chỉ có con người mới có thể làm được. Những hệ thống thông minh này không chỉ tối ưu hóa hoạt động mà còn tiên phong trong các phương pháp sáng tạo, mở ra một kỷ nguyên mới của sự chuyển đổi kinh doanh trên toàn thế giới.',
               version: 1,
             },
           ],
@@ -157,7 +157,7 @@ export const post1: Partial<Post> = {
               format: 0,
               mode: 'normal',
               style: '',
-              text: 'To demonstrate basic AI functionality, here is a javascript snippet that makes a POST request to a generic AI API in order to generate text based on a prompt. ',
+              text: 'Để minh họa chức năng cơ bản của AI, đây là một đoạn mã javascript thực hiện yêu cầu POST đến một API AI chung để tạo văn bản dựa trên một gợi ý.',
               version: 1,
             },
           ],
@@ -170,9 +170,9 @@ export const post1: Partial<Post> = {
         {
           type: 'block',
           fields: {
-            blockName: 'Generate Text',
+            blockName: 'Tạo Văn Bản',
             blockType: 'code',
-            code: "async function generateText(prompt) {\n    const apiKey = 'your-api-key';\n    const apiUrl = 'https://api.example.com/generate-text';\n\n    const response = await fetch(apiUrl, {\n        method: 'POST',\n        headers: {\n            'Content-Type': 'application/json',\n            'Authorization': `Bearer ${apiKey}`\n        },\n        body: JSON.stringify({\n            model: 'text-generation-model',\n            prompt: prompt,\n            max_tokens: 50\n        })\n    });\n\n    const data = await response.json();\n    console.log(data.choices[0].text.trim());\n}\n\n// Example usage\ngenerateText(\"Once upon a time in a faraway land,\");\n",
+            code: "async function generateText(prompt) {\n    const apiKey = 'your-api-key';\n    const apiUrl = 'https://api.example.com/generate-text';\n\n    const response = await fetch(apiUrl, {\n        method: 'POST',\n        headers: {\n            'Content-Type': 'application/json',\n            'Authorization': `Bearer ${apiKey}`\n        },\n        body: JSON.stringify({\n            model: 'text-generation-model',\n            prompt: prompt,\n            max_tokens: 50\n        })\n    });\n\n    const data = await response.json();\n    console.log(data.choices[0].text.trim());\n}\n\n// Example usage\ngenerateText(\"Ngày xửa ngày xưa ở một vùng đất xa xôi,\");\n",
             language: 'javascript',
           },
           format: '',
@@ -187,7 +187,7 @@ export const post1: Partial<Post> = {
               format: 0,
               mode: 'normal',
               style: '',
-              text: 'IoT: Connecting the World Around Us',
+              text: 'IoT: Kết Nối Thế Giới Xung Quanh Chúng Ta',
               version: 1,
             },
           ],
@@ -206,7 +206,7 @@ export const post1: Partial<Post> = {
               format: 0,
               mode: 'normal',
               style: '',
-              text: "In today's rapidly evolving technological landscape, the Internet of Things (IoT) stands out as a revolutionary force. From transforming our residences with smart home systems to redefining transportation through connected cars, IoT's influence is palpable in nearly every facet of our daily lives.",
+              text: 'Trong bối cảnh công nghệ đang phát triển nhanh chóng ngày nay, Internet of Things (IoT) nổi bật như một lực lượng cách mạng. Từ việc biến đổi nơi ở của chúng ta với các hệ thống nhà thông minh đến việc định nghĩa lại giao thông qua các xe kết nối, ảnh hưởng của IoT là rõ ràng trong hầu hết mọi khía cạnh của cuộc sống hàng ngày của chúng ta.',
               version: 1,
             },
           ],
@@ -225,7 +225,7 @@ export const post1: Partial<Post> = {
               format: 0,
               mode: 'normal',
               style: '',
-              text: "This technology hinges on the seamless integration of devices and systems, allowing them to communicate and collaborate effortlessly. With each connected device, we move a step closer to a world where convenience and efficiency are embedded in the very fabric of our existence. As a result, we're transitioning into an era where our surroundings intuitively respond to our needs, heralding a smarter and more interconnected global community.",
+              text: 'Công nghệ này dựa trên sự tích hợp liền mạch của các thiết bị và hệ thống, cho phép chúng giao tiếp và hợp tác một cách dễ dàng. Với mỗi thiết bị kết nối, chúng ta tiến gần hơn đến một thế giới nơi sự tiện lợi và hiệu quả được tích hợp vào chính cấu trúc của sự tồn tại của chúng ta. Kết quả là, chúng ta đang chuyển sang một kỷ nguyên mà môi trường xung quanh chúng ta phản ứng một cách trực quan với nhu cầu của chúng ta, mở ra một cộng đồng toàn cầu thông minh và kết nối hơn.',
               version: 1,
             },
           ],
@@ -248,7 +248,7 @@ export const post1: Partial<Post> = {
         {
           type: 'block',
           fields: {
-            blockName: 'Dynamic Components',
+            blockName: 'Các Thành Phần Động',
             blockType: 'banner',
             content: {
               root: {
@@ -263,7 +263,7 @@ export const post1: Partial<Post> = {
                         format: 0,
                         mode: 'normal',
                         style: '',
-                        text: "This content above is completely dynamic using custom layout building blocks configured in the CMS. This can be anything you'd like from rich text and images, to highly designed, complex components.",
+                        text: 'Nội dung trên hoàn toàn động bằng cách sử dụng các khối xây dựng bố cục tùy chỉnh được cấu hình trong CMS. Điều này có thể là bất cứ điều gì bạn muốn từ văn bản phong phú và hình ảnh, đến các thành phần phức tạp, được thiết kế cao.',
                         version: 1,
                       },
                     ],
@@ -297,12 +297,12 @@ export const post1: Partial<Post> = {
   heroImage: '{{IMAGE_1}}',
   meta: {
     description:
-      'Dive into the marvels of modern innovation, where the only constant is change. A journey where pixels and data converge to craft the future.',
+      'Khám phá những điều kỳ diệu của sự đổi mới hiện đại, nơi duy nhất không thay đổi là sự thay đổi. Một hành trình nơi các điểm ảnh và dữ liệu hội tụ để tạo nên tương lai.',
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
     // @ts-ignore
     image: '{{IMAGE_1}}',
-    title: 'Digital Horizons: A Glimpse into Tomorrow',
+    title: 'Chân Trời Số: Một Cái Nhìn Về Tương Lai',
   },
   relatedPosts: [], // this is populated by the seed script
-  title: 'Digital Horizons: A Glimpse into Tomorrow',
+  title: 'Chân Trời Số: Một Cái Nhìn Về Tương Lai',
 }

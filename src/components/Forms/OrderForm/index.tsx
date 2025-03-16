@@ -33,7 +33,7 @@ import {
 import Spinner from '../../Spinner'
 import { createOrder } from '@/actions/orders'
 import { toast } from 'sonner'
-import {  useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { getShippingFee } from '@/actions/shippingFee'
 import { Badge } from '../../ui/badge'
 import { getCollectedCoupons } from '@/actions/coupons'
@@ -97,7 +97,7 @@ export const OrderForm = () => {
 
   const onSubmit = (data: TCreateOrderValidator) => {
     if (!data.addressId) {
-      toast.error('Please select an address')
+      toast.error('Vui lòng chọn địa chỉ')
       return
     }
 
@@ -134,10 +134,10 @@ export const OrderForm = () => {
             className="flex flex-col md:grid md:grid-cols-6 gap-6"
           >
             <div className="md:col-span-4 lg:col-span-3 xl:col-span-4 flex flex-col gap-6">
-              {/* ORDER SUMMARY */}
+              {/* Tóm tắt đơn hàng */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Order Summary</CardTitle>
+                  <CardTitle>Tóm tắt đơn hàng</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <Controller
@@ -145,8 +145,12 @@ export const OrderForm = () => {
                     control={control}
                     render={({ field }) => (
                       <div className="space-y-2">
-                        <Label htmlFor="note">Order Note</Label>
-                        <Textarea id="note" {...field} placeholder="Add a note to your order" />
+                        <Label htmlFor="note">Ghi chú đơn hàng</Label>
+                        <Textarea
+                          id="note"
+                          {...field}
+                          placeholder="Thêm ghi chú cho đơn hàng của bạn"
+                        />
                         {errors.note && (
                           <p className="text-red-500 text-sm">{errors.note.message}</p>
                         )}
@@ -155,19 +159,19 @@ export const OrderForm = () => {
                   />
                 </CardContent>
               </Card>
-              {/* Products Card */}
+              {/* Sản phẩm */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Products</CardTitle>
+                  <CardTitle>Sản phẩm</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead className="w-[150px] hidden md:table-cell">Title</TableHead>
-                        <TableHead className="max-w-[80px]">Price</TableHead>
-                        <TableHead>Quantity</TableHead>
-                        <TableHead>Total</TableHead>
+                        <TableHead className="w-[150px] hidden md:table-cell">Tiêu đề</TableHead>
+                        <TableHead className="max-w-[80px]">Giá</TableHead>
+                        <TableHead>Số lượng</TableHead>
+                        <TableHead>Tổng</TableHead>
                         <TableHead className="flex items-center justify-center">
                           <Flag className="size-6" />
                         </TableHead>
@@ -207,11 +211,11 @@ export const OrderForm = () => {
                   </Table>
                 </CardContent>
               </Card>
-              {/* SHPPING FEE */}
+              {/* Phí vận chuyển */}
               <Card>
                 <CardHeader>
                   <CardTitle className="flex space-x-2">
-                    <div>Shipping Fee </div>
+                    <div>Phí vận chuyển </div>
                     <Badge className="ml-2" color="green">
                       ${shippingFee}
                     </Badge>
@@ -223,10 +227,10 @@ export const OrderForm = () => {
                     control={control}
                     render={({ field }) => (
                       <div className="space-y-2">
-                        <Label htmlFor="addressId">Address</Label>
+                        <Label htmlFor="addressId">Địa chỉ</Label>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select an address" />
+                            <SelectValue placeholder="Chọn địa chỉ" />
                           </SelectTrigger>
                           <SelectContent>
                             {addresses.map((address) => (
@@ -247,10 +251,10 @@ export const OrderForm = () => {
               </Card>
             </div>
             <div className="md:col-span-2 lg:col-span-3 xl:col-span-2 flex flex-col gap-6">
-              {/* COUPONS */}
+              {/* Mã giảm giá */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Coupons</CardTitle>
+                  <CardTitle>Mã giảm giá</CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm">
                   <Controller
@@ -260,7 +264,7 @@ export const OrderForm = () => {
                       <div className="space-y-2">
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select a coupon" />
+                            <SelectValue placeholder="Chọn mã giảm giá" />
                           </SelectTrigger>
                           <SelectContent>
                             {coupons.map((coupon) => (
@@ -278,7 +282,7 @@ export const OrderForm = () => {
               </Card>
               <Card>
                 <CardHeader>
-                  <CardTitle>Payment method</CardTitle>
+                  <CardTitle>Phương thức thanh toán</CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm">
                   <Controller
@@ -288,14 +292,14 @@ export const OrderForm = () => {
                       <div className="space-y-2">
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <SelectTrigger>
-                            <SelectValue placeholder="Select type of payment" />
+                            <SelectValue placeholder="Chọn phương thức thanh toán" />
                           </SelectTrigger>
                           <SelectContent>
                             <SelectItem key="cod" value="cod">
                               Ship COD
                             </SelectItem>
                             <SelectItem key="online" value="online">
-                              Online Payment
+                              Thanh toán trực tuyến
                             </SelectItem>
                           </SelectContent>
                         </Select>
@@ -304,18 +308,18 @@ export const OrderForm = () => {
                   />
                 </CardContent>
               </Card>
-              {/* CUSTOMER INFORMATION */}
+              {/* Thông tin khách hàng */}
               <Card>
                 <CardHeader>
-                  <CardTitle>Customer Information</CardTitle>
+                  <CardTitle>Thông tin khách hàng</CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm">
                   <div className="grid gap-2 grid-cols-2">
-                    <div>Name:</div>
+                    <div>Tên:</div>
                     <div className="font-medium">{user?.name}</div>
                   </div>
                   <div className="grid grid-cols-2 gap-2">
-                    <div>Contact:</div>
+                    <div>Liên hệ:</div>
                     <div className="font-medium">{user?.email}</div>
                   </div>
                 </CardContent>
@@ -328,7 +332,7 @@ export const OrderForm = () => {
               >
                 {!isPending ? (
                   <Fragment>
-                    Checkout
+                    Thanh toán
                     <PiggyBank className="size-10" />
                   </Fragment>
                 ) : (
@@ -339,7 +343,7 @@ export const OrderForm = () => {
                 href="/contact"
                 className={cn(buttonVariants({ variant: 'outline', size: 'lg' }), 'w-full')}
               >
-                Contact Support
+                Liên hệ hỗ trợ
               </Link>
             </div>
           </form>

@@ -6,6 +6,14 @@ import { slugField } from '@/fields/slug'
 
 export const Categories: CollectionConfig = {
   slug: 'categories',
+  labels: {
+    singular: {
+      vi: 'Danh mục',
+    },
+    plural: {
+      vi: 'Danh mục',
+    },
+  },
   access: {
     create: authenticated,
     delete: authenticated,
@@ -18,11 +26,17 @@ export const Categories: CollectionConfig = {
   fields: [
     {
       name: 'title',
+      label: {
+        vi: 'Tên danh mục',
+      },
       type: 'text',
       required: true,
     },
     {
       name: 'description',
+      label: {
+        vi: 'Mô tả',
+      },
       type: 'textarea',
     },
     ...slugField(),

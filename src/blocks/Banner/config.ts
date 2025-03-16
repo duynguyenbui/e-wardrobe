@@ -8,16 +8,44 @@ import {
 
 export const Banner: Block = {
   slug: 'banner',
+  labels: {
+    singular: {
+      vi: 'Tranh treo tường',
+    },
+    plural: {
+      vi: 'Tranh treo tường',
+    },
+  },
   fields: [
     {
       name: 'style',
       type: 'select',
       defaultValue: 'info',
       options: [
-        { label: 'Info', value: 'info' },
-        { label: 'Warning', value: 'warning' },
-        { label: 'Error', value: 'error' },
-        { label: 'Success', value: 'success' },
+        {
+          label: {
+            vi: 'Thông tin',
+          },
+          value: 'info',
+        },
+        {
+          label: {
+            vi: 'Cảnh báo',
+          },
+          value: 'warning',
+        },
+        {
+          label: {
+            vi: 'Lỗi',
+          },
+          value: 'error',
+        },
+        {
+          label: {
+            vi: 'Thành công',
+          },
+          value: 'success',
+        },
       ],
       required: true,
     },

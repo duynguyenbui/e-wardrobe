@@ -110,7 +110,7 @@ export default async function Page({ searchParams: searchParamsPromise }: Args) 
             })}
           </div>
           {products?.length === 0 && (
-            <div className="container col-span-12 text-center mt-2">No results.</div>
+            <div className="container col-span-12 text-center mt-2">Không có kết quả.</div>
           )}
         </div>
       </div>

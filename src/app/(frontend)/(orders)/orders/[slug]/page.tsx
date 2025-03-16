@@ -17,7 +17,6 @@ import { cn } from '@/utilities/ui'
 import { getOrder } from '@/actions/orders'
 import { getServerSideUser } from '@/get-serverside-user'
 import { notFound } from 'next/navigation'
-import { PiggyBank } from 'lucide-react'
 import ChangeOrderStatus from '@/components/ChangeOrderStatus'
 
 type Args = {
@@ -56,9 +55,9 @@ export default async function OrderDetailsPage({ params: paramsPromise }: Args) 
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
           <div className="flex items-center gap-4">
             <h1 className="font-semibold text-lg md:text-xl items-center">
-              Order #{order.id}
+              Đơn hàng #{order.id}
               <span className="font-normal text-gray-500 dark:text-gray-400">
-                on {moment(order.createdAt).format('LL')}
+                vào ngày {moment(order.createdAt).format('LL')}
               </span>
               <ChangeOrderStatus order={order!} />
             </h1>
@@ -67,34 +66,34 @@ export default async function OrderDetailsPage({ params: paramsPromise }: Args) 
             <div className="md:col-span-4 lg:col-span-3 xl:col-span-4 flex flex-col gap-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Order Summary</CardTitle>
+                  <CardTitle>Tóm tắt đơn hàng</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <div className="grid gap-4">
                     <div className="flex items-center">
-                      <div>Order Number:</div>
+                      <div>Số đơn hàng:</div>
                       <div className="ml-auto">#{order.id}</div>
                     </div>
                     <div className="flex items-center">
-                      <div>Date:</div>
+                      <div>Ngày:</div>
                       <div className="ml-auto">
                         {moment(order.createdAt).format('YYYY-MM-DD HH:mm:ss')}
                       </div>
                     </div>
                     <div className="flex items-center">
-                      <div>Status:</div>
+                      <div>Trạng thái:</div>
                       <div className="ml-auto">
                         <Badge variant={order.isPaid ? 'default' : 'destructive'}>
-                          {order.isPaid ? 'Paid' : 'Unpaid'}
+                          {order.isPaid ? 'Đã thanh toán' : 'Chưa thanh toán'}
                         </Badge>
                       </div>
                     </div>
                     <div className="flex items-center">
-                      <div>Note:</div>
+                      <div>Ghi chú:</div>
                       <div className="ml-auto">{order.note}</div>
                     </div>
                     <div className="flex items-center">
-                      <div>Payment Method:</div>
+                      <div>Phương thức thanh toán:</div>
                       <div className="ml-auto">{order.type?.toUpperCase()}</div>
                     </div>
                   </div>
@@ -102,16 +101,16 @@ export default async function OrderDetailsPage({ params: paramsPromise }: Args) 
               </Card>
               <Card>
                 <CardHeader>
-                  <CardTitle>Products</CardTitle>
+                  <CardTitle>Sản phẩm</CardTitle>
                 </CardHeader>
                 <CardContent>
                   <Table>
                     <TableHeader>
                       <TableRow>
-                        <TableHead className="max-w-[150px]">Name</TableHead>
-                        <TableHead>Quantity</TableHead>
-                        <TableHead>Price</TableHead>
-                        <TableHead>Total</TableHead>
+                        <TableHead className="max-w-[150px]">Tên</TableHead>
+                        <TableHead>Số lượng</TableHead>
+                        <TableHead>Giá</TableHead>
+                        <TableHead>Tổng</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -136,11 +135,11 @@ export default async function OrderDetailsPage({ params: paramsPromise }: Args) 
               </Card>
               <Card>
                 <CardHeader>
-                  <CardTitle>Shipping Details</CardTitle>
+                  <CardTitle>Chi tiết giao hàng</CardTitle>
                 </CardHeader>
                 <CardContent className="grid gap-4">
                   <div className="flex items-center">
-                    <div>Address:</div>
+                    <div>Địa chỉ:</div>
                     <div className="ml-auto">
                       {(order.shippingAddress as any).detailAddress},{' '}
                       {(order.shippingAddress as any).ward},{' '}
@@ -149,15 +148,15 @@ export default async function OrderDetailsPage({ params: paramsPromise }: Args) 
                     </div>
                   </div>
                   <div className="flex items-center">
-                    <div>Contact Name:</div>
+                    <div>Tên liên hệ:</div>
                     <div className="ml-auto">{(order.shippingAddress as any).contactName}</div>
                   </div>
                   <div className="flex items-center">
-                    <div>Contact Phone:</div>
+                    <div>Số điện thoại liên hệ:</div>
                     <div className="ml-auto">{(order.shippingAddress as any).contactPhone}</div>
                   </div>
                   <div className="flex items-center">
-                    <div>Shipping Status:</div>
+                    <div>Trạng thái giao hàng:</div>
                     <div className="ml-auto">{(order.shippingStatus as any).name || 'N/A'}</div>
                   </div>
                 </CardContent>
@@ -166,11 +165,11 @@ export default async function OrderDetailsPage({ params: paramsPromise }: Args) 
             <div className="md:col-span-2 lg:col-span-3 xl:col-span-2 flex flex-col gap-6">
               <Card>
                 <CardHeader>
-                  <CardTitle>Customer Information</CardTitle>
+                  <CardTitle>Thông tin khách hàng</CardTitle>
                 </CardHeader>
                 <CardContent className="text-sm">
                   <div className="grid gap-1 grid-cols-2">
-                    <div>Name:</div>
+                    <div>Tên:</div>
                     <div className="font-medium">
                       {typeof order.customer === 'string' ? order.customer : order.customer.name}
                     </div>
@@ -185,25 +184,25 @@ export default async function OrderDetailsPage({ params: paramsPromise }: Args) 
               </Card>
               <Card>
                 <CardHeader>
-                  <CardTitle>Payment Information</CardTitle>
+                  <CardTitle>Thông tin thanh toán</CardTitle>
                 </CardHeader>
                 <CardContent className="grid gap-4">
                   <div className="flex items-center">
-                    <div>Subtotal:</div>
+                    <div>Tổng phụ:</div>
                     <div className="ml-auto">{formatTHB((order as any).totalPrice || 0)}</div>
                   </div>
                   <div className="flex items-center">
-                    <div>Shipping Fee:</div>
+                    <div>Phí vận chuyển:</div>
                     <div className="ml-auto">{formatTHB(order.shippingFee)}</div>
                   </div>
                   <div className="flex items-center">
-                    <div>Discount:</div>
+                    <div>Giảm giá:</div>
                     <div className="ml-auto">
                       -{formatTHB((order as any)?.discount?.discountAmount || 0)}
                     </div>
                   </div>
                   <div className="flex items-center font-bold">
-                    <div>Total:</div>
+                    <div>Tổng cộng:</div>
                     <div className="ml-auto">
                       {formatTHB(
                         (order as any)!.totalPrice +
@@ -216,19 +215,19 @@ export default async function OrderDetailsPage({ params: paramsPromise }: Args) 
               </Card>
               <Card>
                 <CardHeader>
-                  <CardTitle>Discount Applied</CardTitle>
+                  <CardTitle>Giảm giá áp dụng</CardTitle>
                 </CardHeader>
                 <CardContent className="grid gap-4">
                   <div className="flex items-center">
-                    <div>Code:</div>
+                    <div>Mã:</div>
                     <div className="ml-auto">{(order.discount as any)?.code}</div>
                   </div>
                   <div className="flex items-center">
-                    <div>Description:</div>
+                    <div>Mô tả:</div>
                     <div className="ml-auto">{(order.discount as any)?.description}</div>
                   </div>
                   <div className="flex items-center">
-                    <div>Amount:</div>
+                    <div>Số tiền:</div>
                     <div className="ml-auto">
                       {formatTHB((order.discount as any)?.discountAmount)}{' '}
                       {(order.discount as any)?.discountType}
@@ -240,7 +239,7 @@ export default async function OrderDetailsPage({ params: paramsPromise }: Args) 
                 href="/contact"
                 className={cn('w-full', buttonVariants({ variant: 'outline', size: 'lg' }))}
               >
-                Contact Support
+                Liên hệ hỗ trợ
               </Link>
             </div>
           </div>

@@ -24,7 +24,7 @@ export const contact: Partial<Page> = {
                   format: 0,
                   mode: 'normal',
                   style: '',
-                  text: 'Contact us via form below, we evaluate your concern and get back to you as soon as possible.',
+                  text: 'Liên hệ với chúng tôi qua biểu mẫu dưới đây, chúng tôi sẽ đánh giá mối quan tâm của bạn và phản hồi sớm nhất có thể.',
                   version: 1,
                 },
               ],
@@ -43,5 +43,5 @@ export const contact: Partial<Page> = {
       },
     },
   ],
-  title: 'Contact',
+  title: 'Liên hệ',
 }

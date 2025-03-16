@@ -3,6 +3,9 @@ import { Field } from 'payload'
 export const searchFields: Field[] = [
   {
     name: 'slug',
+    label: {
+      vi: 'Khoá slug',
+    },
     type: 'text',
     index: true,
     admin: {
@@ -11,7 +14,9 @@ export const searchFields: Field[] = [
   },
   {
     name: 'meta',
-    label: 'Meta',
+    label: {
+      vi: 'Meta',
+    },
     type: 'group',
     index: true,
     admin: {
@@ -21,23 +26,31 @@ export const searchFields: Field[] = [
       {
         type: 'text',
         name: 'title',
-        label: 'Title',
+        label: {
+          vi: 'Tiêu đề',
+        },
       },
       {
         type: 'text',
         name: 'description',
-        label: 'Description',
+        label: {
+          vi: 'Mô tả',
+        },
       },
       {
         name: 'image',
-        label: 'Image',
+        label: {
+          vi: 'Hình ảnh',
+        },
         type: 'upload',
         relationTo: 'media',
       },
     ],
   },
   {
-    label: 'Categories',
+    label: {
+      vi: 'Danh mục',
+    },
     name: 'categories',
     type: 'array',
     admin: {
@@ -47,14 +60,23 @@ export const searchFields: Field[] = [
       {
         name: 'relationTo',
         type: 'text',
+        label: {
+          vi: 'Liên kết',
+        },
       },
       {
         name: 'id',
         type: 'text',
+        label: {
+          vi: 'ID',
+        },
       },
       {
         name: 'title',
         type: 'text',
+        label: {
+          vi: 'Tiêu đề',
+        },
       },
     ],
   },

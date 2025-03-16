@@ -18,13 +18,13 @@ export default function ChangeOrderStatus({ order }: { order: Order }) {
         const { success } = await isReceivedOrder(order.id)
 
         if (success) {
-          toast.success('Order is received')
+          toast.success('Đơn hàng đã được nhận')
         } else {
-          toast.error('Failed to change order status')
+          toast.error('Thay đổi trạng thái đơn hàng thất bại')
         }
       } catch (error) {
         console.error(error)
-        toast.error('Failed to change order status')
+        toast.error('Thay đổi trạng thái đơn hàng thất bại')
       } finally {
         setLoading(false)
       }
@@ -36,9 +36,9 @@ export default function ChangeOrderStatus({ order }: { order: Order }) {
       <Button
         className="font-bold cursor-pointer ml-2"
         onClick={onClick}
-        disabled={(order.shippingStatus as any)?.name === SHIPPING_STATUS.Delivered || loading}
+        disabled={(order.shippingStatus as any)?.code === SHIPPING_STATUS.Received || loading}
       >
-        {loading ? 'Processing...' : 'Is Received'}
+        {loading ? 'Đang xử lý...' : 'Đã nhận hàng'}
         <PiggyBank className="w-4 h-4 ml-2" />
       </Button>
     </Fragment>

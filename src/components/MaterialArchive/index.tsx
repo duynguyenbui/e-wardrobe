@@ -17,7 +17,7 @@ export const MaterialArchive = (props: Props) => {
           materials.map((material, index) => (
             <MaterialCard
               title={material.title}
-              description={material?.description || 'No description available'}
+              description={material?.description || 'Không có mô tả'}
               key={index}
             />
           ))}

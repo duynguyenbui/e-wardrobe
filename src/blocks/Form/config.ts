@@ -16,11 +16,16 @@ export const FormBlock: Block = {
       type: 'relationship',
       relationTo: 'forms',
       required: true,
+      label: {
+        vi: 'Biểu mẫu',
+      },
     },
     {
       name: 'enableIntro',
       type: 'checkbox',
-      label: 'Enable Intro Content',
+      label: {
+        vi: 'Cho phép nội dung giới thiệu',
+      },
     },
     {
       name: 'introContent',
@@ -45,7 +50,11 @@ export const FormBlock: Block = {
     singularName: 'FormBlock',
   },
   labels: {
-    plural: 'Form Blocks',
-    singular: 'Form Block',
+    plural: {
+      vi: 'Khối biểu mẫu',
+    },
+    singular: {
+      vi: 'Khối biểu mẫu',
+    },
   },
 }

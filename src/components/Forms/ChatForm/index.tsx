@@ -27,9 +27,7 @@ export function ChatForm({ className, ...props }: React.ComponentProps<'form'>) 
 
   const header = (
     <header className="m-auto flex max-w-96 flex-col text-center">
-      <h1 className="text-2xl font-semibold leading-none tracking-tight">
-        eWardrobe Assistant
-      </h1>
+      <h1 className="text-2xl font-semibold leading-none tracking-tight">Trợ lý eWardrobe</h1>
     </header>
   )
 
@@ -66,7 +64,7 @@ export function ChatForm({ className, ...props }: React.ComponentProps<'form'>) 
           onKeyDown={handleKeyDown}
           onChange={(v) => setInput(v)}
           value={input}
-          placeholder="Enter a message"
+          placeholder="Nhập tin nhắn"
           className="placeholder:text-muted-foreground flex-1 bg-transparent focus:outline-none"
         />
         <Tooltip>
@@ -79,7 +77,7 @@ export function ChatForm({ className, ...props }: React.ComponentProps<'form'>) 
               <ArrowUpIcon size={16} />
             </Button>
           </TooltipTrigger>
-          <TooltipContent sideOffset={12}>Submit</TooltipContent>
+          <TooltipContent sideOffset={12}>Gửi</TooltipContent>
         </Tooltip>
       </form>
     </main>

@@ -5,6 +5,14 @@ import { authenticated } from '@/access/authenticated'
 
 export const Orders: CollectionConfig = {
   slug: 'orders',
+  labels: {
+    singular: {
+      vi: 'Đơn hàng',
+    },
+    plural: {
+      vi: 'Đơn hàng',
+    },
+  },
   access: {
     create: authenticated,
     delete: authenticated,
@@ -13,22 +21,31 @@ export const Orders: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'id',
-    description: 'A summary of all orders on e-wardrobe.',
+    description: 'Tổng quan tất cả đơn hàng trên e-wardrobe.',
     defaultColumns: ['id', 'customer', 'isPaid'],
   },
   fields: [
     {
       name: 'lineItems',
+      label: {
+        vi: 'Sản phẩm',
+      },
       type: 'array',
       fields: [
         {
           name: 'productVariant',
+          label: {
+            vi: 'Biến thể sản phẩm',
+          },
           type: 'relationship',
           relationTo: 'productVariants',
           required: true,
         },
         {
           name: 'quantityToBuy',
+          label: {
+            vi: 'Số lượng',
+          },
           type: 'number',
           required: true,
         },
@@ -38,6 +55,9 @@ export const Orders: CollectionConfig = {
     },
     {
       name: 'customer',
+      label: {
+        vi: 'Khách hàng',
+      },
       type: 'relationship',
       relationTo: 'users',
       hasMany: false,
@@ -45,6 +65,9 @@ export const Orders: CollectionConfig = {
     },
     {
       name: 'isPaid',
+      label: {
+        vi: 'Đã thanh toán',
+      },
       type: 'checkbox',
       defaultValue: false,
       required: true,
@@ -54,6 +77,9 @@ export const Orders: CollectionConfig = {
     },
     {
       name: 'totalPrice',
+      label: {
+        vi: 'Tổng giá trị',
+      },
       type: 'number',
       required: true,
       defaultValue: 0,
@@ -64,12 +90,18 @@ export const Orders: CollectionConfig = {
     },
     {
       name: 'shippingFee',
+      label: {
+        vi: 'Phí vận chuyển',
+      },
       type: 'number',
       required: true,
       defaultValue: 2,
     },
     {
       name: 'shippingAddress',
+      label: {
+        vi: 'Địa chỉ giao hàng',
+      },
       type: 'relationship',
       relationTo: 'addresses',
       hasMany: false,
@@ -80,6 +112,9 @@ export const Orders: CollectionConfig = {
     },
     {
       name: 'discount',
+      label: {
+        vi: 'Mã giảm giá',
+      },
       type: 'relationship',
       relationTo: 'coupons',
       hasMany: false,
@@ -90,11 +125,17 @@ export const Orders: CollectionConfig = {
     },
     {
       name: 'note',
+      label: {
+        vi: 'Ghi chú',
+      },
       type: 'textarea',
       required: false,
     },
     {
       name: 'shippingStatus',
+      label: {
+        vi: 'Trạng thái vận chuyển',
+      },
       type: 'relationship',
       relationTo: 'shippingStatuses',
       hasMany: false,
@@ -105,6 +146,9 @@ export const Orders: CollectionConfig = {
     {
       name: 'type',
       type: 'select',
+      label: {
+        vi: 'Phương thức thanh toán',
+      },
       admin: {
         isClearable: true,
         isSortable: true, // use mouse to drag and drop different values, and sort them according to your choice
@@ -112,11 +156,15 @@ export const Orders: CollectionConfig = {
       },
       options: [
         {
-          label: 'Ship COD',
+          label: {
+            vi: 'Thanh toán tiền mặt (COD)',
+          },
           value: 'cod',
         },
         {
-          label: 'Online Payment',
+          label: {
+            vi: 'Thanh toán online (Stripe)',
+          },
           value: 'online',
         },
       ],

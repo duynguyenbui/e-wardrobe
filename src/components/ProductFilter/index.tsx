@@ -52,10 +52,10 @@ export default function ProductFilter({
           <div>
             <Select onValueChange={setCategory} defaultValue={category}>
               <SelectTrigger className="w-[180px] rounded-sm">
-                <SelectValue placeholder="Select a category" />
+                <SelectValue placeholder="Chọn danh mục" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All</SelectItem>
+                <SelectItem value="all">Tất cả</SelectItem>
                 {categories.map((category: any) => (
                   <SelectItem key={category.id} value={category.title}>
                     {category.title}
@@ -67,10 +67,10 @@ export default function ProductFilter({
           <div>
             <Select onValueChange={setMaterial} defaultValue={material}>
               <SelectTrigger className="w-[180px] rounded-sm">
-                <SelectValue placeholder="Select a category" />
+                <SelectValue placeholder="Chọn chất liệu" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All</SelectItem>
+                <SelectItem value="all">Tất cả</SelectItem>
                 {materials.map((material: any) => (
                   <SelectItem key={material.id} value={material.title}>
                     {material.title}
@@ -89,7 +89,7 @@ export default function ProductFilter({
               }}
             >
               <SelectTrigger className="w-[180px] rounded-sm">
-                <SelectValue placeholder="Select a page size" />
+                <SelectValue placeholder="Chọn kích thước trang" />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="4">4</SelectItem>
@@ -106,7 +106,7 @@ export default function ProductFilter({
               }}
             >
               <SelectTrigger className="w-[180px] rounded-sm">
-                <SelectValue placeholder="Select a page" />
+                <SelectValue placeholder="Chọn trang" />
               </SelectTrigger>
               <SelectContent>
                 {Array.from({ length: totalPages }).map((_, index) => (
@@ -127,18 +127,18 @@ export default function ProductFilter({
             }}
           >
             <Label htmlFor="search" className="sr-only">
-              Search
+              Tìm kiếm
             </Label>
             <Input
               id="search"
               onChange={(event) => {
                 setValue(event.target.value)
               }}
-              placeholder="Search"
-              className='rounded-sm'
+              placeholder="Tìm kiếm"
+              className="rounded-sm"
             />
             <button type="submit" className="sr-only">
-              submit
+              gửi
             </button>
           </form>
         </div>

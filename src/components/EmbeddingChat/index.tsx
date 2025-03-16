@@ -17,7 +17,7 @@ interface Message {
 export function EmbeddingChat() {
   const [isOpen, setIsOpen] = useState(false)
   const [messages, setMessages] = useState<Message[]>([
-    { text: 'Hello! How can I assist you today?', isUser: false },
+    { text: 'Chào! Tôi có thể giúp gì cho bạn hôm nay?', isUser: false },
   ])
   const [inputValue, setInputValue] = useState('')
 
@@ -45,7 +45,7 @@ export function EmbeddingChat() {
       {isOpen ? (
         <div className="bg-white dark:bg-zinc-900 rounded-lg shadow-lg w-96 h-[500px] flex flex-col overflow-hidden">
           <div className="p-4 flex justify-between items-center bg-primary text-primary-foreground">
-            <h3 className="font-semibold text-lg">Chat Support</h3>
+            <h3 className="font-semibold text-lg">Hỗ trợ trực tiếp</h3>
             <Button
               variant="ghost"
               size="sm"
@@ -89,7 +89,7 @@ export function EmbeddingChat() {
             <div className="flex space-x-2">
               <Input
                 type="text"
-                placeholder="Type your message..."
+                placeholder="Nhập tin nhắn của bạn..."
                 value={inputValue}
                 onChange={(e) => setInputValue(e.target.value)}
                 className="flex-grow rounded-md"

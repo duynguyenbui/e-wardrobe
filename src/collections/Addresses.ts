@@ -32,8 +32,12 @@ export const Addresses: CollectionConfig = {
     ],
   },
   labels: {
-    singular: 'Address',
-    plural: 'Addresses',
+    singular: {
+      vi: 'Địa chỉ',
+    },
+    plural: {
+      vi: 'Địa chỉ',
+    },
   },
   admin: {
     useAsTitle: 'name',
@@ -41,14 +45,18 @@ export const Addresses: CollectionConfig = {
   fields: [
     {
       name: 'name',
-      label: 'Name',
+      label: {
+        vi: 'Tên địa chỉ',
+      },
       type: 'text',
       required: true,
       unique: true,
     },
     {
       name: 'province',
-      label: 'Province',
+      label: {
+        vi: 'Tỉnh/Thành phố',
+      },
       type: 'select',
       options: provinces,
       required: true,
@@ -58,25 +66,33 @@ export const Addresses: CollectionConfig = {
     },
     {
       name: 'district',
-      label: 'District',
+      label: {
+        vi: 'Quận/Huyện',
+      },
       type: 'text',
       required: true,
     },
     {
       name: 'ward',
-      label: 'Ward',
+      label: {
+        vi: 'Phường/Xã',
+      },
       type: 'text',
       required: true,
     },
     {
       name: 'detailAddress',
-      label: 'Detail Address',
+      label: {
+        vi: 'Địa chỉ chi tiết',
+      },
       type: 'textarea',
       required: true,
     },
     {
       name: 'contactName',
-      label: 'Contact Name',
+      label: {
+        vi: 'Tên liên hệ',
+      },
       type: 'text',
       required: true,
       admin: {
@@ -85,7 +101,9 @@ export const Addresses: CollectionConfig = {
     },
     {
       name: 'contactPhone',
-      label: 'Contact Phone',
+      label: {
+        vi: 'Số điện thoại liên hệ',
+      },
       type: 'text',
       required: true,
       admin: {
@@ -94,7 +112,9 @@ export const Addresses: CollectionConfig = {
     },
     {
       name: 'user',
-      label: 'User',
+      label: {
+        vi: 'Người dùng',
+      },
       type: 'relationship',
       relationTo: 'users',
       hasMany: false,

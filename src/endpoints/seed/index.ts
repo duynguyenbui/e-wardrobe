@@ -13,13 +13,6 @@ import { faker } from '@faker-js/faker'
 import path from 'path'
 import fs from 'fs/promises'
 
-const NUM_COLORS = 10
-const NUM_MATERIALS = 8
-const NUM_CATEGORIES = 8
-const NUM_PRODUCTS = 5
-
-const capitalize = (str: string) => str.charAt(0).toUpperCase() + str.slice(1)
-
 const collections: CollectionSlug[] = [
   'categories',
   'media',
@@ -29,13 +22,156 @@ const collections: CollectionSlug[] = [
   'form-submissions',
   'search',
 ]
+
 const globals: GlobalSlug[] = ['header', 'footer']
 
 export const seed = async ({ payload, req }: { payload: Payload; req: PayloadRequest }) => {
-  payload.logger.info('Seeding database...')
+  payload.logger.info(`Clearing collections and globals...`)
 
-  payload.logger.info(`— Clearing collections and globals...`)
-  // clear the database
+  await Promise.all([
+    payload.delete({
+      collection: 'users',
+      depth: 0,
+      where: {
+        email: {
+          equals: 'demo@ewardrobe.com',
+        },
+      },
+    }),
+    payload.delete({
+      collection: 'users',
+      depth: 0,
+      where: {
+        email: {
+          equals: 'user@ewardrobe.com',
+        },
+      },
+    }),
+  ])
+
+  await Promise.all([
+    payload.delete({
+      collection: 'orders',
+      where: {
+        id: {
+          exists: true,
+        },
+      },
+    }),
+    payload.delete({
+      collection: 'pages',
+      where: {
+        id: {
+          exists: true,
+        },
+      },
+    }),
+    payload.delete({
+      collection: 'posts',
+      where: {
+        id: {
+          exists: true,
+        },
+      },
+    }),
+    payload.delete({
+      collection: 'productVariants',
+      where: {
+        id: {
+          exists: true,
+        },
+      },
+    }),
+    payload.delete({
+      collection: 'products',
+      where: {
+        id: {
+          exists: true,
+        },
+      },
+    }),
+    payload.delete({
+      collection: 'shippingFees',
+      where: {
+        id: {
+          exists: true,
+        },
+      },
+    }),
+    payload.delete({
+      collection: 'addresses',
+      where: {
+        id: {
+          exists: true,
+        },
+      },
+    }),
+    payload.delete({
+      collection: 'categories',
+      where: {
+        id: {
+          exists: true,
+        },
+      },
+    }),
+    payload.delete({
+      collection: 'colors',
+      where: {
+        id: {
+          exists: true,
+        },
+      },
+    }),
+    payload.delete({
+      collection: 'coupons',
+      where: {
+        id: {
+          exists: true,
+        },
+      },
+    }),
+    payload.delete({
+      collection: 'materials',
+      where: {
+        id: {
+          exists: true,
+        },
+      },
+    }),
+    payload.delete({
+      collection: 'sizes',
+      where: {
+        id: {
+          exists: true,
+        },
+      },
+    }),
+    payload.delete({
+      collection: 'shippingStatuses',
+      where: {
+        id: {
+          exists: true,
+        },
+      },
+    }),
+    payload.delete({
+      collection: 'warranties',
+      where: {
+        id: {
+          exists: true,
+        },
+      },
+    }),
+    payload.delete({
+      collection: 'media',
+      where: {
+        id: {
+          exists: true,
+        },
+      },
+    }),
+  ])
+
   await Promise.all(
     globals.map((global) =>
       payload.updateGlobal({
@@ -61,17 +197,7 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
       .map((collection) => payload.db.deleteVersions({ collection, req, where: {} })),
   )
 
-  payload.logger.info(`— Seeding demo author and user...`)
-
-  await payload.delete({
-    collection: 'users',
-    depth: 0,
-    where: {
-      email: {
-        equals: 'demo@ewardrobe.com',
-      },
-    },
-  })
+  payload.logger.info(`Seeding demo author and user...`)
 
   const [image1Buffer, image2Buffer, image3Buffer, hero1Buffer] = await Promise.all([
     fetchFileByDisk('D:/Projects/PayloadCMS/e-wardrobe/src/endpoints/seed', 'image-post1.webp'),
@@ -81,6 +207,7 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
   ])
 
   const [
+    user,
     demoAuthor,
     image1Doc,
     image2Doc,
@@ -91,6 +218,15 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
     kidsCategory,
   ] = await Promise.all([
     // USERS
+    payload.create({
+      collection: 'users',
+      data: {
+        name: 'User',
+        email: 'user@ewardrobe.com',
+        password: 'user',
+        roles: ['user'],
+      },
+    }),
     payload.create({
       collection: 'users',
       data: {
@@ -125,11 +261,11 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
     payload.create({
       collection: 'categories',
       data: {
-        title: 'Men',
+        title: 'Nam',
         breadcrumbs: [
           {
-            label: 'Men',
-            url: '/men',
+            label: 'Nam',
+            url: '/nam',
           },
         ],
       },
@@ -137,11 +273,11 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
     payload.create({
       collection: 'categories',
       data: {
-        title: 'Women',
+        title: 'Nữ',
         breadcrumbs: [
           {
-            label: 'Women',
-            url: '/women',
+            label: 'Nữ',
+            url: '/nu',
           },
         ],
       },
@@ -149,11 +285,11 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
     payload.create({
       collection: 'categories',
       data: {
-        title: 'Kids',
+        title: 'Trẻ em',
         breadcrumbs: [
           {
-            label: 'Kids',
-            url: '/kids',
+            label: 'Trẻ em',
+            url: '/tre-em',
           },
         ],
       },
@@ -161,11 +297,11 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
     payload.create({
       collection: 'categories',
       data: {
-        title: 'Accessories',
+        title: 'Phụ kiện',
         breadcrumbs: [
           {
-            label: 'Accessories',
-            url: '/accessories',
+            label: 'Phụ kiện',
+            url: '/phu-kien',
           },
         ],
       },
@@ -173,11 +309,11 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
     payload.create({
       collection: 'categories',
       data: {
-        title: 'Footwear',
+        title: 'Giày dép',
         breadcrumbs: [
           {
-            label: 'Footwear',
-            url: '/footwear',
+            label: 'Giày dép',
+            url: '/giay-dep',
           },
         ],
       },
@@ -185,11 +321,11 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
     payload.create({
       collection: 'categories',
       data: {
-        title: 'Outerwear',
+        title: 'Áo khoác',
         breadcrumbs: [
           {
-            label: 'Outerwear',
-            url: '/outerwear',
+            label: 'Áo khoác',
+            url: '/ao-khoac',
           },
         ],
       },
@@ -211,7 +347,7 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
     demoAuthorID = `"${demoAuthorID}"`
   }
 
-  payload.logger.info(`— Seeding posts...`)
+  payload.logger.info(`Seeding posts...`)
 
   // Do not create posts with `Promise.all` because we want the posts to be created in order
   // This way we can sort them by `createdAt` or `publishedAt` and they will be in the expected order
@@ -281,7 +417,7 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
     },
   })
 
-  payload.logger.info(`— Seeding contact form...`)
+  payload.logger.info(`Seeding contact form...`)
 
   const contactForm = await payload.create({
     collection: 'forms',
@@ -295,7 +431,7 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
     contactFormID = `"${contactFormID}"`
   }
 
-  payload.logger.info(`— Seeding pages...`)
+  payload.logger.info(`Seeding pages...`)
 
   const [homePage, contactPage] = await Promise.all([
     payload.create({
@@ -319,7 +455,7 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
     }),
   ])
 
-  payload.logger.info(`— Seeding globals...`)
+  payload.logger.info(`Seeding globals...`)
 
   await Promise.all([
     payload.updateGlobal({
@@ -329,7 +465,7 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
           {
             link: {
               type: 'reference',
-              label: 'Home',
+              label: 'Trang chủ',
               reference: {
                 relationTo: 'pages',
                 value: homePage.id,
@@ -339,70 +475,70 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
           {
             link: {
               type: 'custom',
-              label: 'Posts',
+              label: 'Bài viết',
               url: '/posts',
             },
           },
           {
             link: {
               type: 'custom',
-              label: 'Products',
+              label: 'Sản phẩm',
               url: '/products',
             },
           },
           {
             link: {
               type: 'custom',
-              label: 'Chat',
+              label: 'Trò chuyện',
               url: '/chat',
             },
           },
           {
             link: {
               type: 'custom',
-              label: 'Coupons',
+              label: 'Mã giảm giá',
               url: '/coupons',
             },
           },
           {
             link: {
               type: 'custom',
-              label: 'Orders',
+              label: 'Đơn hàng',
               url: '/orders',
             },
           },
           {
             link: {
               type: 'custom',
-              label: 'Login',
+              label: 'Đăng nhập',
               url: '/login',
             },
           },
           {
             link: {
               type: 'custom',
-              label: 'Register',
+              label: 'Đăng ký',
               url: '/register',
             },
           },
           {
             link: {
               type: 'custom',
-              label: 'Account',
+              label: 'Tài khoản',
               url: '/account',
             },
           },
           {
             link: {
               type: 'custom',
-              label: 'Logout',
+              label: 'Đăng xuất',
               url: '/logout',
             },
           },
           {
             link: {
               type: 'reference',
-              label: 'Contact',
+              label: 'Liên hệ',
               reference: {
                 relationTo: 'pages',
                 value: contactPage.id,
@@ -414,22 +550,440 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
     }),
   ])
 
-  payload.logger.info(`— Seeding materials...`)
-  const createdMaterials = await create(payload, 'materials', materials())
+  // Seeding custom data
+  payload.logger.info(`Seeding materials...`)
+  const materials = [
+    {
+      title: 'Da',
+      description:
+        'Chất liệu cao cấp, mềm mại, thường dùng trong các sản phẩm thời trang và nội thất sang trọng.',
+    },
+    {
+      title: 'Vải',
+      description:
+        'Chất liệu linh hoạt, thoáng khí, lý tưởng cho quần áo và đồ trang trí nội thất.',
+    },
+    {
+      title: 'Cotton',
+      description:
+        'Chất liệu tự nhiên, thoáng mát, thường dùng cho quần áo và các sản phẩm gia dụng.',
+    },
+    {
+      title: 'Polyester',
+      description: 'Chất liệu tổng hợp, bền bỉ, thường dùng cho quần áo thể thao và đồ gia dụng.',
+    },
+    {
+      title: 'Nilon',
+      description: 'Chất liệu nhẹ, chống thấm nước, lý tưởng cho các sản phẩm ngoài trời.',
+    },
+    {
+      title: 'Denim',
+      description: 'Chất liệu bền, thường dùng cho quần áo casual và thời trang đường phố.',
+    },
+    {
+      title: 'Tổng hợp',
+      description: 'Chất liệu kết hợp, đa năng, phù hợp với nhiều loại sản phẩm khác nhau.',
+    },
+    {
+      title: 'Vải dệt',
+      description:
+        'Chất liệu truyền thống, bền bỉ, thường dùng cho các sản phẩm thủ công và trang trí.',
+    },
+    {
+      title: 'Vải thô',
+      description: 'Chất liệu tự nhiên, mộc mạc, lý tưởng cho các sản phẩm nội thất và trang trí.',
+    },
+    {
+      title: 'Vải dệt',
+      description:
+        'Chất liệu truyền thống, bền bỉ, thường dùng cho các sản phẩm thủ công và trang trí.',
+    },
+  ]
+  const createdMaterials = await createPayloadData(payload, 'materials', materials)
 
-  payload.logger.info(`— Seeding sizes...`)
-  await create(payload, 'sizes', sizes())
+  payload.logger.info(`Seeding sizes...`)
+  const sizes = [
+    {
+      name: 'M',
+      minHeight: 160,
+      maxHeight: 180,
+      minWeight: 55,
+      maxWeight: 75,
+      description: 'Kích cỡ M, phù hợp với chiều cao 160-180cm và cân nặng 55-75kg.',
+    },
+    {
+      name: 'L',
+      minHeight: 170,
+      maxHeight: 190,
+      minWeight: 65,
+      maxWeight: 85,
+      description: 'Kích cỡ L, phù hợp với chiều cao 170-190cm và cân nặng 65-85kg.',
+    },
+    {
+      name: 'XL',
+      minHeight: 180,
+      maxHeight: 200,
+      minWeight: 75,
+      maxWeight: 100,
+      description: 'Kích cỡ XL, phù hợp với chiều cao 180-200cm và cân nặng 75-100kg.',
+    },
+    {
+      name: 'XXL',
+      minHeight: 185,
+      maxHeight: 210,
+      minWeight: 85,
+      maxWeight: 120,
+      description: 'Kích cỡ XXL, phù hợp với chiều cao 185-210cm và cân nặng 85-120kg.',
+    },
+    {
+      name: '3XL',
+      minHeight: 190,
+      maxHeight: 220,
+      minWeight: 100,
+      maxWeight: 150,
+      description: 'Kích cỡ 3XL, phù hợp với chiều cao 190-220cm và cân nặng 100-150kg.',
+    },
+    {
+      name: '4XL',
+      minHeight: 195,
+      maxHeight: 230,
+      minWeight: 120,
+      maxWeight: 180,
+      description: 'Kích cỡ 4XL, phù hợp với chiều cao 195-230cm và cân nặng 120-180kg.',
+    },
+    {
+      name: '5XL',
+      minHeight: 200,
+      maxHeight: 240,
+      minWeight: 140,
+      maxWeight: 210,
+      description: 'Kích cỡ 5XL, phù hợp với chiều cao 200-240cm và cân nặng 140-210kg.',
+    },
+    {
+      name: '6XL',
+      minHeight: 205,
+      maxHeight: 250,
+      minWeight: 160,
+      maxWeight: 240,
+      description: 'Kích cỡ 6XL, phù hợp với chiều cao 205-250cm và cân nặng 160-240kg.',
+    },
+    {
+      name: '7XL',
+      minHeight: 210,
+      maxHeight: 260,
+      minWeight: 180,
+      maxWeight: 280,
+      description: 'Kích cỡ 7XL, phù hợp với chiều cao 210-260cm và cân nặng 180-280kg.',
+    },
+  ]
+  const createdSizes = await createPayloadData(payload, 'sizes', sizes)
 
-  payload.logger.info(`— Seeding colors...`)
-  await create(payload, 'colors', colors())
+  payload.logger.info(`Seeding colors...`)
+  const colors = [
+    {
+      title: 'Đỏ',
+      description: 'Màu đỏ nổi bật, phù hợp với sản phẩm thời trang và nội thất hiện đại.',
+      hex: '#FF5733',
+    },
+    {
+      title: 'Xanh dương',
+      description:
+        'Màu xanh dương dịu mắt, thường được sử dụng cho sản phẩm văn phòng và công nghệ.',
+      hex: '#337DFF',
+    },
+    {
+      title: 'Xanh lá',
+      description:
+        'Màu xanh lá tự nhiên, mang đến cảm giác gần gũi, phù hợp với nội thất và đồ trang trí.',
+      hex: '#33FF57',
+    },
+    {
+      title: 'Vàng',
+      description: 'Màu vàng sáng, phù hợp với các sản phẩm trang trí và chiếu sáng nội thất.',
+      hex: '#FFC300',
+    },
+    {
+      title: 'Tím',
+      description:
+        'Màu tím nhẹ nhàng, thường được sử dụng cho sản phẩm thời trang cao cấp và nội thất sang trọng.',
+      hex: '#9B59B6',
+    },
+    {
+      title: 'Cam',
+      description: 'Màu cam ấm áp, phù hợp với nội thất phong cách hiện đại hoặc Scandinavia.',
+      hex: '#E67E22',
+    },
+    {
+      title: 'Trắng',
+      description: 'Màu trắng tinh khiết, dễ kết hợp với nhiều sản phẩm và phong cách khác nhau.',
+      hex: '#FFFFFF',
+    },
+    {
+      title: 'Đen',
+      description:
+        'Màu đen sang trọng, thường được sử dụng trong các sản phẩm thời trang và nội thất.',
+      hex: '#000000',
+    },
+    {
+      title: 'Hồng',
+      description: 'Màu hồng ngọt ngào, phù hợp với các sản phẩm thời trang và trang trí.',
+      hex: '#FFC0CB',
+    },
+    {
+      title: 'Xám',
+      description: 'Màu xám trung tính, dễ kết hợp với nhiều phong cách nội thất và thời trang.',
+      hex: '#808080',
+    },
+    {
+      title: 'Nâu',
+      description: 'Màu nâu ấm áp, thường được sử dụng trong nội thất và sản phẩm thời trang.',
+      hex: '#A52A2A',
+    },
+    {
+      title: 'Bạc',
+      description:
+        'Màu bạc hiện đại, thường được sử dụng trong các sản phẩm công nghệ và trang trí.',
+      hex: '#C0C0C0',
+    },
+  ]
+  const createdColors = await createPayloadData(payload, 'colors', colors)
 
-  payload.logger.info(`— Seeding shipping statuses...`)
-  await create(payload, 'shippingStatuses', shippingStatuses())
+  payload.logger.info(`Seeding shipping statuses...`)
+  const shippingStatuses = [
+    { name: 'Chờ xác nhận', description: 'Chờ xác nhận', code: 'pending' },
+    { name: 'Đã giao hàng', description: 'Đã giao hàng', code: 'delivered' },
+    { name: 'Đã nhận hàng', description: 'Đã nhận hàng', code: 'received' },
+  ]
+  await createPayloadData(payload, 'shippingStatuses', shippingStatuses)
 
-  payload.logger.info(`— Seeding image products...`)
+  payload.logger.info(`Seeding categories...`)
+  const categories = [
+    {
+      title: 'Áo thun',
+      description:
+        'Áo thun là loại áo thoải mái, thường được sử dụng trong các hoạt động hàng ngày và thể thao.',
+      breadcrumbs: [{ label: 'Áo thun', url: '/ao-thun' }],
+    },
+    {
+      title: 'Áo sơ mi',
+      description:
+        'Áo sơ mi là loại áo trang trọng, thường được mặc trong các dịp công sở hoặc sự kiện.',
+      breadcrumbs: [{ label: 'Áo sơ mi', url: '/ao-so-mi' }],
+    },
+    {
+      title: 'Quần jean',
+      description:
+        'Quần jean là loại quần bền bỉ, phù hợp cho cả công việc và các hoạt động thường ngày.',
+      breadcrumbs: [{ label: 'Quần jean', url: '/quan-jean' }],
+    },
+    {
+      title: 'Quần short',
+      description:
+        'Quần short là loại quần ngắn, lý tưởng cho các hoạt động ngoài trời và thời tiết nóng.',
+      breadcrumbs: [{ label: 'Quần short', url: '/quan-short' }],
+    },
+    {
+      title: 'Váy đầm',
+      description:
+        'Váy đầm là trang phục nữ tính, thường được mặc trong các dịp đặc biệt hoặc dạo phố.',
+      breadcrumbs: [{ label: 'Váy đầm', url: '/vay-dam' }],
+    },
+    {
+      title: 'Áo khoác',
+      description: 'Áo khoác là loại áo ngoài, giúp giữ ấm và bảo vệ khỏi thời tiết lạnh.',
+      breadcrumbs: [{ label: 'Áo khoác', url: '/ao-khoac' }],
+    },
+    {
+      title: 'Đồ thể thao',
+      description:
+        'Đồ thể thao được thiết kế để tối ưu hóa hiệu suất và sự thoải mái trong các hoạt động thể thao.',
+      breadcrumbs: [{ label: 'Đồ thể thao', url: '/do-the-thao' }],
+    },
+    {
+      title: 'Phụ kiện',
+      description:
+        'Phụ kiện bao gồm các sản phẩm như mũ, khăn quàng, và túi xách để hoàn thiện trang phục.',
+      breadcrumbs: [{ label: 'Phụ kiện', url: '/phu-kien' }],
+    },
+    {
+      title: 'Giày dép',
+      description:
+        'Giày dép là sản phẩm thiết yếu, cung cấp sự thoải mái và phong cách cho đôi chân.',
+      breadcrumbs: [{ label: 'Giày dép', url: '/giay-dep' }],
+    },
+    {
+      title: 'Đồ ngủ',
+      description: 'Đồ ngủ được thiết kế để mang lại sự thoải mái tối đa trong khi ngủ.',
+      breadcrumbs: [{ label: 'Đồ ngủ', url: '/do-ngu' }],
+    },
+  ]
+  const createdCategories = await createPayloadData(payload, 'categories', categories)
+
+  payload.logger.info(`Seeding shipping fees...`)
+  const shippingFees = [
+    {
+      title: 'Phí từ 0 đến 99.999 VNĐ',
+      description: 'Phí vận chuyển từ 0 đến 99.999 VNĐ',
+      minimumPriceToUse: 0,
+      fee: 30000,
+    },
+    {
+      title: 'Phí từ 100.000 đến 499.999 VNĐ',
+      description: 'Phí vận chuyển từ 100.000 đến 499.999 VNĐ',
+      minimumPriceToUse: 100000,
+      fee: 25000,
+    },
+    {
+      title: 'Phí từ 500.000 VNĐ trở lên (Miễn phí)',
+      description: 'Phí vận chuyển từ 500.000 VNĐ trở lên (Miễn phí)',
+      minimumPriceToUse: 500000,
+      fee: 0,
+    },
+  ]
+  await createPayloadData(payload, 'shippingFees', shippingFees)
+
+  payload.logger.info('Seeding addresses...')
+  await Promise.all([
+    payload.create({
+      collection: 'addresses',
+      data: {
+        name: 'Nhà riêng',
+        province: 'HCM',
+        district: 'Quận 1',
+        ward: 'Bến Nghé',
+        detailAddress: 'Số 15 Nguyễn Huệ',
+        contactName: 'Trần Thị C',
+        contactPhone: '0987654321',
+        user: user,
+      },
+    }),
+    payload.create({
+      collection: 'addresses',
+      data: {
+        name: 'Công ty',
+        province: 'HN',
+        district: 'Ba Đình',
+        ward: 'Phúc Xá',
+        detailAddress: 'Số 10 Phúc Xá',
+        contactName: 'Nguyễn Văn B',
+        contactPhone: '0912345678',
+        user: demoAuthor,
+      },
+    }),
+    payload.create({
+      collection: 'addresses',
+      data: {
+        name: 'Nhà bạn',
+        province: 'DN',
+        district: 'Hải Châu',
+        ward: 'Hòa Cường Bắc',
+        detailAddress: 'Số 20 Lê Duẩn',
+        contactName: 'Lê Thị D',
+        contactPhone: '0901234567',
+        user: user,
+      },
+    }),
+    payload.create({
+      collection: 'addresses',
+      data: {
+        name: 'Văn phòng',
+        province: 'CT',
+        district: 'Ninh Kiều',
+        ward: 'An Khánh',
+        detailAddress: 'Số 25 Trần Hưng Đạo',
+        contactName: 'Phạm Văn E',
+        contactPhone: '0934567890',
+        user: demoAuthor,
+      },
+    }),
+  ])
+
+  payload.logger.info('Seeding warranties...')
+
+  const warranties = [
+    {
+      title: 'Mua hàng không hài lòng',
+      description:
+        'Bạn có thể đổi trả sản phẩm trong vòng 7 ngày nếu sản phẩm không đáp ứng được yêu cầu của bạn.',
+    },
+    {
+      title: 'Bảo hành 1 năm',
+      description: 'Bảo hành 1 năm cho tất cả sản phẩm',
+    },
+    {
+      title: 'Hỗ trợ khách hàng',
+      description: 'Hỗ trợ khách hàng 24/7 với AI Stylist',
+    },
+  ]
+
+  await createPayloadData(payload, 'warranties', warranties)
+
+  payload.logger.info('Seeding coupons...')
+
+  const coupons = [
+    {
+      code: 'SUMMER10',
+      description: 'Khuyến mãi tháng 3',
+      minimumPriceToUse: 150000,
+      quantity: 50,
+      discountType: 'percentage',
+      discountAmount: 10,
+      active: faker.datatype.boolean(),
+      validFrom: faker.date.past({ years: 1 }).toISOString(),
+      validTo: faker.date.future({ years: 1 }).toISOString(),
+    },
+    {
+      code: 'WEEKEND50',
+      description: 'Ưu đãi đặc biệt cuối tuần',
+      minimumPriceToUse: 300000,
+      quantity: 30,
+      discountType: 'fixed',
+      discountAmount: 50000,
+      active: faker.datatype.boolean(),
+      validFrom: faker.date.past({ years: 1 }).toISOString(),
+      validTo: faker.date.future({ years: 1 }).toISOString(),
+    },
+    {
+      code: 'NEWUSER15',
+      description: 'Coupon dành cho khách mới',
+      minimumPriceToUse: 100000,
+      quantity: 100,
+      discountType: 'percentage',
+      active: faker.datatype.boolean(),
+      discountAmount: 15,
+      validFrom: faker.date.past({ years: 1 }).toISOString(),
+      validTo: faker.date.future({ years: 1 }).toISOString(),
+    },
+    {
+      code: 'SUMMER10',
+      description: 'Khuyến mãi giữa tháng',
+      minimumPriceToUse: 250000,
+      quantity: 40,
+      discountType: 'fixed',
+      active: faker.datatype.boolean(),
+      discountAmount: 30000,
+      validFrom: faker.date.past({ years: 1 }).toISOString(),
+      validTo: faker.date.future({ years: 1 }).toISOString(),
+    },
+    {
+      code: 'FLASHSALE20',
+      description: 'Flash Sale 48 giờ',
+      minimumPriceToUse: 500000,
+      quantity: 10,
+      discountType: 'percentage',
+      discountAmount: 20,
+      active: faker.datatype.boolean(),
+      validFrom: faker.date.past({ years: 1 }).toISOString(),
+      validTo: faker.date.future({ years: 1 }).toISOString(),
+    },
+  ]
+
+  await createPayloadData(payload, 'coupons', coupons)
+
+  payload.logger.info(`Seeding image products...`)
   const createdImageBuffer: any[] = []
 
-  for (let i = 1; i <= 50; i++) {
+  for (let i = 1; i <= 10; i++) {
     const imageBuffer = await fetchFileByDisk(
       'D:/Projects/PayloadCMS/e-wardrobe/pics', // Change it depends on your local path
       `${i}.jpg`,
@@ -455,26 +1009,249 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
     }),
   )
 
-  payload.logger.info(`— Seeding products...`)
-  const seedProducts = (): any[] => {
-    return Array.from({ length: NUM_PRODUCTS }).map(() => ({
-      title: faker.commerce.productName(),
-      description: faker.commerce.productDescription(),
-      instruction: faker.commerce.productAdjective(),
-      material: faker.helpers.arrayElement(createdMaterials).id,
-      category: faker.helpers.arrayElement([kidsCategory, menCategory, womenCategory]).id,
-      image: faker.helpers.arrayElement(createdImages).id,
+  payload.logger.info('Seeding products...')
+
+  const products = [
+    {
+      title: 'Áo thun cotton',
+      description:
+        'Áo thun cotton mềm mại, thoáng khí, phù hợp để mặc hàng ngày hoặc đi chơi. Thiết kế đơn giản nhưng vẫn giữ được phong cách trẻ trung, năng động.',
+      instruction: 'Giặt ở nhiệt độ dưới 30°C, không dùng chất tẩy mạnh, phơi trong bóng râm.',
       published: faker.datatype.boolean(),
-    }))
-  }
+      category: createdCategories[Math.floor(Math.random() * createdCategories.length)],
+      material: createdMaterials[Math.floor(Math.random() * createdMaterials.length)],
+      image: createdImages[Math.floor(Math.random() * createdImages.length)],
+    },
+    {
+      title: 'Áo sơ mi công sở',
+      description:
+        'Áo sơ mi công sở thanh lịch, phù hợp cho môi trường làm việc chuyên nghiệp hoặc các sự kiện quan trọng. Chất liệu thoáng mát, giúp thoải mái suốt ngày dài.',
+      instruction: 'Giặt tay hoặc giặt máy ở chế độ nhẹ, ủi ở nhiệt độ thấp, không vắt mạnh.',
+      published: faker.datatype.boolean(),
+      category: createdCategories[Math.floor(Math.random() * createdCategories.length)],
+      material: createdMaterials[Math.floor(Math.random() * createdMaterials.length)],
+      image: createdImages[Math.floor(Math.random() * createdImages.length)],
+    },
+    {
+      title: 'Quần jean nam',
+      description:
+        'Quần jean nam phong cách, bền bỉ, dễ phối với áo thun hoặc sơ mi. Phù hợp với nhiều dịp từ đi làm đến đi chơi.',
+      instruction:
+        'Giặt máy ở chế độ nhẹ, không dùng chất tẩy mạnh, lộn trái khi giặt để bảo vệ màu vải.',
+      published: faker.datatype.boolean(),
+      category: createdCategories[Math.floor(Math.random() * createdCategories.length)],
+      material: createdMaterials[Math.floor(Math.random() * createdMaterials.length)],
+      image: createdImages[Math.floor(Math.random() * createdImages.length)],
+    },
+    {
+      title: 'Váy maxi nữ',
+      description:
+        'Váy maxi nữ duyên dáng, mềm mại, phù hợp để đi biển hoặc dự tiệc nhẹ. Thiết kế thoải mái giúp tôn lên nét nữ tính và thanh lịch.',
+      instruction: 'Giặt tay, không vắt mạnh, không dùng máy sấy, phơi trong bóng râm.',
+      published: faker.datatype.boolean(),
+      category: createdCategories[Math.floor(Math.random() * createdCategories.length)],
+      material: createdMaterials[Math.floor(Math.random() * createdMaterials.length)],
+      image: createdImages[Math.floor(Math.random() * createdImages.length)],
+    },
+    {
+      title: 'Giày thể thao nam',
+      description:
+        'Giày thể thao nam êm ái, bền bỉ, hỗ trợ tốt cho hoạt động chạy bộ hoặc đi chơi hàng ngày. Thiết kế hiện đại, phù hợp với nhiều phong cách thời trang.',
+      instruction: 'Vệ sinh bằng khăn ẩm, không giặt máy, tránh tiếp xúc trực tiếp với nước.',
+      published: faker.datatype.boolean(),
+      category: createdCategories[Math.floor(Math.random() * createdCategories.length)],
+      material: createdMaterials[Math.floor(Math.random() * createdMaterials.length)],
+      image: createdImages[Math.floor(Math.random() * createdImages.length)],
+    },
+  ]
 
-  await create(payload, 'products', seedProducts())
+  const createdProducts = await createPayloadData(payload, 'products', products)
 
-  payload.logger.info(`— Seeding categories...`)
+  payload.logger.info('Seeding product variants...')
 
-  await create(payload, 'categories', categories(), true)
+  const productVariantForProduct1 = [
+    {
+      title: 'Áo thun cotton màu trắng',
+      description: 'Áo thun cotton màu trắng',
+      quantity: 100,
+      price: 100000,
+      product: createdProducts[0],
+      size: createdSizes[Math.floor(Math.random() * createdSizes.length)],
+      color: createdColors[Math.floor(Math.random() * createdColors.length)],
+      image: createdImages[Math.floor(Math.random() * createdImages.length)],
+    },
+    {
+      title: 'Áo thun cotton màu đen',
+      description: 'Áo thun cotton màu đen',
+      quantity: 150,
+      price: 120000,
+      product: createdProducts[0],
+      size: createdSizes[Math.floor(Math.random() * createdSizes.length)],
+      color: createdColors[Math.floor(Math.random() * createdColors.length)],
+      image: createdImages[Math.floor(Math.random() * createdImages.length)],
+    },
+    {
+      title: 'Áo thun cotton màu xanh dương',
+      description: 'Áo thun cotton màu xanh dương',
+      quantity: 200,
+      price: 110000,
+      product: createdProducts[0],
+      size: createdSizes[Math.floor(Math.random() * createdSizes.length)],
+      color: createdColors[Math.floor(Math.random() * createdColors.length)],
+      image: createdImages[Math.floor(Math.random() * createdImages.length)],
+    },
+    {
+      title: 'Áo thun cotton màu đỏ',
+      description: 'Áo thun cotton màu đỏ',
+      quantity: 80,
+      price: 130000,
+      product: createdProducts[0],
+      size: createdSizes[Math.floor(Math.random() * createdSizes.length)],
+      color: createdColors[Math.floor(Math.random() * createdColors.length)],
+      image: createdImages[Math.floor(Math.random() * createdImages.length)],
+    },
+    {
+      title: 'Áo thun cotton màu xám',
+      description: 'Áo thun cotton màu xám',
+      quantity: 90,
+      price: 115000,
+      product: createdProducts[0],
+      size: createdSizes[Math.floor(Math.random() * createdSizes.length)],
+      color: createdColors[Math.floor(Math.random() * createdColors.length)],
+      image: createdImages[Math.floor(Math.random() * createdImages.length)],
+    },
+  ]
+
+  await createPayloadData(payload, 'productVariants', productVariantForProduct1)
+
+  const productVariantForProduct2 = [
+    {
+      title: 'Áo sơ mi công sở màu trắng',
+      description: 'Áo sơ mi công sở màu trắng',
+      quantity: 100,
+      price: 100000,
+      product: createdProducts[1],
+      size: createdSizes[Math.floor(Math.random() * createdSizes.length)],
+      color: createdColors[Math.floor(Math.random() * createdColors.length)],
+      image: createdImages[Math.floor(Math.random() * createdImages.length)],
+    },
+    {
+      title: 'Áo sơ mi công sở màu đen',
+      description: 'Áo sơ mi công sở màu đen',
+      quantity: 150,
+      price: 120000,
+      product: createdProducts[1],
+      size: createdSizes[Math.floor(Math.random() * createdSizes.length)],
+      color: createdColors[Math.floor(Math.random() * createdColors.length)],
+      image: createdImages[Math.floor(Math.random() * createdImages.length)],
+    },
+    {
+      title: 'Áo sơ mi công sở màu xanh dương',
+      description: 'Áo sơ mi công sở màu xanh dương',
+      quantity: 200,
+      price: 110000,
+      product: createdProducts[1],
+      size: createdSizes[Math.floor(Math.random() * createdSizes.length)],
+      color: createdColors[Math.floor(Math.random() * createdColors.length)],
+      image: createdImages[Math.floor(Math.random() * createdImages.length)],
+    },
+  ]
+
+  await createPayloadData(payload, 'productVariants', productVariantForProduct2)
+
+  const productVariantForProduct3 = [
+    {
+      title: 'Quần jean nam màu xanh',
+      description: 'Quần jean nam màu xanh',
+      quantity: 100,
+      price: 200000,
+      product: createdProducts[2],
+      size: createdSizes[Math.floor(Math.random() * createdSizes.length)],
+      color: createdColors[Math.floor(Math.random() * createdColors.length)],
+      image: createdImages[Math.floor(Math.random() * createdImages.length)],
+    },
+    {
+      title: 'Quần jean nam màu đen',
+      description: 'Quần jean nam màu đen',
+      quantity: 150,
+      price: 220000,
+      product: createdProducts[2],
+      size: createdSizes[Math.floor(Math.random() * createdSizes.length)],
+      color: createdColors[Math.floor(Math.random() * createdColors.length)],
+      image: createdImages[Math.floor(Math.random() * createdImages.length)],
+    },
+  ]
+
+  await createPayloadData(payload, 'productVariants', productVariantForProduct3)
+
+  const productVariantForProduct4 = [
+    {
+      title: 'Váy maxi nữ màu trắng',
+      description: 'Váy maxi nữ màu trắng',
+      quantity: 100,
+      price: 300000,
+      product: createdProducts[3],
+      size: createdSizes[Math.floor(Math.random() * createdSizes.length)],
+      color: createdColors[Math.floor(Math.random() * createdColors.length)],
+      image: createdImages[Math.floor(Math.random() * createdImages.length)],
+    },
+    {
+      title: 'Váy maxi nữ màu đỏ',
+      description: 'Váy maxi nữ màu đỏ',
+      quantity: 150,
+      price: 320000,
+      product: createdProducts[3],
+      size: createdSizes[Math.floor(Math.random() * createdSizes.length)],
+      color: createdColors[Math.floor(Math.random() * createdColors.length)],
+      image: createdImages[Math.floor(Math.random() * createdImages.length)],
+    },
+  ]
+
+  await createPayloadData(payload, 'productVariants', productVariantForProduct4)
+
+  const productVariantForProduct5 = [
+    {
+      title: 'Giày thể thao nam màu trắng',
+      description: 'Giày thể thao nam màu trắng',
+      quantity: 100,
+      price: 400000,
+      product: createdProducts[4],
+      size: createdSizes[Math.floor(Math.random() * createdSizes.length)],
+      color: createdColors[Math.floor(Math.random() * createdColors.length)],
+      image: createdImages[Math.floor(Math.random() * createdImages.length)],
+    },
+    {
+      title: 'Giày thể thao nam màu đen',
+      description: 'Giày thể thao nam màu đen',
+      quantity: 150,
+      price: 420000,
+      product: createdProducts[4],
+      size: createdSizes[Math.floor(Math.random() * createdSizes.length)],
+      color: createdColors[Math.floor(Math.random() * createdColors.length)],
+      image: createdImages[Math.floor(Math.random() * createdImages.length)],
+    },
+  ]
+
+  await createPayloadData(payload, 'productVariants', productVariantForProduct5)
 
   payload.logger.info('Seeded database successfully!')
+}
+
+export const createPayloadData = async (payload: Payload, collection: any, data: any[]) => {
+  const createdData: any[] = []
+
+  await Promise.all(
+    data.map(async (item) => {
+      const createdItem = await payload.create({
+        collection,
+        data: item,
+      })
+      await new Promise((resolve) => setTimeout(resolve, 1000))
+      createdData.push(createdItem)
+    }),
+  )
+
+  return createdData
 }
 
 const fetchFileByDisk = async (folder: string, url: string): Promise<File> => {
@@ -487,91 +1264,4 @@ const fetchFileByDisk = async (folder: string, url: string): Promise<File> => {
     mimetype: `image/${path.extname(filePath).slice(1)}`,
     size: data.byteLength,
   }
-}
-
-const create = async (
-  payload: Payload,
-  collection: any,
-  data: any[],
-  ignoreExistingData: boolean = false,
-) => {
-  const createdData: any[] = []
-
-  const { totalDocs } = await payload.find({
-    collection,
-    pagination: false,
-  })
-
-  if (totalDocs <= 0 || ignoreExistingData) {
-    await Promise.all(
-      data.map(async (item) => {
-        const createdItem = await payload.create({
-          collection,
-          data: item,
-        })
-        // wait for 1s to avoid the same `createdAt` time
-        await new Promise((resolve) => setTimeout(resolve, 1000))
-        createdData.push(createdItem)
-      }),
-    )
-
-    return createdData
-  }
-
-  return createdData
-}
-
-const categories = () =>
-  Array.from({ length: NUM_CATEGORIES }).map(() => {
-    const title = capitalize(faker.commerce.department())
-
-    return {
-      title,
-      breadcrumbs: [
-        {
-          label: title,
-          url: `/${title.toLowerCase().replace(/ /g, '-').trim()}`,
-        },
-      ],
-    }
-  })
-
-const colors = () =>
-  Array.from({ length: NUM_COLORS }).map(() => ({
-    title: capitalize(faker.color.human()),
-    description: capitalize(faker.commerce.productDescription()),
-    hex: faker.color.rgb({ format: 'hex' }),
-  }))
-
-const sizes = () =>
-  Array.from([
-    ['M', 160, 180, 55, 75],
-    ['L', 170, 190, 65, 85],
-    ['XL', 180, 200, 75, 100],
-    ['XXL', 185, 210, 85, 120],
-    ['3XL', 190, 220, 100, 150],
-    ['4XL', 195, 230, 120, 180],
-    ['5XL', 200, 240, 140, 210],
-    ['6XL', 205, 250, 160, 240],
-    ['7XL', 210, 260, 180, 280],
-  ]).map(([name, minHeight, maxHeight, minWeight, maxWeight]) => ({
-    name,
-    description: `Size ${name}, suitable for height ${minHeight}-${maxHeight}cm and weight ${minWeight}-${maxWeight}kg.`,
-    minHeight,
-    maxHeight,
-    minWeight,
-    maxWeight,
-  }))
-
-const materials = () =>
-  Array.from({ length: NUM_MATERIALS }).map(() => ({
-    title: capitalize(faker.commerce.productMaterial()),
-    description: capitalize(faker.lorem.sentence({ min: 20, max: 30 })),
-  }))
-
-const shippingStatuses = () => {
-  return ['Pending', 'Shipped', 'Delivered'].map((data) => ({
-    name: capitalize(data),
-    description: capitalize(faker.git.commitMessage()),
-  }))
 }

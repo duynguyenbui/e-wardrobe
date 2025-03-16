@@ -95,7 +95,6 @@ export const ProductCard: React.FC<{
               href={`/products/${id}`}
               className="text-sm text-muted-foreground flex gap-2 items-center hover:scale-105 transition-all duration-100"
             >
-              Buy Now
               <ShoppingCart className="w-5 h-5" />
             </Link>
           )}

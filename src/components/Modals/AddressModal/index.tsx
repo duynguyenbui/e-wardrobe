@@ -41,13 +41,13 @@ export const AddressModal = () => {
   const form = useForm<TCreateAddressValidator>({
     resolver: zodResolver(CreateAddressValidator),
     defaultValues: {
-      name: 'Home',
-      contactName: 'Nhu Nhan',
+      name: 'Nhà',
+      contactName: 'Như Nhân',
       contactPhone: '0908080808',
       province: '',
-      district: 'Long Phu',
-      ward: 'Hau Thanh',
-      detailAddress: '99, Cuu Cuu',
+      district: 'Long Phú',
+      ward: 'Hậu Thạnh',
+      detailAddress: '99, Cửu Cửu',
     },
   })
 
@@ -64,9 +64,9 @@ export const AddressModal = () => {
     <Dialog open={type === ModalType.ADD_ADDRESS && isOpen && Boolean(user)} onOpenChange={close}>
       <DialogContent className="sm:max-w-[500px]">
         <DialogHeader>
-          <DialogTitle>Create Address</DialogTitle>
+          <DialogTitle>Tạo địa chỉ mới</DialogTitle>
           <DialogDescription>
-            Enter your address details below. Click save when you&apos;re done.
+            Nhập thông tin địa chỉ của bạn bên dưới. Nhấn lưu khi hoàn tất.
           </DialogDescription>
         </DialogHeader>
         <Form {...form}>
@@ -76,9 +76,9 @@ export const AddressModal = () => {
               name="name"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Name</FormLabel>
+                  <FormLabel>Tên địa chỉ</FormLabel>
                   <FormControl>
-                    <Input placeholder="Home" {...field} />
+                    <Input placeholder="Nhà" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -89,9 +89,9 @@ export const AddressModal = () => {
               name="contactName"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Contact Name</FormLabel>
+                  <FormLabel>Tên người nhận</FormLabel>
                   <FormControl>
-                    <Input placeholder="John Doe" {...field} />
+                    <Input placeholder="Nguyễn Văn A" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -102,7 +102,7 @@ export const AddressModal = () => {
               name="contactPhone"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Contact Phone</FormLabel>
+                  <FormLabel>Số điện thoại</FormLabel>
                   <FormControl>
                     <Input placeholder="0123456789" {...field} />
                   </FormControl>
@@ -115,11 +115,11 @@ export const AddressModal = () => {
               name="province"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Province</FormLabel>
+                  <FormLabel>Tỉnh/Thành phố</FormLabel>
                   <Select onValueChange={field.onChange} defaultValue={field.value}>
                     <FormControl>
                       <SelectTrigger>
-                        <SelectValue placeholder="Select a province" />
+                        <SelectValue placeholder="Chọn tỉnh/thành phố" />
                       </SelectTrigger>
                     </FormControl>
                     <SelectContent>
@@ -139,9 +139,9 @@ export const AddressModal = () => {
               name="district"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>District</FormLabel>
+                  <FormLabel>Quận/Huyện</FormLabel>
                   <FormControl>
-                    <Input placeholder="District 1" {...field} />
+                    <Input placeholder="Quận 1" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -152,9 +152,9 @@ export const AddressModal = () => {
               name="ward"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Ward</FormLabel>
+                  <FormLabel>Phường/Xã</FormLabel>
                   <FormControl>
-                    <Input placeholder="Ward 1" {...field} />
+                    <Input placeholder="Phường 1" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
@@ -165,15 +165,15 @@ export const AddressModal = () => {
               name="detailAddress"
               render={({ field }) => (
                 <FormItem>
-                  <FormLabel>Detail Address</FormLabel>
+                  <FormLabel>Địa chỉ chi tiết</FormLabel>
                   <FormControl>
-                    <Input placeholder="123 Street, Ward 1" {...field} />
+                    <Input placeholder="123 Đường ABC, Phường 1" {...field} />
                   </FormControl>
                   <FormMessage />
                 </FormItem>
               )}
             />
-            <Button type="submit">Submit</Button>
+            <Button type="submit">Lưu địa chỉ</Button>
           </form>
         </Form>
       </DialogContent>

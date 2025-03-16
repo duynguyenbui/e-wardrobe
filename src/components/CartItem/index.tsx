@@ -15,7 +15,7 @@ export function CartItem({ cartProductVariant }: { cartProductVariant: CartProdu
     <div className="flex items-center gap-1 py-4 border-b last:border-b-0">
       <div className="flex-grow space-y-1">
         <h3 className="text-sm font-medium">{title}</h3>
-        <p className="text-sm text-muted-foreground">${price.toFixed(2)} each</p>
+        <p className="text-sm text-muted-foreground">${price.toFixed(2)} mỗi cái</p>
       </div>
       <div className="flex items-center gap-1">
         <Button

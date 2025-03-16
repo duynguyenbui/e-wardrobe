@@ -28,10 +28,10 @@ export default function Variants({ variants }: VariantsProps) {
   return (
     <div className="flex flex-col space-y-6">
       <div>
-        <h2 className="text-2xl font-bold">Variants</h2>
+        <h2 className="text-2xl font-bold">Phiên bản</h2>
         <p className="text-sm text-muted-foreground">
-          Select a variant to add to your cart. If you need help with sizing, use the size
-          recommendation tool below.
+          Chọn một phiên bản để thêm vào giỏ hàng. Nếu bạn cần giúp đỡ về kích cỡ, hãy sử dụng công cụ
+          khuyến nghị kích cỡ bên dưới.
         </p>
       </div>
 
@@ -48,7 +48,7 @@ export default function Variants({ variants }: VariantsProps) {
           <CarouselNext />
         </Carousel>
       ) : (
-        <p className="text-center text-gray-500">No variants available</p>
+        <p className="text-center text-gray-500">Không có phiên bản</p>
       )}
 
       <div className="flex space-x-2 items-center justify-center">
@@ -57,11 +57,11 @@ export default function Variants({ variants }: VariantsProps) {
           onClick={() => open({ modal: ModalType.SIZE_SELECTOR })}
           className="flex items-center justify-center"
         >
-          Size Recommendation
+          Khuyến nghị kích cỡ
           <PaintRollerIcon className="w-5 h-5 ml-2" />
         </Button>
         <Button variant="default" onClick={() => router.push('/chat')}>
-          Chat With AI Stylist
+          Chat với AI Stylist
         </Button>
       </div>
       <Warranties />

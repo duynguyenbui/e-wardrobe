@@ -24,19 +24,28 @@ export const Archive: Block = {
           ]
         },
       }),
-      label: 'Intro Content',
+      label: {
+        vi: 'Nội dung giới thiệu',
+      },
     },
     {
       name: 'populateBy',
+      label: {
+        vi: 'Phương thức hiển thị',
+      },
       type: 'select',
       defaultValue: 'collection',
       options: [
         {
-          label: 'Collection',
+          label: {
+            vi: 'Tập hợp',
+          },
           value: 'collection',
         },
         {
-          label: 'Individual Selection (For Posts Only)',
+          label: {
+            vi: 'Chọn từng bài viết',
+          },
           value: 'selection',
         },
       ],
@@ -45,22 +54,32 @@ export const Archive: Block = {
       name: 'relationTo',
       type: 'select',
       defaultValue: 'posts',
-      label: 'Collections To Show',
+      label: {
+        vi: 'Tập hợp hiển thị',
+      },
       options: [
         {
-          label: 'Posts',
+          label: {
+            vi: 'Bài viết',
+          },
           value: 'posts',
         },
         {
-          label: 'Colors',
+          label: {
+            vi: 'Màu sắc',
+          },
           value: 'colors',
         },
         {
-          label: 'Categories',
+          label: {
+            vi: 'Danh mục',
+          },
           value: 'categories',
         },
         {
-          label: 'Materials',
+          label: {
+            vi: 'Chất liệu',
+          },
           value: 'materials',
         },
       ],
@@ -73,7 +92,9 @@ export const Archive: Block = {
           siblingData.populateBy === 'collection' && siblingData.relationTo === 'posts',
       },
       hasMany: true,
-      label: 'Categories To Show',
+      label: {
+        vi: 'Danh mục hiển thị',
+      },
       relationTo: 'categories',
     },
     {
@@ -84,7 +105,9 @@ export const Archive: Block = {
         step: 1,
       },
       defaultValue: 10,
-      label: 'Limit',
+      label: {
+        vi: 'Giới hạn',
+      },
     },
     {
       name: 'selectedDocs',
@@ -94,12 +117,18 @@ export const Archive: Block = {
           siblingData.populateBy === 'selection' && siblingData.relationTo === 'posts',
       },
       hasMany: true,
-      label: 'Selection',
+      label: {
+        vi: 'Chọn từng bài viết',
+      },
       relationTo: ['posts'],
     },
   ],
   labels: {
-    plural: 'Archives',
-    singular: 'Archive',
+    plural: {
+      vi: 'Tập hợp',
+    },
+    singular: {
+      vi: 'Tập hợp',
+    },
   },
 }

@@ -1,7 +1,7 @@
 import type { Media } from '@/payload-types'
 
 export const image3: Omit<Media, 'createdAt' | 'id' | 'updatedAt'> = {
-  alt: 'Straight metallic shapes with an orange and blue gradient',
+  alt: 'Hình dạng kim loại thẳng với gradient màu xanh lam',
   caption: {
     root: {
       type: 'root',
@@ -15,7 +15,7 @@ export const image3: Omit<Media, 'createdAt' | 'id' | 'updatedAt'> = {
               format: 0,
               mode: 'normal',
               style: '',
-              text: 'Photo by ',
+              text: 'Chụp bởi ',
               version: 1,
             },
             {
@@ -47,7 +47,7 @@ export const image3: Omit<Media, 'createdAt' | 'id' | 'updatedAt'> = {
               format: 0,
               mode: 'normal',
               style: '',
-              text: ' on Unsplash.',
+              text: ' trên Unsplash.',
               version: 1,
             },
           ],
