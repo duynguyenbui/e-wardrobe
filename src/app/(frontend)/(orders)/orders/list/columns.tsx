@@ -18,8 +18,8 @@ import Link from 'next/link'
 // You can use a Zod schema here if you want.
 export type OrderTableType = {
   id: string
-  totalPrice: number
-  shippingFee: number
+  totalPrice: string
+  shippingFee: string
   isPaid: 'Paid' | 'Unpaid'
   note: string
   createdAt: string

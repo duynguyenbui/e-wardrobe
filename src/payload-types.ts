@@ -797,11 +797,10 @@ export interface ProductVariant {
   images: (string | Media)[];
   quantity: number;
   price: number;
+  discount: number;
   size: string | Size;
   color: string | Color;
   product: string | Product;
-  priceId?: string | null;
-  productId?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -848,18 +847,21 @@ export interface Order {
     | {
         productVariant: string | ProductVariant;
         quantityToBuy: number;
+        productDiscount: number;
+        productPrice: number;
+        finalProductPrice: number;
         id?: string | null;
       }[]
     | null;
-  customer: string | User;
   isPaid: boolean;
-  totalPrice?: number | null;
+  customer: string | User;
+  totalPrice: number;
   shippingFee: number;
-  shippingAddress?: (string | null) | Address;
-  discount?: (string | null) | Coupon;
+  shippingAddress: string | Address;
+  coupon?: (string | null) | Coupon;
   note?: string | null;
   shippingStatus?: (string | null) | ShippingStatus;
-  type?: ('cod' | 'online') | null;
+  type?: ('cod' | 'stripe') | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -870,70 +872,7 @@ export interface Order {
 export interface Address {
   id: string;
   name: string;
-  province:
-    | 'AG'
-    | 'BR-VT'
-    | 'BG'
-    | 'BK'
-    | 'BL'
-    | 'BN'
-    | 'BTR'
-    | 'BDUOG'
-    | 'BDINH'
-    | 'BP'
-    | 'BTN'
-    | 'CM'
-    | 'CT'
-    | 'CB'
-    | 'DN'
-    | 'DALAT'
-    | 'DNONG'
-    | 'DBIEN'
-    | 'DNAI'
-    | 'DTHAP'
-    | 'GL'
-    | 'HAG'
-    | 'HAN'
-    | 'HN'
-    | 'HT'
-    | 'HD'
-    | 'HP'
-    | 'HGI'
-    | 'HB'
-    | 'HCM'
-    | 'HY'
-    | 'KH'
-    | 'KG'
-    | 'KT'
-    | 'LCH'
-    | 'LD'
-    | 'LS'
-    | 'LCA'
-    | 'LA'
-    | 'NAMD'
-    | 'NA'
-    | 'NB'
-    | 'NT'
-    | 'PT'
-    | 'PY'
-    | 'QB'
-    | 'QNA'
-    | 'QNg'
-    | 'QNI'
-    | 'QT'
-    | 'ST'
-    | 'SL'
-    | 'TNINH'
-    | 'TB'
-    | 'TNG'
-    | 'TH'
-    | 'TTH'
-    | 'TG'
-    | 'TV'
-    | 'TQ'
-    | 'VL'
-    | 'VP'
-    | 'YB';
+  province: string;
   district: string;
   ward: string;
   detailAddress: string;
@@ -997,8 +936,6 @@ export interface ShippingFee {
   description?: string | null;
   minimumPriceToUse: number;
   fee: number;
-  productId?: string | null;
-  priceId?: string | null;
   updatedAt: string;
   createdAt: string;
 }
@@ -1463,11 +1400,10 @@ export interface ProductVariantsSelect<T extends boolean = true> {
   images?: T;
   quantity?: T;
   price?: T;
+  discount?: T;
   size?: T;
   color?: T;
   product?: T;
-  priceId?: T;
-  productId?: T;
   updatedAt?: T;
   createdAt?: T;
 }
@@ -1481,14 +1417,17 @@ export interface OrdersSelect<T extends boolean = true> {
     | {
         productVariant?: T;
         quantityToBuy?: T;
+        productDiscount?: T;
+        productPrice?: T;
+        finalProductPrice?: T;
         id?: T;
       };
-  customer?: T;
   isPaid?: T;
+  customer?: T;
   totalPrice?: T;
   shippingFee?: T;
   shippingAddress?: T;
-  discount?: T;
+  coupon?: T;
   note?: T;
   shippingStatus?: T;
   type?: T;
@@ -1753,8 +1692,6 @@ export interface ShippingFeesSelect<T extends boolean = true> {
   description?: T;
   minimumPriceToUse?: T;
   fee?: T;
-  productId?: T;
-  priceId?: T;
   updatedAt?: T;
   createdAt?: T;
 }

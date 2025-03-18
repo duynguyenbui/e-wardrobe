@@ -1,9 +1,6 @@
 import type { CollectionConfig } from 'payload'
 
 import { anyone } from '../../access/anyone'
-import { authenticated } from '../../access/authenticated'
-import { populateStripe } from './hook/populateStripe'
-import { deactivateProduct } from '../Hooks/deactivateProduct'
 import { admins } from '@/access/admin'
 
 export const ShippingFees: CollectionConfig = {
@@ -21,10 +18,6 @@ export const ShippingFees: CollectionConfig = {
     delete: admins,
     read: anyone,
     update: () => false,
-  },
-  hooks: {
-    // beforeChange: [populateStripe],
-    // afterDelete: [deactivateProduct],
   },
   admin: {
     useAsTitle: 'title',
@@ -60,28 +53,6 @@ export const ShippingFees: CollectionConfig = {
       },
       type: 'number',
       required: true,
-    },
-    {
-      name: 'productId',
-      label: {
-        vi: 'Sản phẩm Stripe ID',
-      },
-      type: 'text',
-      required: false,
-      admin: {
-        readOnly: true,
-      },
-    },
-    {
-      name: 'priceId',
-      label: {
-        vi: 'Giá sản phẩm Stripe ID',
-      },
-      type: 'text',
-      required: false,
-      admin: {
-        readOnly: true,
-      },
     },
   ],
 }

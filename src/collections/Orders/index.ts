@@ -49,19 +49,33 @@ export const Orders: CollectionConfig = {
           type: 'number',
           required: true,
         },
+        {
+          name: 'productDiscount',
+          label: {
+            vi: 'Giảm giá sản phẩm (%)',
+          },
+          type: 'number',
+          required: true,
+        },
+        {
+          name: 'productPrice',
+          label: {
+            vi: 'Giá sản phẩm',
+          },
+          type: 'number',
+          required: true,
+        },
+        {
+          name: 'finalProductPrice',
+          label: {
+            vi: 'Giá bán sản phẩm (Bao gồm giảm giá của sản phẩm)',
+          },
+          type: 'number',
+          required: true,
+        },
       ],
       minRows: 1,
       maxRows: 10,
-    },
-    {
-      name: 'customer',
-      label: {
-        vi: 'Khách hàng',
-      },
-      type: 'relationship',
-      relationTo: 'users',
-      hasMany: false,
-      required: true,
     },
     {
       name: 'isPaid',
@@ -76,17 +90,26 @@ export const Orders: CollectionConfig = {
       },
     },
     {
+      name: 'customer',
+      label: {
+        vi: 'Khách hàng',
+      },
+      type: 'relationship',
+      relationTo: 'users',
+      hasMany: false,
+      required: true,
+      admin: {
+        position: 'sidebar',
+      },
+    },
+    {
       name: 'totalPrice',
       label: {
-        vi: 'Tổng giá trị',
+        vi: 'Tổng giá trị (bao gồm mã giảm giá, và voucher)',
       },
       type: 'number',
       required: true,
       defaultValue: 0,
-      admin: {
-        condition: (_, siblingData) => siblingData?.customer && siblingData?.lineItems.length > 0,
-        position: 'sidebar',
-      },
     },
     {
       name: 'shippingFee',
@@ -95,7 +118,7 @@ export const Orders: CollectionConfig = {
       },
       type: 'number',
       required: true,
-      defaultValue: 2,
+      defaultValue: 0,
     },
     {
       name: 'shippingAddress',
@@ -106,12 +129,9 @@ export const Orders: CollectionConfig = {
       relationTo: 'addresses',
       hasMany: false,
       required: true,
-      admin: {
-        condition: (_, siblingData) => siblingData?.customer && siblingData?.lineItems.length > 0,
-      },
     },
     {
-      name: 'discount',
+      name: 'coupon',
       label: {
         vi: 'Mã giảm giá',
       },
@@ -151,7 +171,7 @@ export const Orders: CollectionConfig = {
       },
       admin: {
         isClearable: true,
-        isSortable: true, // use mouse to drag and drop different values, and sort them according to your choice
+        isSortable: true,
         position: 'sidebar',
       },
       options: [
@@ -165,7 +185,7 @@ export const Orders: CollectionConfig = {
           label: {
             vi: 'Thanh toán online (Stripe)',
           },
-          value: 'online',
+          value: 'stripe',
         },
       ],
     },

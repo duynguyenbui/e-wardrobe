@@ -1,3 +1,5 @@
+'use client'
+
 import Spinner from '@/components/Spinner'
 import React from 'react'
 

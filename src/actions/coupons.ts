@@ -16,6 +16,7 @@ export const getCollectedCoupons = async (minimumPriceToUse: number) => {
   const { docs: collectedCoupons } = await payload.find({
     collection: 'coupons',
     pagination: false,
+    depth: 0,
     where: {
       and: [
         {
@@ -49,9 +50,7 @@ export const getCollectedCoupons = async (minimumPriceToUse: number) => {
 
   const validCollectedCoupons = collectedCoupons.filter((coupon) => {
     if (Array.isArray(coupon.currentUse)) {
-      return !coupon.currentUse.some(
-        (user) => typeof user === 'object' && user.id === currentUser.id,
-      )
+      return !coupon.currentUse.some((user) => user === currentUser.id)
     }
 
     return true
@@ -89,6 +88,7 @@ export const getValidCoupons = async () => {
     collection: 'coupons',
     pagination: false,
     where,
+    depth: 0,
   })
 
   const validCoupons =

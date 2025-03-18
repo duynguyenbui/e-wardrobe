@@ -3,6 +3,10 @@ import type { CollectionConfig } from 'payload'
 import { anyone } from '../../access/anyone'
 import { authenticated } from '../../access/authenticated'
 import { slugField } from '@/fields/slug'
+// import { revalidatePath } from 'next/cache'
+// import { indexProduct } from './hooks/indexProduct'
+// import { deleteIndex } from './hooks/deleteIndex'
+// import { uuidv4 } from '@/utilities/uuid'
 
 export const Products: CollectionConfig = {
   slug: 'products',
@@ -25,9 +29,9 @@ export const Products: CollectionConfig = {
     //   async () => {
     //     revalidatePath('/products')
     //   },
-    //   indexProduct, // change it if you want to use vector database
+    //   indexProduct,
     // ],
-    // afterDelete: [deleteIndex], // change it if you want to use vector database
+    // afterDelete: [deleteIndex],
     // beforeChange: [
     //   async ({ data }) => {
     //     if (!data.embedding) {

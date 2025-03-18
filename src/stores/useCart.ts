@@ -2,7 +2,7 @@ import { ProductVariant } from '@/payload-types'
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 
-export type CartProductVariant = Pick<ProductVariant, 'id' | 'price' | 'quantity' | 'title'> & {
+export type CartProductVariant = Pick<ProductVariant, 'id' | 'price' | 'quantity' | 'title' | 'discount'> & {
   quantityToBuy: number
 }
 

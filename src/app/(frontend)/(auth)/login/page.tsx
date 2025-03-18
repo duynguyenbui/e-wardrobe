@@ -9,7 +9,7 @@ const Page = async () => {
   const { user } = await getMeUser()
 
   if (user) {
-    redirect(`/home?message=${encodeURIComponent('You are already logged in.')}`)
+    redirect(`/?message=${encodeURIComponent('You are already logged in.')}`)
   }
 
   return (

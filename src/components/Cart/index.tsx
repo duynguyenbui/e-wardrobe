@@ -32,18 +32,18 @@ export function Cart() {
           </TooltipTrigger>
         </SheetTrigger>
         <TooltipContent align="end">Giỏ hàng ({totalItems} sản phẩm)</TooltipContent>
-        <SheetContent side="right" className="flex w-[600px] sm:w-[700px] flex-col gap-1 p-3 pt-14">
+        <SheetContent side="right" className="flex flex-col gap-1 p-3 pt-14">
           <SheetTitle></SheetTitle>
           {items.length === 0 ? (
             <div className="text-center">Giỏ hàng của bạn đang trống.</div>
           ) : (
             <>
               {items.map((item) => (
-                <div className="flex flex-col gap-4" key={item.id}>
+                <div className="flex flex-col gap-2" key={item.id}>
                   <CartItem cartProductVariant={item} />
                 </div>
               ))}
-              <div className="flex flex-col gap-4 mt-auto pt-6 border-t">
+              <div className="flex flex-col gap-2 mt-auto pt-6 border-t">
                 <Link href="/orders" className={buttonVariants({ variant: 'default', size: 'lg' })}>
                   Tiến hành thanh toán
                 </Link>

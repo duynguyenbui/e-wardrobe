@@ -29,6 +29,14 @@ export const plugins: Plugin[] = [
   redirectsPlugin({
     collections: ['pages', 'posts'],
     overrides: {
+      labels: {
+        singular: {
+          vi: 'Chuyển hướng',
+        },
+        plural: {
+          vi: 'Chuyển hướng',
+        },
+      },
       // @ts-expect-error - This is a valid override, mapped fields don't resolve to the same type
       fields: ({ defaultFields }) => {
         return defaultFields.map((field) => {
@@ -61,6 +69,14 @@ export const plugins: Plugin[] = [
       payment: false,
     },
     formOverrides: {
+      labels: {
+        singular: {
+          vi: 'Biểu mẫu',
+        },
+        plural: {
+          vi: 'Biểu mẫu',
+        },
+      },
       fields: ({ defaultFields }) => {
         return defaultFields.map((field) => {
           if ('name' in field && field.name === 'confirmationMessage') {
@@ -86,6 +102,14 @@ export const plugins: Plugin[] = [
     collections: ['posts'],
     beforeSync: beforeSyncWithSearch,
     searchOverrides: {
+      labels: {
+        singular: {
+          vi: 'Tìm kiếm',
+        },
+        plural: {
+          vi: 'Tìm kiếm',
+        },
+      },
       fields: ({ defaultFields }) => {
         return [...defaultFields, ...searchFields]
       },
@@ -96,7 +120,6 @@ export const plugins: Plugin[] = [
     stripeWebhooksEndpointSecret: process.env.STRIPE_WEBHOOKS_ENDPOINT_SECRET,
     webhooks: {
       'checkout.session.completed': async ({ event, req }) => {
-
         const { payload } = req
         const session = event.data.object as Stripe.Checkout.Session
         const orderId = session?.metadata?.orderId

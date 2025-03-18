@@ -2,8 +2,6 @@ import type { CollectionConfig } from 'payload'
 
 import { anyone } from '@/access/anyone'
 import { authenticated } from '@/access/authenticated'
-import { populateStripe } from './hooks/populateStripe'
-import { deactivateProduct } from '../Hooks/deactivateProduct'
 import { revalidatePath } from 'next/cache'
 
 export const ProductVariants: CollectionConfig = {
@@ -23,8 +21,6 @@ export const ProductVariants: CollectionConfig = {
     update: authenticated,
   },
   hooks: {
-    // beforeChange: [populateStripe],
-    // afterDelete: [deactivateProduct],
     afterChange: [
       ({ doc }) => {
         revalidatePath(`$/products/${doc.id}`)
@@ -78,6 +74,15 @@ export const ProductVariants: CollectionConfig = {
       required: true,
     },
     {
+      name: 'discount',
+      label: {
+        vi: 'Giảm giá (%) (0 nếu không có giảm giá)',
+      },
+      type: 'number',
+      required: true,
+      defaultValue: 0,
+    },
+    {
       name: 'size',
       label: {
         vi: 'Kích cỡ',
@@ -114,26 +119,6 @@ export const ProductVariants: CollectionConfig = {
       required: true,
       admin: {
         position: 'sidebar',
-      },
-    },
-    {
-      name: 'priceId',
-      label: {
-        vi: 'Giá sản phẩm Stripe ID',
-      },
-      type: 'text',
-      admin: {
-        readOnly: true,
-      },
-    },
-    {
-      name: 'productId',
-      label: {
-        vi: 'Sản phẩm Stripe ID',
-      },
-      type: 'text',
-      admin: {
-        readOnly: true,
       },
     },
   ],

@@ -4,6 +4,7 @@ import { DataTable } from './data-table'
 import { redirect } from 'next/navigation'
 import { getOrders } from '@/actions/orders'
 import moment from 'moment'
+import { formatVND } from '@/utilities/currency'
 
 export default async function Page() {
   const { user: currentUser } = await getServerSideUser()
@@ -13,23 +14,19 @@ export default async function Page() {
   }
 
   const { data: orders } = await getOrders()
-  const orderTables: OrderTableType[] = []
+  let orderTables: OrderTableType[] = []
 
   if (orders) {
-    orders.forEach(
-      (order) =>
-        order &&
-        orderTables.push({
-          id: order.id,
-          totalPrice: order.totalPrice ?? 0,
-          isPaid: order.isPaid ? 'Paid' : 'Unpaid',
-          shippingFee: order.shippingFee,
-          note: order.note ?? '',
-          createdAt: moment(order.createdAt).format('LL'),
-          type: order.type?.toUpperCase() || 'N/A',
-          shippingStatus: (order.shippingStatus as any)?.name || 'N/A',
-        }),
-    )
+    orderTables = orders.filter(Boolean).map((order: any) => ({
+      id: order.id,
+      totalPrice: formatVND(order.totalPrice),
+      isPaid: order.isPaid ? 'Paid' : 'Unpaid',
+      shippingFee: formatVND(order.shippingFee),
+      note: order.note ?? '',
+      createdAt: moment(order.createdAt).format('LL'),
+      type: order.type?.toUpperCase(),
+      shippingStatus: (order.shippingStatus as any)?.name,
+    }))
   }
 
   return (

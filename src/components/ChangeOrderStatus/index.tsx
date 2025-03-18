@@ -1,6 +1,6 @@
 'use client'
 
-import { isReceivedOrder } from '@/actions/orders'
+import { receiveOrder } from '@/actions/orders'
 import { Fragment, useState } from 'react'
 import { Button } from '../ui/button'
 import { toast } from 'sonner'
@@ -15,7 +15,7 @@ export default function ChangeOrderStatus({ order }: { order: Order }) {
     if (order.id) {
       setLoading(true)
       try {
-        const { success } = await isReceivedOrder(order.id)
+        const { success } = await receiveOrder(order.id)
 
         if (success) {
           toast.success('Đơn hàng đã được nhận')

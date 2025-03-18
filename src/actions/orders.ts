@@ -3,20 +3,35 @@
 import { getPayloadClient } from '@/get-payload'
 import { getServerSideUser } from '@/get-serverside-user'
 import { CreateOrderValidator, TCreateOrderValidator } from '@/validation'
+import { revalidatePath } from 'next/cache'
+import { SHIPPING_STATUS } from '@/constants'
 import { stripe } from '@/stripe'
 import Stripe from 'stripe'
 import { redirect } from 'next/navigation'
-import { Coupon } from '@/payload-types'
-import { revalidatePath } from 'next/cache'
-import { SHIPPING_STATUS } from '@/constants'
+import { formatVND } from '@/utilities/currency'
 
 export const createOrder = async (data: TCreateOrderValidator) => {
-  // parse data
+  const currentDate = new Date()
+
   const { success, data: safeData } = await CreateOrderValidator.safeParseAsync(data)
 
-  if (!success) return { success: false, message: 'Invalid data' }
+  if (!success) return { success: false, message: 'Dữ liệu không hợp lệ', data: null }
 
-  const { addressId, userId, lineItems, note, couponId, type } = safeData
+  const { user: currentUser } = await getServerSideUser()
+
+  if (!currentUser) return { success: false, message: 'Không tìm thấy người dùng', data: null }
+
+  const {
+    addressId,
+    userId,
+    lineItems: userLineItems,
+    note,
+    couponId,
+    type: paymentMethod,
+  } = safeData
+
+  if (userId !== currentUser.id)
+    return { success: false, message: 'Người dùng không hợp lệ', data: null }
 
   const payload = await getPayloadClient()
   const transactionID = await payload.db.beginTransaction()
@@ -24,127 +39,18 @@ export const createOrder = async (data: TCreateOrderValidator) => {
   let session: Stripe.Response<Stripe.Checkout.Session> | undefined = undefined
 
   try {
-    // get address from server
-    const address = await payload.findByID({
+    // handle address
+    const shippingAddress = await payload.findByID({
       collection: 'addresses',
       id: addressId,
+      depth: 0,
     })
 
-    if (!address) return { success: false, message: 'Address not found' }
-
-    // get user from server
-    const { user: currentUser } = await getServerSideUser()
-
-    if (!currentUser || currentUser.id !== userId)
-      return { success: false, message: 'User not found' }
-
-    const serverUser = await payload.findByID({
-      collection: 'users',
-      id: userId,
-    })
-
-    // check stock
-    const productVariantIds = lineItems.map((lineItem) => lineItem.productVariantId)
-
-    const { docs: productVariants } = await payload.find({
-      collection: 'productVariants',
-      pagination: false,
-      where: {
-        id: {
-          in: productVariantIds,
-        },
-      },
-    })
-
-    const stockCheck = productVariants.every((productVariant) => {
-      const lineItem = lineItems.find((lineItem) => lineItem.productVariantId === productVariant.id)
-      return productVariant.quantity >= lineItem!.quantityToBuy
-    })
-
-    if (!stockCheck) return { success: false, message: 'Out of stock' }
-
-    // create order
-    const lineItemsData = lineItems.map((lineItem) => ({
-      productVariant: lineItem.productVariantId,
-      quantityToBuy: lineItem.quantityToBuy,
-    }))
-
-    // total price
-    const totalPrice = lineItems.reduce((acc, lineItem) => {
-      const productVariant = productVariants.find(
-        (productVariant) => productVariant.id === lineItem.productVariantId,
-      )
-      return acc + productVariant!.price * lineItem.quantityToBuy
-    }, 0)
-
-    // get shipping fee
-    const { docs: shippingFees } = await payload.find({
-      collection: 'shippingFees',
-      pagination: false,
-      where: {
-        minimumPriceToUse: {
-          less_than_equal: totalPrice,
-        },
-      },
-      sort: ['fee'],
-    })
-
-    const shippingFee = shippingFees.reduce((minFee, fee) => {
-      return fee.fee < minFee ? fee.fee : minFee
-    }, shippingFees[0]?.fee || 0)
-
-    // get discount from coupon
-    let discount: Coupon | undefined
-
-    if (couponId) {
-      const today = new Date()
-
-      discount = await payload.findByID({
-        collection: 'coupons',
-        id: couponId,
-      })
-
-      if (!discount) return { success: false, message: 'Coupon not found' }
-
-      if (new Date(discount.validFrom) > today || new Date(discount.validTo) < today)
-        return { success: false, message: 'Coupon is not valid' }
-
-      if ((discount.currentUse?.length ?? 0) > discount.quantity)
-        return { success: false, message: 'Coupon is out of stock' }
-
-      if (
-        discount.currentUse?.some((user) =>
-          typeof user === 'object' ? user?.id === currentUser.id : user === currentUser.id,
-        )
-      ) {
-        return { success: false, message: 'Coupon already used' }
-      }
-
-      if (
-        !discount.collectedUsers?.some((user) =>
-          typeof user === 'object' ? user?.id === currentUser.id : user === currentUser.id,
-        )
-      ) {
-        return { success: false, message: 'Coupon is not collected by user' }
-      }
-
-      if (totalPrice < discount.minimumPriceToUse)
-        return { success: false, message: 'Minimum price to use coupon is not reached' }
-
-      await payload.update({
-        collection: 'coupons',
-        id: discount.id,
-        data: {
-          currentUse: [...(discount.currentUse || []), currentUser],
-        },
-        req: {
-          transactionID: transactionID!,
-        },
-      })
+    if (!shippingAddress || shippingAddress.user !== userId) {
+      return { success: false, message: 'Địa chỉ không tồn tại', data: null }
     }
 
-    if (couponId && !discount) return { success: false, message: 'Coupon not found' }
-
+    // handle shipping status
     const { docs: shippingStatuses } = await payload.find({
       collection: 'shippingStatuses',
       where: {
@@ -155,130 +61,248 @@ export const createOrder = async (data: TCreateOrderValidator) => {
       pagination: false,
     })
 
-    const order = await payload.create({
-      collection: 'orders',
-      data: {
-        shippingAddress: address,
-        customer: serverUser,
-        lineItems: lineItemsData,
-        totalPrice: totalPrice,
-        discount: discount,
-        isPaid: false,
-        shippingFee: shippingFee,
-        note,
-        type: type,
-        shippingStatus: shippingStatuses[0] ?? null,
+    if (!shippingStatuses.length) {
+      return { success: false, message: 'Trạng thái vận chuyển không tồn tại', data: null }
+    }
+
+    const shippingStatus = shippingStatuses[0]
+
+    // handle line items
+    const lineItems: any = []
+
+    for (const item of userLineItems) {
+      const productVariant = await payload.findByID({
+        collection: 'productVariants',
+        id: item.productVariantId,
+      })
+
+      if (!productVariant) {
+        return { success: false, message: 'Sản phẩm không tồn tại', data: null }
+      }
+
+      if (productVariant.quantity <= 0 || productVariant.quantity < item.quantityToBuy) {
+        return { success: false, message: 'Sản phẩm không còn hàng', data: null }
+      }
+
+      lineItems.push({
+        productVariant,
+        productDiscount: productVariant.discount || 0,
+        quantityToBuy: item.quantityToBuy,
+        productPrice: productVariant.price,
+        finalProductPrice:
+          productVariant.price * item.quantityToBuy -
+          (productVariant.price * item.quantityToBuy * productVariant.discount) / 100,
+      })
+    }
+
+    const totalPrice = lineItems.reduce((acc: number, item: any) => acc + item.finalProductPrice, 0)
+
+    if (!totalPrice) {
+      return { success: false, message: 'Tổng giá trị đơn hàng không hợp lệ', data: null }
+    }
+
+    const { docs: shippingFees } = await payload.find({
+      collection: 'shippingFees',
+      where: {
+        minimumPriceToUse: {
+          less_than_equal: totalPrice,
+        },
       },
-      req: {
-        transactionID: transactionID!,
-      },
+      pagination: false,
+      sort: ['fee'],
+      limit: 1,
     })
 
-    if (!order) return { success: false, message: 'Failed to create order' }
+    if (!shippingFees.length || !shippingFees[0]) {
+      return { success: false, message: 'Phí vận chuyển không tồn tại', data: null }
+    }
 
-    // update stock
-    await Promise.all(
-      productVariants.map((productVariant) => {
-        const lineItem = lineItems.find(
-          (lineItem) => lineItem.productVariantId === productVariant.id,
-        )
-        return payload.update({
-          collection: 'productVariants',
-          id: productVariant.id,
-          data: {
-            quantity: productVariant.quantity - lineItem!.quantityToBuy,
-          },
-          req: {
-            transactionID: transactionID!,
-          },
-        })
-      }),
-    )
+    const shippingFeeValue = shippingFees[0].fee
 
-    if (type === 'online') {
-      // stripe session
-      const stripeLineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = []
+    // handle coupon
+    let couponValue = 0
+    let coupon = null
 
-      productVariants.map((productVariant) => {
-        const lineItem = lineItems.find(
-          (lineItem) => lineItem.productVariantId === productVariant.id,
-        )
-
-        stripeLineItems.push({
-          quantity: lineItem!.quantityToBuy,
-          price: productVariant.priceId!,
-        })
+    if (couponId && couponId !== 'none') {
+      coupon = await payload.findByID({
+        collection: 'coupons',
+        id: couponId,
+        depth: 0,
       })
 
-      if (shippingFee > 0) {
-        stripeLineItems.push({
-          quantity: 1,
-          price: shippingFees[0]!.priceId!,
-        })
+      if (!coupon) {
+        return { success: false, message: 'Mã giảm giá không tồn tại', data: null }
       }
 
-      let stripeCoupon: Stripe.Coupon | undefined
-      if (couponId && discount) {
-        let stripeCouponData: Stripe.CouponCreateParams = {
-          name: `${discount.code}`,
-        }
-
-        if (discount.discountType === 'fixed') {
-          stripeCouponData = {
-            ...stripeCouponData,
-            amount_off: discount.discountAmount,
-            currency: 'THB',
-          }
-        } else {
-          stripeCouponData = {
-            ...stripeCouponData,
-            percent_off: discount.discountAmount,
-          }
-
-          stripeCoupon = await stripe.coupons.create({
-            name: discount.code,
-          })
-        }
-
-        stripeCoupon = await stripe.coupons.create(stripeCouponData)
+      if (coupon.validFrom && new Date(coupon.validFrom) > currentDate) {
+        return { success: false, message: 'Mã giảm giá chưa bắt đầu', data: null }
       }
 
-      session = await stripe.checkout.sessions.create({
-        line_items: stripeLineItems,
-        mode: 'payment',
-        metadata: {
-          orderId: order.id,
-        },
-        discounts: stripeCoupon ? [{ coupon: stripeCoupon.id }] : [],
-        cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/orders/cancel?orderId=${order.id}`,
-        success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/orders/success?orderId=${order.id}`,
-      })
+      if (coupon.validTo && new Date(coupon.validTo) < currentDate) {
+        return { success: false, message: 'Mã giảm giá đã hết hạn', data: null }
+      }
 
-      if (!session || !session.url) {
+      if (coupon.minimumPriceToUse && totalPrice < coupon.minimumPriceToUse) {
+        console.log('coupon.minimumPriceToUse', coupon.minimumPriceToUse)
+        console.log('totalPrice', totalPrice)
         return {
           success: false,
-          message: 'Failed to create session. Please check in your orders to continue',
+          message: 'Đơn hàng không đạt điều kiện sử dụng mã giảm giá',
+          data: null,
         }
+      }
+
+      if (!coupon.collectedUsers?.includes(currentUser.id)) {
+        return {
+          success: false,
+          message: 'Bạn chưa thuộc danh sách người dùng được áp dụng mã giảm giá',
+          data: null,
+        }
+      }
+
+      if (coupon.currentUse?.length && coupon.currentUse.length >= coupon.quantity) {
+        return { success: false, message: 'Mã giảm giá đã hết lượt sử dụng', data: null }
+      }
+
+      if (coupon.currentUse?.includes(currentUser.id)) {
+        return { success: false, message: 'Bạn đã sử dụng mã giảm giá này', data: null }
+      }
+
+      if (coupon.discountType === 'percentage') {
+        couponValue = (totalPrice * coupon.discountAmount) / 100
+      } else {
+        couponValue = coupon.discountAmount
       }
     }
 
+    if (paymentMethod !== 'cod' && paymentMethod !== 'stripe') {
+      return { success: false, message: 'Phương thức thanh toán không hợp lệ', data: null }
+    }
+
+    const totalPriceWithCoupon = totalPrice - couponValue
+
+    const order = await payload.create({
+      collection: 'orders',
+      data: {
+        lineItems: lineItems,
+        totalPrice: totalPriceWithCoupon,
+        shippingFee: shippingFeeValue,
+        shippingAddress: shippingAddress,
+        shippingStatus: shippingStatus,
+        note: note,
+        type: paymentMethod,
+        customer: currentUser,
+        isPaid: false,
+        coupon: coupon,
+      },
+    })
+
+    if (!order) {
+      throw new Error('Lỗi khi tạo đơn hàng')
+    }
+
+    // update product variant quantity
+    for (const item of lineItems) {
+      const updatedProductVariant = await payload.update({
+        collection: 'productVariants',
+        id: item.productVariant.id,
+        data: {
+          quantity: item.productVariant.quantity - item.quantityToBuy,
+        },
+      })
+
+      if (!updatedProductVariant) {
+        throw new Error('Lỗi khi cập nhật số lượng sản phẩm')
+      }
+    }
+
+    // update coupon current use
+    if (coupon) {
+      await payload.update({
+        collection: 'coupons',
+        id: coupon.id,
+        data: { currentUse: [...(coupon.currentUse || []), currentUser.id] },
+      })
+    }
+
+    if (paymentMethod === 'cod') {
+      await payload.db.commitTransaction(transactionID!)
+      return { success: true, message: 'Đơn hàng đã được tạo thành công' }
+    }
+
+    // handle online payment
+    const stripeLineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = []
+
+    lineItems.forEach((item: any) => {
+      stripeLineItems.push({
+        price_data: {
+          currency: 'vnd',
+          product_data: {
+            name: item.productVariant.title,
+            description: item.productVariant.description,
+          },
+          unit_amount: item.finalProductPrice,
+        },
+        quantity: item.quantityToBuy,
+      })
+    })
+
+    if (shippingFeeValue) {
+      stripeLineItems.push({
+        price_data: {
+          currency: 'vnd',
+          product_data: {
+            name: 'Phí vận chuyển',
+            description: `Phí vận chuyển cho đơn hàng ${formatVND(shippingFeeValue)}`,
+          },
+          unit_amount: shippingFeeValue,
+        },
+        quantity: 1,
+      })
+    }
+
+    let stripeCoupon: Stripe.Coupon | null = null
+    if (coupon && couponValue) {
+      let stripeCouponData: Stripe.CouponCreateParams = {
+        name: `${coupon.code}`,
+      }
+
+      if (coupon.discountType === 'fixed') {
+        stripeCouponData = {
+          ...stripeCouponData,
+          amount_off: couponValue,
+          currency: 'vnd',
+        }
+      }
+
+      if (coupon.discountType === 'percentage') {
+        stripeCouponData = {
+          ...stripeCouponData,
+          percent_off: coupon.discountAmount,
+        }
+      }
+
+      stripeCoupon = await stripe.coupons.create(stripeCouponData)
+    }
+
+    session = await stripe.checkout.sessions.create({
+      line_items: stripeLineItems,
+      mode: 'payment',
+      success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/orders/success?orderId=${order.id}`,
+      cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/orders/cancel?orderId=${order.id}`,
+      metadata: {
+        orderId: order.id,
+      },
+      discounts: stripeCoupon ? [{ coupon: stripeCoupon.id }] : [],
+    })
+
     await payload.db.commitTransaction(transactionID!)
-  } catch (_) {
+  } catch (error) {
     await payload.db.rollbackTransaction(transactionID!)
-    return { success: false, message: 'Failed to create order' }
+    return { success: false, message: 'Lỗi khi tạo đơn hàng' }
   } finally {
     if (session?.url) {
       redirect(session.url)
-    } else if (type === 'cod') {
-      return {
-        success: true,
-        message: 'Create order successfully!',
-      }
-    } else {
-      return {
-        success: false,
-        message: 'Failed to create a new session for this order! Please try again later!',
-      }
     }
   }
 }
@@ -294,6 +318,7 @@ export const getOrder = async (orderId: string) => {
     const order = await payload.findByID({
       collection: 'orders',
       id: orderId,
+      depth: 2,
     })
 
     if (!order) return { success: false, message: 'Order not found', data: null }
@@ -339,10 +364,10 @@ export const getOrders = async () => {
     },
   })
 
-  return { success: true, data: orders }
+  return { success: true, data: orders || [] }
 }
 
-export const isReceivedOrder = async (orderId: string) => {
+export const receiveOrder = async (orderId: string) => {
   const payload = await getPayloadClient()
 
   const { user: currentUser } = await getServerSideUser()
@@ -384,4 +409,40 @@ export const isReceivedOrder = async (orderId: string) => {
 
   revalidatePath('/orders/list')
   return { success: true }
+}
+
+export const getNumberOfOrdersWithin3MonthsGroupByDay = async () => {
+  const currentDate = new Date()
+  const threeMonthsAgo = new Date(currentDate)
+  threeMonthsAgo.setMonth(currentDate.getMonth() - 3)
+
+  const payload = await getPayloadClient()
+
+  const { docs: orders } = await payload.find({
+    collection: 'orders',
+    where: {
+      createdAt: {
+        greater_than_equal: threeMonthsAgo,
+        less_than_equal: currentDate,
+      },
+    },
+    pagination: false,
+    depth: 1,
+    sort: 'createdAt',
+    limit: 1000,
+  })
+
+  const ordersByDay = new Map()
+
+  orders.forEach((order) => {
+    const day = new Date(order.createdAt).toISOString().split('T')[0]
+    ordersByDay.set(day, (ordersByDay.get(day) || 0) + 1)
+  })
+
+  const ordersByDayArray = Array.from(ordersByDay, ([date, orders]) => ({
+    date,
+    orders,
+  }))
+
+  return { success: true, data: ordersByDayArray }
 }

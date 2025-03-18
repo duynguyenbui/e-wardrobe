@@ -12,6 +12,8 @@ import { useModals } from '@/stores/useModals'
 import { ModalType } from '@/types'
 import ImageSlider from '../ImageSlider'
 import { formatVND } from '@/utilities/currency'
+import { cn } from '@/utilities/ui'
+import { Fragment } from 'react'
 
 export type ProductVariantCardProps = Omit<ProductVariant, 'product'> & {
   showImage?: boolean
@@ -27,6 +29,7 @@ const ProductVariantCard: React.FC<{
     id,
     title,
     description,
+    discount,
     price,
     quantity,
     images,
@@ -37,6 +40,8 @@ const ProductVariantCard: React.FC<{
   const color = parseObject(colorPrimitive)
   const { add } = useCart()
   const { open } = useModals()
+
+  const discountedPrice = discount ? price - (price * discount) / 100 : price
 
   return (
     <Card className="w-full max-w-sm overflow-hidden group">
@@ -57,7 +62,12 @@ const ProductVariantCard: React.FC<{
           <Badge className="w-28">SL: {quantity}</Badge>
         </div>
         <div className="flex items-center justify-between">
-          <span className="text-2xl font-bold">{formatVND(price)}</span>
+          <Fragment>
+            <span className={cn(discount > 0 && 'line-through text-zinc-500 text-sm mr-2')}>
+              ₫{formatVND(price)}
+            </span>
+            {discount > 0 && <span>₫{formatVND(discountedPrice)}</span>}
+          </Fragment>
           <div className="flex items-center space-x-2">
             <div className="text-sm">
               <span className="font-semibold">Kích thước:</span> {size.name}
@@ -70,7 +80,7 @@ const ProductVariantCard: React.FC<{
         </div>
         {showAddToCart && (
           <Button
-            onClick={() => add({ id, title, price, quantity, quantityToBuy: 1 })}
+            onClick={() => add({ id, title, price, quantity, quantityToBuy: 1, discount })}
             className="w-full"
           >
             Thêm vào giỏ hàng

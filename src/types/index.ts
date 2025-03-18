@@ -39,3 +39,17 @@ export enum ModalType {
   ADD_ADDRESS = 2,
   ADD_TO_CART = 3,
 }
+
+export interface Ward {
+  name: string
+}
+
+export interface District {
+  name: string
+  wards: Ward[]
+}
+
+export interface Province {
+  name: string
+  districts: District[]
+}

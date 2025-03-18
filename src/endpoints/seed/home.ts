@@ -91,7 +91,7 @@ export const home: RequiredDataFromCollectionSlug<'pages'> = {
                     format: 0,
                     mode: 'normal',
                     style: '',
-                    text: 'trên Github của chúng tôi',
+                    text: 'trên trang quản thị của chúng tôi',
                     version: 1,
                   },
                 ],

@@ -38,6 +38,7 @@ import { getShippingFee } from '@/actions/shippingFee'
 import { Badge } from '../../ui/badge'
 import { getCollectedCoupons } from '@/actions/coupons'
 import { capitalize } from '@/utilities/capitalize'
+import { formatVND } from '@/utilities/currency'
 
 type AddressExcludeUser = Omit<Address, 'user'>
 
@@ -53,6 +54,7 @@ export const OrderForm = () => {
   const {
     control,
     handleSubmit,
+    setValue,
     formState: { errors },
   } = useForm<TCreateOrderValidator>({
     resolver: zodResolver(CreateOrderValidator),
@@ -65,7 +67,7 @@ export const OrderForm = () => {
       })),
       couponId: '',
       note: '',
-      type: 'online',
+      type: 'stripe',
     },
   })
 
@@ -73,7 +75,15 @@ export const OrderForm = () => {
     if (items.length === 0) {
       router.push('/orders/list')
     }
-  }, [items.length, router])
+
+    setValue(
+      'lineItems',
+      items.map((item) => ({
+        productVariantId: item.id,
+        quantityToBuy: item.quantityToBuy,
+      })),
+    )
+  }, [items.length, router, items, setValue])
 
   useEffect(() => {
     getAddresses().then((res) => {
@@ -102,17 +112,14 @@ export const OrderForm = () => {
     }
 
     startTransition(async () => {
-      const { success, message } = await createOrder(data)
+      const res = await createOrder(data)
 
-      if (!success) {
-        toast.error(message)
-        return
-      }
-
-      if (success) {
-        toast.success(message)
+      if (res?.success) {
+        toast.success(res?.message || 'Đơn hàng đã được tạo thành công')
         clear()
         router.push('/orders/list')
+      } else {
+        toast.error(res?.message || 'Lỗi khi tạo đơn hàng')
       }
     })
   }
@@ -181,11 +188,19 @@ export const OrderForm = () => {
                       {items.map((item) => (
                         <TableRow key={item.id}>
                           <TableCell className="hidden md:table-cell">{item.title}</TableCell>
-                          <TableCell className="font-medium">$ {item.price}</TableCell>
+                          <TableCell className="font-medium">
+                            {formatVND(item.price - (item.price * item.discount) / 100)}
+                          </TableCell>
                           <TableCell>{item.quantityToBuy}</TableCell>
-                          <TableCell>$ {item.quantityToBuy * item.price}</TableCell>
+                          <TableCell>
+                            {formatVND(
+                              item.quantityToBuy *
+                                (item.price - (item.price * item.discount) / 100),
+                            )}
+                          </TableCell>
                           <TableCell className="gap-2 flex justify-center">
                             <Button
+                              type="button"
                               size="icon"
                               variant="ghost"
                               onClick={() => minus(item.id)}
@@ -193,10 +208,11 @@ export const OrderForm = () => {
                             >
                               <Minus className="size-2" />
                             </Button>
-                            <Button size="icon" onClick={() => remove(item)}>
+                            <Button type="button" size="icon" onClick={() => remove(item)}>
                               <Trash2Icon className="size-5" />
                             </Button>
                             <Button
+                              type="button"
                               size="icon"
                               variant="ghost"
                               onClick={() => plus(item.id)}
@@ -267,6 +283,9 @@ export const OrderForm = () => {
                             <SelectValue placeholder="Chọn mã giảm giá" />
                           </SelectTrigger>
                           <SelectContent>
+                            <SelectItem key="none" value="none">
+                              Không sử dụng mã giảm giá
+                            </SelectItem>
                             {coupons.map((coupon) => (
                               <SelectItem key={coupon.id} value={coupon.id}>
                                 {coupon.code} - {capitalize(coupon.discountType)},{' '}
@@ -298,8 +317,8 @@ export const OrderForm = () => {
                             <SelectItem key="cod" value="cod">
                               Ship COD
                             </SelectItem>
-                            <SelectItem key="online" value="online">
-                              Thanh toán trực tuyến
+                            <SelectItem key="stripe" value="stripe">
+                              Thanh toán trực tuyến (Stripe)
                             </SelectItem>
                           </SelectContent>
                         </Select>

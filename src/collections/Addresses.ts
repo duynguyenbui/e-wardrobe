@@ -1,4 +1,3 @@
-import { provinces } from '@/constants'
 import type { CollectionConfig } from 'payload'
 import adminsAndUser from '@/access/adminAndUser'
 import { admins } from '@/access/admin'
@@ -50,15 +49,13 @@ export const Addresses: CollectionConfig = {
       },
       type: 'text',
       required: true,
-      unique: true,
     },
     {
       name: 'province',
       label: {
         vi: 'Tỉnh/Thành phố',
       },
-      type: 'select',
-      options: provinces,
+      type: 'text',
       required: true,
       admin: {
         position: 'sidebar',

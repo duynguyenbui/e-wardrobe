@@ -77,7 +77,7 @@ export const CreateOrderValidator = z.object({
   ),
   couponId: z.string().optional(),
   note: z.string().optional(),
-  type: z.enum(['online', 'cod']),
+  type: z.enum(['stripe', 'cod']),
 })
 
 export type TCreateOrderValidator = z.infer<typeof CreateOrderValidator>

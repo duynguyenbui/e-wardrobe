@@ -49,6 +49,17 @@ export default async function OrderDetailsPage({ params: paramsPromise }: Args) 
     notFound()
   }
 
+  const subTotal = lineItems.reduce((acc, item) => {
+    return acc + item.finalProductPrice
+  }, 0)
+
+  const discountCouponValue =
+    (order.coupon as any)?.discountType === 'percentage'
+      ? ((order.coupon as any)?.discountAmount * subTotal) / 100
+      : (order.coupon as any)?.discountAmount || 0
+
+  const totalPrice = subTotal + (order.shippingFee || 0) - discountCouponValue
+
   return (
     <div className="grid min-h-screen w-full overflow-hidden container">
       <div className="flex flex-col">
@@ -110,25 +121,24 @@ export default async function OrderDetailsPage({ params: paramsPromise }: Args) 
                         <TableHead className="max-w-[150px]">Tên</TableHead>
                         <TableHead>Số lượng</TableHead>
                         <TableHead>Giá</TableHead>
+                        <TableHead>Giảm giá (%) (VNĐ)</TableHead>
                         <TableHead>Tổng</TableHead>
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {order.lineItems!.map((item) => (
-                        <TableRow key={item.id}>
-                          <TableCell className="font-medium">
-                            {(item.productVariant as any).title}
-                          </TableCell>
-                          <TableCell>{item.quantityToBuy}</TableCell>
-                          <TableCell>
-                            {typeof item.productVariant === 'object' &&
-                              formatVND((item.productVariant as any).price || 0)}
-                          </TableCell>
-                          <TableCell>
-                            {formatVND((item.productVariant as any).price * item.quantityToBuy)}
-                          </TableCell>
-                        </TableRow>
-                      ))}
+                      {order.lineItems!.map((item) => {
+                        return (
+                          <TableRow key={item.id}>
+                            <TableCell className="font-medium">
+                              {(item.productVariant as any).title}
+                            </TableCell>
+                            <TableCell>{item.quantityToBuy}</TableCell>
+                            <TableCell>{formatVND(item.productPrice)}</TableCell>
+                            <TableCell>{item.productDiscount} %</TableCell>
+                            <TableCell>{formatVND(item.finalProductPrice)}</TableCell>
+                          </TableRow>
+                        )
+                      })}
                     </TableBody>
                   </Table>
                 </CardContent>
@@ -189,7 +199,7 @@ export default async function OrderDetailsPage({ params: paramsPromise }: Args) 
                 <CardContent className="grid gap-4">
                   <div className="flex items-center">
                     <div>Tổng phụ:</div>
-                    <div className="ml-auto">{formatVND((order as any).totalPrice || 0)}</div>
+                    <div className="ml-auto">{formatVND(subTotal)}</div>
                   </div>
                   <div className="flex items-center">
                     <div>Phí vận chuyển:</div>
@@ -197,23 +207,11 @@ export default async function OrderDetailsPage({ params: paramsPromise }: Args) 
                   </div>
                   <div className="flex items-center">
                     <div>Giảm giá:</div>
-                    <div className="ml-auto">
-                      -{formatVND((order as any)?.discount?.discountAmount || 0)}
-                    </div>
+                    <div className="ml-auto">- {formatVND(discountCouponValue)}</div>
                   </div>
                   <div className="flex items-center font-bold">
                     <div>Tổng cộng:</div>
-                    <div className="ml-auto">
-                      {formatVND(
-                        parseFloat(
-                          (
-                            (order as any)!.totalPrice +
-                            order.shippingFee -
-                            ((order?.discount as any)?.discountAmount || 0)
-                          ).toFixed(2),
-                        ),
-                      )}
-                    </div>
+                    <div className="ml-auto">{formatVND(totalPrice)}</div>
                   </div>
                 </CardContent>
               </Card>
@@ -224,17 +222,18 @@ export default async function OrderDetailsPage({ params: paramsPromise }: Args) 
                 <CardContent className="grid gap-4">
                   <div className="flex items-center">
                     <div>Mã:</div>
-                    <div className="ml-auto">{(order.discount as any)?.code}</div>
+                    <div className="ml-auto">{(order.coupon as any)?.code}</div>
                   </div>
                   <div className="flex items-center">
                     <div>Mô tả:</div>
-                    <div className="ml-auto">{(order.discount as any)?.description}</div>
+                    <div className="ml-auto">{(order.coupon as any)?.description}</div>
                   </div>
                   <div className="flex items-center">
                     <div>Số tiền:</div>
                     <div className="ml-auto">
-                      {formatVND((order.discount as any)?.discountAmount)}{' '}
-                      {(order.discount as any)?.discountType}
+                      {(order.coupon as any)?.discountType === 'percentage'
+                        ? `${(order.coupon as any)?.discountAmount}%`
+                        : formatVND((order.coupon as any)?.discountAmount)}
                     </div>
                   </div>
                 </CardContent>
