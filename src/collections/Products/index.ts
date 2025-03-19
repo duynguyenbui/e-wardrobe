@@ -3,10 +3,10 @@ import type { CollectionConfig } from 'payload'
 import { anyone } from '../../access/anyone'
 import { authenticated } from '../../access/authenticated'
 import { slugField } from '@/fields/slug'
-// import { revalidatePath } from 'next/cache'
-// import { indexProduct } from './hooks/indexProduct'
-// import { deleteIndex } from './hooks/deleteIndex'
-// import { uuidv4 } from '@/utilities/uuid'
+import { revalidatePath } from 'next/cache'
+import { indexProduct } from './hooks/indexProduct'
+import { deleteIndex } from './hooks/deleteIndex'
+import { uuidv4 } from '@/utilities/uuid'
 
 export const Products: CollectionConfig = {
   slug: 'products',
@@ -25,21 +25,21 @@ export const Products: CollectionConfig = {
     update: authenticated,
   },
   hooks: {
-    // afterChange: [
-    //   async () => {
-    //     revalidatePath('/products')
-    //   },
-    //   indexProduct,
-    // ],
-    // afterDelete: [deleteIndex],
-    // beforeChange: [
-    //   async ({ data }) => {
-    //     if (!data.embedding) {
-    //       data.embedding = uuidv4()
-    //     }
-    //     return data
-    //   },
-    // ],
+    afterChange: [
+      async () => {
+        revalidatePath('/products')
+      },
+      indexProduct,
+    ],
+    afterDelete: [deleteIndex],
+    beforeChange: [
+      async ({ data }) => {
+        if (!data.embedding) {
+          data.embedding = uuidv4()
+        }
+        return data
+      },
+    ],
   },
   admin: {
     useAsTitle: 'title',

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { getPayload, Payload } from 'payload'
 import config from './payload.config'
 

@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { User } from '@/payload-types'
 
 export const rest = async (

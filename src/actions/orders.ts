@@ -298,6 +298,7 @@ export const createOrder = async (data: TCreateOrderValidator) => {
 
     await payload.db.commitTransaction(transactionID!)
   } catch (error) {
+    console.error(error)
     await payload.db.rollbackTransaction(transactionID!)
     return { success: false, message: 'Lỗi khi tạo đơn hàng' }
   } finally {

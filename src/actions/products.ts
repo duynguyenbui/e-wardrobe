@@ -7,13 +7,13 @@ import { index } from '@/index'
 export const searchProductRelevance = async (input: string) => {
   try {
     if (!index) {
-      return { success: false, message: 'Atificical intelligence is not available' }
+      return { success: false, message: 'Trí tuệ nhân tạo không khả dụng' }
     }
 
     const vector = await generateEmbedding(input)
 
     if (vector.length === 0) {
-      return { success: false, message: 'Cannot generate embedding' }
+      return { success: false, message: 'Không thể tạo embedding' }
     }
 
     const queries = await index.query({
@@ -46,15 +46,15 @@ export const searchProductRelevance = async (input: string) => {
     })
 
     if (products.length === 0) {
-      return { success: false, message: 'No products found' }
+      return { success: false, message: 'Không tìm thấy sản phẩm nào' }
     }
 
     return {
       success: true,
       data: products,
-      message: 'Here are some products you might be interested in',
+      message: 'Dưới đây là một số sản phẩm bạn có thể quan tâm',
     }
   } catch (_) {
-    return { success: false, message: 'Something went wrong' }
+    return { success: false, message: 'Đã xảy ra lỗi' }
   }
 }

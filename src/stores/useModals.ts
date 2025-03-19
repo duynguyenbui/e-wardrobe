@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ModalType } from '@/types'
 import { create } from 'zustand'
 

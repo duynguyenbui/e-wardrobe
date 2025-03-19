@@ -18,21 +18,21 @@ import {
   ChartTooltipContent,
 } from '@/components/ui/chart'
 const chartData = [
-  { month: 'January', desktop: 186, mobile: 80 },
-  { month: 'February', desktop: 305, mobile: 200 },
-  { month: 'March', desktop: 237, mobile: 120 },
-  { month: 'April', desktop: 73, mobile: 190 },
-  { month: 'May', desktop: 209, mobile: 130 },
-  { month: 'June', desktop: 214, mobile: 140 },
+  { month: 'Tháng 1', desktop: 186, mobile: 80 },
+  { month: 'Tháng 2', desktop: 305, mobile: 200 },
+  { month: 'Tháng 3', desktop: 237, mobile: 120 },
+  { month: 'Tháng 4', desktop: 73, mobile: 190 },
+  { month: 'Tháng 5', desktop: 209, mobile: 130 },
+  { month: 'Tháng 6', desktop: 214, mobile: 140 },
 ]
 
 const chartConfig = {
   desktop: {
-    label: 'Desktop',
+    label: 'Máy tính để bàn',
     color: 'hsl(var(--chart-1))',
   },
   mobile: {
-    label: 'Mobile',
+    label: 'Di động',
     color: 'hsl(var(--chart-2))',
   },
 } satisfies ChartConfig
@@ -41,8 +41,8 @@ export function RadarChartGrid() {
   return (
     <Card>
       <CardHeader className="items-center pb-4">
-        <CardTitle>Radar Chart - Custom Label</CardTitle>
-        <CardDescription>Showing total visitors for the last 6 months</CardDescription>
+        <CardTitle>Biểu đồ Radar - Nhãn Tùy Chỉnh</CardTitle>
+        <CardDescription>Hiển thị tổng số khách truy cập trong 6 tháng qua</CardDescription>
       </CardHeader>
       <CardContent className="pb-0">
         <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[250px]">
@@ -89,10 +89,10 @@ export function RadarChartGrid() {
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+          Xu hướng tăng 5.2% trong tháng này <TrendingUp className="h-4 w-4" />
         </div>
         <div className="flex items-center gap-2 leading-none text-muted-foreground">
-          January - June 2024
+          Tháng 1 - Tháng 6 năm 2024
         </div>
       </CardFooter>
     </Card>

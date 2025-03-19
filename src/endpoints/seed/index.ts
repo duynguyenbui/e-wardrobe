@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import type { CollectionSlug, GlobalSlug, Payload, PayloadRequest, File } from 'payload'
 import { contactForm as contactFormData } from './contact-form'
 import { contact as contactPageData } from './contact-page'

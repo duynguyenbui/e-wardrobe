@@ -27,7 +27,7 @@ const chartData = [
 
 const chartConfig = {
   visitors: {
-    label: 'Visitors',
+    label: 'Khách truy cập',
   },
   chrome: {
     label: 'Chrome',
@@ -46,7 +46,7 @@ const chartConfig = {
     color: 'hsl(var(--chart-4))',
   },
   other: {
-    label: 'Other',
+    label: 'Khác',
     color: 'hsl(var(--chart-5))',
   },
 } satisfies ChartConfig
@@ -55,8 +55,8 @@ export function RadialChart() {
   return (
     <Card className="flex flex-col">
       <CardHeader className="items-center pb-0">
-        <CardTitle>Radial Chart - Grid</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Biểu đồ Vòng - Lưới</CardTitle>
+        <CardDescription>Tháng 1 - Tháng 6 năm 2024</CardDescription>
       </CardHeader>
       <CardContent className="flex-1 pb-0">
         <ChartContainer config={chartConfig} className="mx-auto aspect-square max-h-[250px]">
@@ -72,10 +72,10 @@ export function RadialChart() {
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 font-medium leading-none">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+          Xu hướng tăng 5.2% trong tháng này <TrendingUp className="h-4 w-4" />
         </div>
         <div className="leading-none text-muted-foreground">
-          Showing total visitors for the last 6 months
+          Hiển thị tổng số khách truy cập trong 6 tháng qua
         </div>
       </CardFooter>
     </Card>

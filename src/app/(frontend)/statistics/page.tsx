@@ -12,6 +12,14 @@ export default function Page() {
         <div className="col-span-12">
           <LineCharts />
         </div>
+        <div className="grid grid-cols-12 gap-4">
+          <div className="col-span-6">
+            <RadarChartGrid />
+          </div>
+          <div className="col-span-6">
+            <RadialChart />
+          </div>
+        </div>
       </div>
     </div>
   )
