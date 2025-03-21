@@ -29,6 +29,9 @@ export const plugins: Plugin[] = [
   redirectsPlugin({
     collections: ['pages', 'posts'],
     overrides: {
+      admin: {
+        hidden: true,
+      },
       labels: {
         singular: {
           vi: 'Chuyển hướng',
@@ -44,7 +47,7 @@ export const plugins: Plugin[] = [
             return {
               ...field,
               admin: {
-                description: 'You will need to rebuild the website when changing this field.',
+                description: 'Bạn sẽ cần phải xây dựng lại trang web khi thay đổi trường này.',
               },
             }
           }
@@ -65,8 +68,15 @@ export const plugins: Plugin[] = [
     generateURL,
   }),
   formBuilderPlugin({
-    fields: {
-      payment: false,
+    formSubmissionOverrides: {
+      labels: {
+        singular: {
+          vi: 'Biểu mẫu đã nhận',
+        },
+        plural: {
+          vi: 'Biểu mẫu đã nhận',
+        },
+      },
     },
     formOverrides: {
       labels: {
@@ -102,6 +112,9 @@ export const plugins: Plugin[] = [
     collections: ['posts'],
     beforeSync: beforeSyncWithSearch,
     searchOverrides: {
+      admin: {
+        hidden: true,
+      },
       labels: {
         singular: {
           vi: 'Tìm kiếm',

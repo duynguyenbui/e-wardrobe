@@ -7,7 +7,8 @@ import React, { useEffect, useState } from 'react'
 import type { Header } from '@/payload-types'
 
 import { HeaderNav } from './Nav'
-import { CloudLightningIcon } from 'lucide-react'
+import Image from 'next/image'
+import { StoreIcon } from 'lucide-react'
 interface HeaderClientProps {
   data: Header
 }
@@ -29,10 +30,10 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   }, [headerTheme])
 
   return (
-    <header className="container relative z-20   " {...(theme ? { 'data-theme': theme } : {})}>
-      <div className="py-8 flex justify-between">
+    <header className="container relative z-20 " {...(theme ? { 'data-theme': theme } : {})}>
+      <div className="pt-4 pb-4 flex justify-between">
         <Link href="/">
-          <CloudLightningIcon className="h-10 w-10 text-blue-700" />
+          <StoreIcon className="w-10 h-10 text-blue-500" />
         </Link>
         <HeaderNav data={data} />
       </div>

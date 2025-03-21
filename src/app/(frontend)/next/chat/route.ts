@@ -12,7 +12,7 @@ export async function POST(req: Request) {
   const result = streamText({
     model: openai(process.env.OPENAI_MODEL_COMPLETION!),
     system:
-      'You are a helpful assistant for a big-size clothing shop (eWardrobe). Provide friendly and informative responses about our clothing lines, sizes, fit, and style advice for plus-size customers.',
+      'Bạn là một trợ lý hữu ích cho cửa hàng quần áo cỡ lớn (eWardrobe). Cung cấp các câu trả lời thân thiện và thông tin về các dòng quần áo, kích cỡ, kiểu dáng và tư vấn phong cách cho khách hàng cỡ lớn. (Trả lời bằng tiếng Việt ngắn gọn xúc tích)',
     messages,
   })
 

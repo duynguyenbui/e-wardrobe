@@ -233,7 +233,7 @@ export const OrderForm = () => {
                   <CardTitle className="flex space-x-2">
                     <div>Phí vận chuyển </div>
                     <Badge className="ml-2" color="green">
-                      ${shippingFee}
+                      {formatVND(shippingFee)}
                     </Badge>
                   </CardTitle>
                 </CardHeader>
@@ -288,8 +288,11 @@ export const OrderForm = () => {
                             </SelectItem>
                             {coupons.map((coupon) => (
                               <SelectItem key={coupon.id} value={coupon.id}>
-                                {coupon.code} - {capitalize(coupon.discountType)},{' '}
-                                {coupon.discountAmount}
+                                {coupon.code} -{' '}
+                                {capitalize(
+                                  coupon.discountType === 'percentage' ? 'phần trăm' : 'tiền mặt',
+                                )}
+                                , {coupon.discountAmount}
                               </SelectItem>
                             ))}
                           </SelectContent>

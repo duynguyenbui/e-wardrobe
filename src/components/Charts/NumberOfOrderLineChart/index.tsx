@@ -23,7 +23,7 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function LineCharts() {
+export function NumberOfOrderLineChart() {
   const [orderByDayArray, setOrderByDayArray] = useState<any[]>([])
 
   useEffect(() => {

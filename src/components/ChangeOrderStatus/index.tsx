@@ -5,7 +5,7 @@ import { Fragment, useState } from 'react'
 import { Button } from '../ui/button'
 import { toast } from 'sonner'
 import { Order } from '@/payload-types'
-import { PiggyBank } from 'lucide-react'
+import { PiggyBank, ShoppingCart } from 'lucide-react'
 import { SHIPPING_STATUS } from '@/constants'
 
 export default function ChangeOrderStatus({ order }: { order: Order }) {
@@ -39,7 +39,7 @@ export default function ChangeOrderStatus({ order }: { order: Order }) {
         disabled={(order.shippingStatus as any)?.code === SHIPPING_STATUS.Received || loading}
       >
         {loading ? 'Đang xử lý...' : 'Đã nhận hàng'}
-        <PiggyBank className="w-4 h-4 ml-2" />
+        <ShoppingCart className="w-5 h-5 ml-2" />
       </Button>
     </Fragment>
   )

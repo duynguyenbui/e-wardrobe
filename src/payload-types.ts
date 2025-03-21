@@ -946,7 +946,7 @@ export interface ShippingFee {
 export interface Redirect {
   id: string;
   /**
-   * You will need to rebuild the website when changing this field.
+   * Bạn sẽ cần phải xây dựng lại trang web khi thay đổi trường này.
    */
   from: string;
   to?: {
