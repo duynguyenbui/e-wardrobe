@@ -73,6 +73,7 @@
     "react-dom": "^19.0.0",
     "react-hook-form": "7.45.4",
     "react-loader-spinner": "^6.1.6",
+    "react-markdown": "^10.1.0",
     "recharts": "^2.15.0",
     "sharp": "0.33.5",
     "sonner": "^1.7.2",

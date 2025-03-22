@@ -56,6 +56,6 @@ export const recommendSizes = async (values: TUserRecommedSizeValidator) => {
 
   return {
     success: false,
-    message: 'Không tìm thấy kích cỡ phù hợp',
+    message: 'Shop không có kích cỡ phù hợp với bạn',
   }
 }

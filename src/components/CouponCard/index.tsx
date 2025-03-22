@@ -50,9 +50,9 @@ export function CouponCard({ coupon }: CouponCardProps) {
 
     await collectCoupon(coupon.id).then((res) => {
       if (res.success) {
-        toast.success(res.message)
+        toast.success('Đã thu thập mã giảm giá')
         setIsCollected(true)
-      } else toast.error(res.message)
+      } else toast.error('Đã xảy ra lỗi, vui lòng thử lại')
     })
   }
 

@@ -30,6 +30,7 @@ import { Orders } from './collections/Orders'
 import { Coupons } from './collections/Coupons'
 import { ShippingFees } from './collections/ShippingFees'
 import { ShippingStatuses } from './collections/ShippingStatus'
+import { Conversation } from './collections/Conversation'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -104,6 +105,7 @@ export default buildConfig({
     Users,
     ShippingFees,
     ShippingStatuses,
+    Conversation,
   ],
   cors: [getServerSideURL()].filter(Boolean),
   globals: [Header, Footer],

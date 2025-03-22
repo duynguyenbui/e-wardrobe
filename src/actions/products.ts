@@ -43,6 +43,7 @@ export const searchProductRelevance = async (input: string) => {
           },
         ],
       },
+      depth: 1,
     })
 
     if (products.length === 0) {

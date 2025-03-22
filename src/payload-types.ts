@@ -82,6 +82,7 @@ export interface Config {
     users: User;
     shippingFees: ShippingFee;
     shippingStatuses: ShippingStatus;
+    conversation: Conversation;
     redirects: Redirect;
     forms: Form;
     'form-submissions': FormSubmission;
@@ -109,6 +110,7 @@ export interface Config {
     users: UsersSelect<false> | UsersSelect<true>;
     shippingFees: ShippingFeesSelect<false> | ShippingFeesSelect<true>;
     shippingStatuses: ShippingStatusesSelect<false> | ShippingStatusesSelect<true>;
+    conversation: ConversationSelect<false> | ConversationSelect<true>;
     redirects: RedirectsSelect<false> | RedirectsSelect<true>;
     forms: FormsSelect<false> | FormsSelect<true>;
     'form-submissions': FormSubmissionsSelect<false> | FormSubmissionsSelect<true>;
@@ -941,6 +943,24 @@ export interface ShippingFee {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "conversation".
+ */
+export interface Conversation {
+  id: string;
+  uuid: string;
+  user: string | User;
+  messages?:
+    | {
+        content: string;
+        role: 'user' | 'assistant';
+        id?: string | null;
+      }[]
+    | null;
+  updatedAt: string;
+  createdAt: string;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "redirects".
  */
 export interface Redirect {
@@ -1174,6 +1194,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'shippingStatuses';
         value: string | ShippingStatus;
+      } | null)
+    | ({
+        relationTo: 'conversation';
+        value: string | Conversation;
       } | null)
     | ({
         relationTo: 'redirects';
@@ -1703,6 +1727,23 @@ export interface ShippingStatusesSelect<T extends boolean = true> {
   name?: T;
   code?: T;
   description?: T;
+  updatedAt?: T;
+  createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "conversation_select".
+ */
+export interface ConversationSelect<T extends boolean = true> {
+  uuid?: T;
+  user?: T;
+  messages?:
+    | T
+    | {
+        content?: T;
+        role?: T;
+        id?: T;
+      };
   updatedAt?: T;
   createdAt?: T;
 }

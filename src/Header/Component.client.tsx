@@ -30,10 +30,10 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
   }, [headerTheme])
 
   return (
-    <header className="container relative z-20 " {...(theme ? { 'data-theme': theme } : {})}>
-      <div className="pt-4 pb-4 flex justify-between">
+    <header className="container relative z-20" {...(theme ? { 'data-theme': theme } : {})}>
+      <div className="mb-4 flex justify-between">
         <Link href="/">
-          <StoreIcon className="w-10 h-10 text-blue-500" />
+          <Image src="/logo.png" alt="eWardrobe logo" width={120} height={120} />
         </Link>
         <HeaderNav data={data} />
       </div>

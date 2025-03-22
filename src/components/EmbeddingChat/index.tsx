@@ -1,5 +1,7 @@
 'use client'
 
+import type React from 'react'
+
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
@@ -11,7 +13,7 @@ import Link from 'next/link'
 interface Message {
   text: string
   isUser: boolean
-  products?: Array<{ id: string; title: string }>
+  products?: Array<{ id: string; title: string; image?: string }>
 }
 
 export function EmbeddingChat() {
@@ -36,7 +38,18 @@ export function EmbeddingChat() {
         return
       }
 
-      setMessages((msgs) => [...msgs, { text: message, isUser: false, products: data }])
+      setMessages((msgs) => [
+        ...msgs,
+        {
+          text: message,
+          isUser: false,
+          products: data.map((product) => ({
+            id: product.id,
+            title: product.title,
+            image: (product.image as any)?.url,
+          })),
+        },
+      ])
     }
   }
 
@@ -65,12 +78,21 @@ export function EmbeddingChat() {
                 >
                   <p className="text-sm">{msg.text}</p>
                   {msg.products && (
-                    <ul className="mt-2 space-y-1">
+                    <ul className="mt-2 space-y-3">
                       {msg.products.map((product) => (
-                        <li key={product.id}>
+                        <li key={product.id} className="flex items-center gap-3">
+                          {product.image && (
+                            <div className="flex-shrink-0 w-12 h-12 rounded overflow-hidden border border-gray-200 dark:border-gray-700">
+                              <img
+                                src={product.image || '/embedding-chat.svg'}
+                                alt={product.title}
+                                className="w-full h-full object-cover"
+                              />
+                            </div>
+                          )}
                           <Link
                             href={`/products/${product.id}`}
-                            className="text-blue-500 hover:underline"
+                            className="text-blue-500 hover:underline flex-1"
                           >
                             {product.title}
                           </Link>
