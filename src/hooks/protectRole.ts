@@ -9,7 +9,10 @@ export const protectRoles: FieldHook<{ id: string } & User> = ({ data, req }) =>
   }
 
   const userRoles = new Set(data?.roles || [])
-  userRoles.add('user')
 
-  return [...userRoles]
+  if (!userRoles.has('user')) {
+    userRoles.add('user')
+  }
+
+  return Array.from(userRoles)
 }

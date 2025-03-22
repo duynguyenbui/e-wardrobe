@@ -81,6 +81,7 @@ export default buildConfig({
         Logo: './decorators/Logo/index',
         Icon: './decorators/Icon/index',
       },
+      beforeDashboard: ['./decorators/BeforeDashboard/index'],
     },
   },
   // This config helps us configure global or default features that the other editors can inherit

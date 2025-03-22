@@ -42,7 +42,7 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
             onClick={() => router.push('/account')}
           >
             <UserIcon className="w-5 text-primary" />
-            <span className="text-primary font-bold">{user?.name}</span>
+            <span className="text-primary">{user?.name}</span>
           </div>
         )}
         <Cart />

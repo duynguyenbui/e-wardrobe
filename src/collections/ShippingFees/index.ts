@@ -7,10 +7,10 @@ export const ShippingFees: CollectionConfig = {
   slug: 'shippingFees',
   labels: {
     singular: {
-      vi: 'Phí vận chuyển (Hệ thống)',
+      vi: 'Phí vận chuyển',
     },
     plural: {
-      vi: 'Phí vận chuyển (Hệ thống)',
+      vi: 'Phí vận chuyển',
     },
   },
   access: {

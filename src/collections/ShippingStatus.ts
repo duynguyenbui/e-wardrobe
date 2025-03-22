@@ -6,10 +6,10 @@ export const ShippingStatuses: CollectionConfig = {
   slug: 'shippingStatuses',
   labels: {
     singular: {
-      vi: 'Trạng thái vận chuyển (Hệ thống)',
+      vi: 'Trạng thái vận chuyển',
     },
     plural: {
-      vi: 'Trạng thái vận chuyển (Hệ thống)',
+      vi: 'Trạng thái vận chuyển',
     },
   },
   access: {
