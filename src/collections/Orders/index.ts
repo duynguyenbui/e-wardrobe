@@ -105,7 +105,7 @@ export const Orders: CollectionConfig = {
     {
       name: 'totalPrice',
       label: {
-        vi: 'Tổng giá trị (bao gồm mã giảm giá, và voucher)',
+        vi: 'Tổng giá trị (bao gồm mã giảm giá, voucher, và phí vận chuyển)',
       },
       type: 'number',
       required: true,

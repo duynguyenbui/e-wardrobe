@@ -5,7 +5,7 @@ import { Fragment, useState } from 'react'
 import { Button } from '../ui/button'
 import { toast } from 'sonner'
 import { Order } from '@/payload-types'
-import { PiggyBank, ShoppingCart } from 'lucide-react'
+import { ShoppingCart } from 'lucide-react'
 import { SHIPPING_STATUS } from '@/constants'
 
 export default function ChangeOrderStatus({ order }: { order: Order }) {

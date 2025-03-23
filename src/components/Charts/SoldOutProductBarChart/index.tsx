@@ -1,6 +1,5 @@
 'use client'
 
-import { TrendingUp } from 'lucide-react'
 import { Bar, BarChart, XAxis, YAxis } from 'recharts'
 
 import {
@@ -24,6 +23,7 @@ export function SoldOutProductBarChart() {
   const chartConfig = {
     quantitySold: {
       label: 'Số lượng bán',
+      color: 'hsl(var(--chart-1))',
     },
   } satisfies ChartConfig
 
@@ -61,7 +61,7 @@ export function SoldOutProductBarChart() {
             />
             <XAxis dataKey="quantitySold" type="number" hide />
             <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
-            <Bar dataKey="quantitySold" layout="vertical" radius={5} />
+            <Bar dataKey="quantitySold" fill="hsl(var(--chart-1))" layout="vertical" radius={5} />
           </BarChart>
         </ChartContainer>
       </CardContent>

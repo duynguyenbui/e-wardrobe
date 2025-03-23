@@ -947,7 +947,6 @@ export interface ShippingFee {
  */
 export interface Conversation {
   id: string;
-  uuid: string;
   user: string | User;
   messages?:
     | {
@@ -1735,7 +1734,6 @@ export interface ShippingStatusesSelect<T extends boolean = true> {
  * via the `definition` "conversation_select".
  */
 export interface ConversationSelect<T extends boolean = true> {
-  uuid?: T;
   user?: T;
   messages?:
     | T

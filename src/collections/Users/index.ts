@@ -67,6 +67,7 @@ export const Users: CollectionConfig = {
       admin: {
         date: {
           pickerAppearance: 'dayOnly',
+          displayFormat: 'dd/MM/yyyy',
         },
       },
       required: true,

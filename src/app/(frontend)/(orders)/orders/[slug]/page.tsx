@@ -38,7 +38,7 @@ export default async function OrderDetailsPage({ params: paramsPromise }: Args) 
     notFound()
   }
 
-  const { lineItems, shippingAddress, customer } = order
+  const { lineItems, shippingAddress, customer, shippingFee } = order
 
   if (
     !Array.isArray(lineItems) ||
@@ -54,10 +54,10 @@ export default async function OrderDetailsPage({ params: paramsPromise }: Args) 
 
   const discountCouponValue =
     (order.coupon as any)?.discountType === 'percentage'
-      ? ((order.coupon as any)?.discountAmount * subTotal) / 100
+      ? ((order.coupon as any)?.discountAmount * (subTotal + shippingFee)) / 100
       : (order.coupon as any)?.discountAmount || 0
 
-  const totalPrice = subTotal + (order.shippingFee || 0) - discountCouponValue
+  const totalPrice = subTotal + shippingFee - discountCouponValue
 
   return (
     <div className="grid min-h-screen w-full overflow-hidden container">

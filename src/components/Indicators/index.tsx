@@ -17,7 +17,7 @@ export default function AdminIndicator() {
           Trang quản trị
           <DoorClosed className="w-4 h-4" />
         </Link>
-        <Link href="/statistics" className="flex items-center gap-2">
+        <Link href="/admin/statistics" className="flex items-center gap-2">
           Thống kê
           <PiIcon className="w-4 h-4" />
         </Link>

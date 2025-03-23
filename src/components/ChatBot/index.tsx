@@ -1,7 +1,7 @@
 'use client'
 
 import type React from 'react'
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef } from 'react'
 import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
@@ -10,7 +10,6 @@ import { uuidv4 } from '@/utilities/uuid'
 import { useChat } from 'ai/react'
 import { Message } from 'ai/react'
 import ReactMarkdown from 'react-markdown'
-import { getProductVariants } from '@/actions/productVariants'
 
 const initialMessages: Message[] = [
   {

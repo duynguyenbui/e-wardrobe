@@ -490,7 +490,7 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
             link: {
               type: 'custom',
               label: 'Trò chuyện',
-              url: '/chat',
+              url: '/chatbot',
             },
           },
           {

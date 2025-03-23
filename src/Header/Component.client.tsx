@@ -8,7 +8,6 @@ import type { Header } from '@/payload-types'
 
 import { HeaderNav } from './Nav'
 import Image from 'next/image'
-import { StoreIcon } from 'lucide-react'
 interface HeaderClientProps {
   data: Header
 }

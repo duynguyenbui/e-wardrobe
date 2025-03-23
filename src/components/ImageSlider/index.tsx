@@ -2,7 +2,7 @@
 
 import { Media } from '@/payload-types'
 import type React from 'react'
-import { useState, useRef, useEffect } from 'react'
+import { useState, useRef, useEffect, useCallback } from 'react'
 import Image from 'next/image'
 import { cn } from '@/utilities/ui'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
@@ -24,9 +24,9 @@ const ImageSlider: React.FC<ImageSliderProps> = ({
   const [isLoading, setIsLoading] = useState(true)
   const sliderRef = useRef<HTMLDivElement>(null)
 
-  const nextSlide = () => {
+  const nextSlide = useCallback(() => {
     setCurrentSlide((prevSlide) => (prevSlide + 1) % images.length)
-  }
+  }, [images.length])
 
   const prevSlide = () => {
     setCurrentSlide((prevSlide) => (prevSlide - 1 + images.length) % images.length)

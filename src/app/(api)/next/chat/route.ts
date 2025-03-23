@@ -1,6 +1,9 @@
 import { CoreMessage, streamText } from 'ai'
 import { createOpenAI } from '@ai-sdk/openai'
 import { getProductVariants } from '@/actions/productVariants'
+import { getPayloadClient } from '@/get-payload'
+import { getServerSideUser } from '@/get-serverside-user'
+
 export async function POST(req: Request) {
   const { messages }: { messages: CoreMessage[] } = await req.json()
 
@@ -8,6 +11,56 @@ export async function POST(req: Request) {
     baseURL: process.env.OPENAI_BASE_URL_COMPLETION!,
     apiKey: process.env.OPENAI_API_KEY_COMPLETION!,
   })
+
+  const { user } = await getServerSideUser()
+  const payload = await getPayloadClient()
+
+  if (!user) {
+    return new Response('Bạn cần đăng nhập để sử dụng chức năng này', { status: 401 })
+  }
+
+  const { docs: convversations } = await payload.find({
+    collection: 'conversation',
+    where: {
+      user: {
+        equals: user?.id,
+      },
+    },
+    limit: 1,
+    depth: 1,
+    pagination: false,
+  })
+
+  let conversation = convversations[0]
+
+  if (!conversation && user) {
+    conversation = await payload.create({
+      collection: 'conversation',
+      data: {
+        user: user,
+        messages: [],
+      },
+    })
+  }
+
+  const payloadMessages: any = messages
+    .filter((message) => {
+      return message.role === 'assistant' || message.role === 'user'
+    })
+    .map((message) => {
+      return {
+        role: message.role,
+        content: message.content || '',
+      }
+    })
+
+  if (conversation?.id && payloadMessages.length > 0) {
+    await payload.update({
+      collection: 'conversation',
+      id: conversation.id,
+      data: { messages: [...payloadMessages] },
+    })
+  }
 
   const coreMessages: CoreMessage[] = []
   const productVariants = await getProductVariants()
@@ -28,7 +81,7 @@ export async function POST(req: Request) {
 
     coreMessages.push({
       role: 'system',
-      content: `Sản phẩm có thông tin: ${content}`,
+      content: `:::DATA::: Thông tin sản phẩm: ${content}`,
     })
   })
 

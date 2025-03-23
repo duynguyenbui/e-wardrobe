@@ -175,7 +175,13 @@ export const createOrder = async (data: TCreateOrderValidator) => {
     return { success: false, message: 'Phương thức thanh toán không hợp lệ', data: null }
   }
 
-  const totalPriceWithCoupon = totalPrice - couponValue
+  let shippingFeeDiscount = 0.0
+
+  if (coupon && coupon.discountType === 'percentage') {
+    shippingFeeDiscount = (shippingFeeValue * coupon.discountAmount) / 100
+  }
+
+  const totalPriceWithCoupon = totalPrice + shippingFeeValue - couponValue - shippingFeeDiscount
 
   const order = await payload.create({
     collection: 'orders',

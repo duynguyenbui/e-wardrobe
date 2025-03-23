@@ -12,15 +12,6 @@ export const Conversation: CollectionConfig = {
   },
   fields: [
     {
-      name: 'uuid',
-      label: {
-        vi: 'Mã cuộc trò chuyện',
-      },
-      type: 'text',
-      unique: true,
-      required: true,
-    },
-    {
       name: 'user',
       label: {
         vi: 'Người dùng',
