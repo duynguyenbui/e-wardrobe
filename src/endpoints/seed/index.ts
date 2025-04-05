@@ -199,10 +199,10 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
   payload.logger.info(`Seeding demo author and user...`)
 
   const [image1Buffer, image2Buffer, image3Buffer, hero1Buffer] = await Promise.all([
-    fetchFileByDisk('D:/Projects/PayloadCMS/e-wardrobe/src/endpoints/seed', 'image-post1.webp'),
-    fetchFileByDisk('D:/Projects/PayloadCMS/e-wardrobe/src/endpoints/seed', 'image-post2.webp'),
-    fetchFileByDisk('D:/Projects/PayloadCMS/e-wardrobe/src/endpoints/seed', 'image-post3.webp'),
-    fetchFileByDisk('D:/Projects/PayloadCMS/e-wardrobe/src/endpoints/seed', 'image-hero1.webp'),
+    fetchFileByDisk('D:/PayloadCMS/e-wardrobe/src/endpoints/seed', 'image-post1.webp'),
+    fetchFileByDisk('D:/PayloadCMS/e-wardrobe/src/endpoints/seed', 'image-post2.webp'),
+    fetchFileByDisk('D:/PayloadCMS/e-wardrobe/src/endpoints/seed', 'image-post3.webp'),
+    fetchFileByDisk('D:/PayloadCMS/e-wardrobe/src/endpoints/seed', 'image-hero1.webp'),
   ])
 
   const [
@@ -992,7 +992,7 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
 
   for (let i = 1; i <= 10; i++) {
     const imageBuffer = await fetchFileByDisk(
-      'D:/Projects/PayloadCMS/e-wardrobe/pics', // Change it depends on your local path
+      'D:/PayloadCMS/e-wardrobe/pics', // Change it depends on your local path
       `${i}.jpg`,
     )
 

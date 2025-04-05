@@ -10,6 +10,40 @@ import Stripe from 'stripe'
 import { redirect } from 'next/navigation'
 import { formatVND } from '@/utilities/currency'
 
+export const repay = async (orderId: string) => {
+  const { user: currentUser } = await getServerSideUser()
+  if (!currentUser) return { success: false, message: 'Không tìm thấy người dùng' }
+
+  if (!orderId) return { success: false, message: 'Không tìm thấy đơn hàng' }
+
+  const payload = await getPayloadClient()
+
+  const order = await payload.findByID({
+    collection: 'orders',
+    id: orderId,
+    depth: 2,
+  })
+
+  if (!order) return { success: false, message: 'Không tìm thấy đơn hàng' }
+
+  if (order.type !== 'stripe')
+    return {
+      success: false,
+      message: 'Phương thức thanh toán không hợp lệ cho chức năng thanh toán lại',
+    }
+
+  if ((order.customer as any)?.id !== currentUser.id) {
+    return { success: false, message: 'Người dùng không hợp lệ' }
+  }
+
+  if (order.isPaid) return { success: false, message: 'Đơn hàng đã được thanh toán' }
+
+  // handle repay here
+  const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = []
+
+  return { success: false, data: order, message: 'Chức năng thanh toán lại đang được bảo trì' }
+}
+
 export const createOrder = async (data: TCreateOrderValidator) => {
   const currentDate = new Date()
 
@@ -447,10 +481,19 @@ export const getRevenueWithin3MonthsGroupByDay = async () => {
   const { docs: orders } = await payload.find({
     collection: 'orders',
     where: {
-      createdAt: {
-        greater_than_equal: threeMonthsAgo,
-        less_than_equal: currentDate,
-      },
+      and: [
+        {
+          createdAt: {
+            greater_than_equal: threeMonthsAgo,
+            less_than_equal: currentDate,
+          },
+        },
+        {
+          isPaid: {
+            equals: true,
+          },
+        },
+      ],
     },
     pagination: false,
     depth: 1,
@@ -528,7 +571,7 @@ export const getNumberOfSellingProduct = async () => {
     }),
   )
     .then((result) => result.sort((a, b) => b.quantitySold - a.quantitySold))
-    .then((result) => result.slice(0, 10))
+    .then((result) => result.slice(0, 5))
 
   return { success: true, data: sellingProductArray }
 }

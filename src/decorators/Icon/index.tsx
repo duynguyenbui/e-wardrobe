@@ -9,8 +9,13 @@ const Icon: React.FC = () => {
   const router = useRouter()
 
   const back = () => {
-    if (['/admin'].includes(pathname ?? '/')) {
-      router.push('/')
+    const routes: Record<string, string> = {
+      '/admin': '/',
+      '/admin/statistics': '/admin',
+    }
+
+    if (pathname && routes[pathname]) {
+      router.push(routes[pathname])
     }
   }
 

@@ -69,7 +69,7 @@ const SignUpForm = () => {
         <div className="flex flex-col gap-4">
           <div className="mx-auto w-full max-w-sm rounded-md p-6 shadow-xl border">
             <div className="mb-6 flex flex-col items-center space-y-2">
-              <CloudLightningIcon className="h-10 w-10 text-blue-700" />
+              <img src="/logo.png" alt="Logo" className="w-20 h-20" />
               <p className="text-muted-foreground">Đăng ký tài khoản trong vòng 2 phút.</p>
             </div>
             <div>

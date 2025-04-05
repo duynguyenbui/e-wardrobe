@@ -17,6 +17,7 @@ import { getOrder } from '@/actions/orders'
 import { getServerSideUser } from '@/get-serverside-user'
 import { notFound } from 'next/navigation'
 import ChangeOrderStatus from '@/components/ChangeOrderStatus'
+import RepayAction from '@/components/RepayAction'
 
 type Args = {
   params: Promise<{
@@ -69,7 +70,10 @@ export default async function OrderDetailsPage({ params: paramsPromise }: Args) 
               <span className="font-normal text-gray-500 dark:text-gray-400">
                 vào ngày {moment(order.createdAt).format('LL')}
               </span>
-              <ChangeOrderStatus order={order!} />
+              <div className="flex gap-2">
+                <ChangeOrderStatus order={order!} />
+                {!order.isPaid && order.type === 'stripe' && <RepayAction orderId={order.id} />}
+              </div>
             </h1>
           </div>
           <div className="flex flex-col md:grid md:grid-cols-6 gap-6">

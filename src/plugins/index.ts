@@ -87,6 +87,9 @@ export const plugins: Plugin[] = [
           vi: 'Biểu mẫu',
         },
       },
+      admin: {
+        hidden: true,
+      },
       fields: ({ defaultFields }) => {
         return defaultFields.map((field) => {
           if ('name' in field && field.name === 'confirmationMessage') {

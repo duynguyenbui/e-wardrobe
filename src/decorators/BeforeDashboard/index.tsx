@@ -21,7 +21,8 @@ export default function BeforeDashboard() {
               </div>
               <h1 className="text-2xl md:text-3xl font-bold text-white">Chào mừng trở lại!</h1>
               <p className="text-blue-100 max-w-md">
-                Cảm ơn bạn đã quay trở lại với cửa hàng thời trang eWardrobe. Chúng tôi rất vui khi được phục vụ và đồng hành cùng phong cách thời trang của bạn.
+                Chào mừng bạn trở lại với vai trò quản trị viên tại eWardrobe. Chúng tôi rất vui khi
+                được hợp tác và hỗ trợ bạn trong công việc quản lý.
               </p>
             </div>
           </div>

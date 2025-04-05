@@ -21,6 +21,7 @@ export const Warranties: CollectionConfig = {
   },
   admin: {
     useAsTitle: 'title',
+    hidden: () => true,
   },
   fields: [
     {
