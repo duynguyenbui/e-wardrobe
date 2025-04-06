@@ -36,12 +36,105 @@ export const repay = async (orderId: string) => {
     return { success: false, message: 'Người dùng không hợp lệ' }
   }
 
+  const oneDayInMilliseconds = 24 * 60 * 60 * 1000
+  const orderCreatedTime = new Date(order.createdAt).getTime()
+
+  if (Date.now() - orderCreatedTime > oneDayInMilliseconds) {
+    return { success: false, message: 'Đơn hàng chỉ có thể thanh toán lại trong vòng 1 ngày' }
+  }
+
   if (order.isPaid) return { success: false, message: 'Đơn hàng đã được thanh toán' }
 
-  // handle repay here
-  const lineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = []
+  let session: Stripe.Response<Stripe.Checkout.Session> | undefined = undefined
+  const stripeLineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = []
 
-  return { success: false, data: order, message: 'Chức năng thanh toán lại đang được bảo trì' }
+  const shippingFeeValue = order.shippingFee || 0
+
+  if (shippingFeeValue > 0) {
+    stripeLineItems.push({
+      price_data: {
+        currency: 'vnd',
+        product_data: {
+          name: 'Phí vận chuyển',
+          description: `Phí vận chuyển cho đơn hàng ${formatVND(shippingFeeValue)}`,
+        },
+        unit_amount: Math.round(shippingFeeValue),
+      },
+      quantity: 1,
+    })
+  }
+
+  const lineItems = order.lineItems || []
+
+  lineItems.forEach((item: any) => {
+    stripeLineItems.push({
+      price_data: {
+        currency: 'vnd',
+        product_data: {
+          name: item.productVariant.title,
+          description: item.productVariant.description,
+        },
+        unit_amount: Math.round(item.finalProductPrice),
+      },
+      quantity: item.quantityToBuy,
+    })
+  })
+
+  let stripeCoupon: Stripe.Coupon | null = null
+  let couponValue = 0
+
+  if (order.coupon) {
+    let totalPriceWithoutCoupon = lineItems.reduce(
+      (acc: number, item: any) => acc + item.finalProductPrice,
+      0,
+    )
+
+    if (shippingFeeValue) {
+      totalPriceWithoutCoupon += shippingFeeValue
+    }
+
+    const coupon = order.coupon as any
+
+    let stripeCouponData: Stripe.CouponCreateParams = {
+      name: `${coupon.code}`,
+    }
+
+    if (coupon.discountType === 'fixed') {
+      stripeCouponData = {
+        ...stripeCouponData,
+        amount_off: Math.round(couponValue),
+        currency: 'vnd',
+      }
+    } else if (coupon.discountType === 'percentage') {
+      stripeCouponData = {
+        ...stripeCouponData,
+        percent_off: coupon.discountAmount,
+      }
+
+      if (couponValue) {
+        couponValue = (totalPriceWithoutCoupon * coupon.discountAmount) / 100
+      }
+    }
+
+    stripeCoupon = await stripe.coupons.create(stripeCouponData)
+  }
+
+  session = await stripe.checkout.sessions.create({
+    line_items: stripeLineItems,
+    mode: 'payment',
+    success_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/orders/success?orderId=${order.id}`,
+    cancel_url: `${process.env.NEXT_PUBLIC_SERVER_URL}/orders/cancel?orderId=${order.id}`,
+    metadata: {
+      orderId: order.id,
+    },
+    discounts: stripeCoupon ? [{ coupon: stripeCoupon.id }] : [],
+  })
+
+  if (session?.url) {
+    redirect(session.url)
+  } else {
+    return { success: false, message: 'Lỗi khi tạo session thanh toán' }
+  }
 }
 
 export const createOrder = async (data: TCreateOrderValidator) => {
@@ -232,6 +325,19 @@ export const createOrder = async (data: TCreateOrderValidator) => {
       coupon: coupon,
     },
   })
+
+  if (order.type === 'stripe') {
+    const checkingStripe = await payload.jobs.queue({
+      input: {
+        orderId: order.id,
+      },
+      task: 'cancelOrder',
+      queue: 'checkPayment',
+      waitUntil: new Date(Date.now() + 1000 * 60 * 2),
+    })
+
+    console.log(checkingStripe)
+  }
 
   if (!order) {
     return { success: false, message: 'Lỗi khi tạo đơn hàng', data: null }

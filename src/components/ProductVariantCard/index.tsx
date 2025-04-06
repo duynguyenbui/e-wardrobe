@@ -80,7 +80,7 @@ const ProductVariantCard: React.FC<{
         </div>
         {showAddToCart && (
           <Button
-            onClick={() => add({ id, title, price, quantity, quantityToBuy: 1, discount })}
+            onClick={() => add({ id, title, price, quantity, quantityToBuy: 1, discount, isBuying: true })}
             className="w-full"
           >
             Thêm vào giỏ hàng

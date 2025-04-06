@@ -70,10 +70,14 @@ export default async function OrderDetailsPage({ params: paramsPromise }: Args) 
               <span className="font-normal text-gray-500 dark:text-gray-400">
                 vào ngày {moment(order.createdAt).format('LL')}
               </span>
-              <div className="flex gap-2">
-                <ChangeOrderStatus order={order!} />
-                {!order.isPaid && order.type === 'stripe' && <RepayAction orderId={order.id} />}
-              </div>
+              {!order.note?.includes(
+                'NOTE: Đơn hàng đã bị hủy do chưa thanh toán sau 2 phút (Thông báo tự động)',
+              ) && (
+                <div className="flex gap-2">
+                  <ChangeOrderStatus order={order!} />
+                  {!order.isPaid && order.type === 'stripe' && <RepayAction orderId={order.id} />}
+                </div>
+              )}
             </h1>
           </div>
           <div className="flex flex-col md:grid md:grid-cols-6 gap-6">

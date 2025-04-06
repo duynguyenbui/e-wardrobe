@@ -4,7 +4,7 @@ export const home: RequiredDataFromCollectionSlug<'pages'> = {
   slug: 'trang-chu',
   _status: 'published',
   hero: {
-    type: 'highImpact',
+    type: 'lowImpact',
     links: [
       {
         link: {

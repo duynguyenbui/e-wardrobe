@@ -1,20 +1,26 @@
 'use client'
 
 import { type CartProductVariant, useCart } from '@/stores/useCart'
-import React from 'react'
 import { Button } from '../ui/button'
 import { Minus, Plus, X } from 'lucide-react'
 import { formatVND } from '@/utilities/currency'
+import { Checkbox } from '@/components/ui/checkbox'
 
 export function CartItem({ cartProductVariant }: { cartProductVariant: CartProductVariant }) {
   const { title, price, quantityToBuy, discount } = cartProductVariant
-  const { remove, plus, minus } = useCart()
+  const { remove, plus, minus, setIsBuying } = useCart()
 
   const totalPrice = price * quantityToBuy
   const totalPriceWithDiscount = totalPrice - totalPrice * ((discount || 0) / 100)
 
   return (
     <div className="flex items-center gap-1 py-4 border-b last:border-b-0">
+      <Checkbox
+        id={`buying-option-${cartProductVariant.id}`}
+        checked={cartProductVariant.isBuying}
+        onCheckedChange={(checked) => setIsBuying(cartProductVariant.id, checked === true)}
+        className="mr-2 data-[state=checked]:bg-primary data-[state=checked]:text-primary-foreground"
+      />
       <div className="flex-grow space-y-1">
         <h3 className="text-sm font-medium">{title}</h3>
         <p className="text-sm text-muted-foreground">{formatVND(totalPriceWithDiscount)} mỗi cái</p>

@@ -20,7 +20,7 @@ import Link from 'next/link'
 import { Fragment, useEffect, useState, useTransition } from 'react'
 import { useForm, Controller } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { CreateOrderValidator, TCreateOrderValidator } from '@/validation'
+import { CreateOrderValidator, type TCreateOrderValidator } from '@/validation'
 import { Textarea } from '@/components/ui/textarea'
 import { Label } from '@/components/ui/label'
 import {
@@ -61,10 +61,12 @@ export const OrderForm = () => {
     defaultValues: {
       userId: user?.id || '',
       addressId: '',
-      lineItems: items.map((item) => ({
-        productVariantId: item.id,
-        quantityToBuy: item.quantityToBuy,
-      })),
+      lineItems: items
+        .filter((item) => item.isBuying)
+        .map((item) => ({
+          productVariantId: item.id,
+          quantityToBuy: item.quantityToBuy,
+        })),
       couponId: '',
       note: '',
       type: 'stripe',
@@ -72,16 +74,18 @@ export const OrderForm = () => {
   })
 
   useEffect(() => {
-    if (items.length === 0) {
-      router.push('/orders/list')
+    if (items.filter((item) => item.isBuying).length === 0) {
+      router.push('/products')
     }
 
     setValue(
       'lineItems',
-      items.map((item) => ({
-        productVariantId: item.id,
-        quantityToBuy: item.quantityToBuy,
-      })),
+      items
+        .filter((item) => item.isBuying)
+        .map((item) => ({
+          productVariantId: item.id,
+          quantityToBuy: item.quantityToBuy,
+        })),
     )
   }, [items.length, router, items, setValue])
 
@@ -185,44 +189,46 @@ export const OrderForm = () => {
                       </TableRow>
                     </TableHeader>
                     <TableBody>
-                      {items.map((item) => (
-                        <TableRow key={item.id}>
-                          <TableCell className="hidden md:table-cell">{item.title}</TableCell>
-                          <TableCell className="font-medium">
-                            {formatVND(item.price - (item.price * item.discount) / 100)}
-                          </TableCell>
-                          <TableCell>{item.quantityToBuy}</TableCell>
-                          <TableCell>
-                            {formatVND(
-                              item.quantityToBuy *
-                                (item.price - (item.price * item.discount) / 100),
-                            )}
-                          </TableCell>
-                          <TableCell className="gap-2 flex justify-center">
-                            <Button
-                              type="button"
-                              size="icon"
-                              variant="ghost"
-                              onClick={() => minus(item.id)}
-                              disabled={item.quantityToBuy <= 1}
-                            >
-                              <Minus className="size-2" />
-                            </Button>
-                            <Button type="button" size="icon" onClick={() => remove(item)}>
-                              <Trash2Icon className="size-5" />
-                            </Button>
-                            <Button
-                              type="button"
-                              size="icon"
-                              variant="ghost"
-                              onClick={() => plus(item.id)}
-                              disabled={item.quantityToBuy >= item.quantity}
-                            >
-                              <Plus className="size-2" />
-                            </Button>
-                          </TableCell>
-                        </TableRow>
-                      ))}
+                      {items
+                        .filter((item) => item.isBuying)
+                        .map((item) => (
+                          <TableRow key={item.id}>
+                            <TableCell className="hidden md:table-cell">{item.title}</TableCell>
+                            <TableCell className="font-medium">
+                              {formatVND(item.price - (item.price * item.discount) / 100)}
+                            </TableCell>
+                            <TableCell>{item.quantityToBuy}</TableCell>
+                            <TableCell>
+                              {formatVND(
+                                item.quantityToBuy *
+                                  (item.price - (item.price * item.discount) / 100),
+                              )}
+                            </TableCell>
+                            <TableCell className="gap-2 flex justify-center">
+                              <Button
+                                type="button"
+                                size="icon"
+                                variant="ghost"
+                                onClick={() => minus(item.id)}
+                                disabled={item.quantityToBuy <= 1}
+                              >
+                                <Minus className="size-2" />
+                              </Button>
+                              <Button type="button" size="icon" onClick={() => remove(item)}>
+                                <Trash2Icon className="size-5" />
+                              </Button>
+                              <Button
+                                type="button"
+                                size="icon"
+                                variant="ghost"
+                                onClick={() => plus(item.id)}
+                                disabled={item.quantityToBuy >= item.quantity}
+                              >
+                                <Plus className="size-2" />
+                              </Button>
+                            </TableCell>
+                          </TableRow>
+                        ))}
                     </TableBody>
                   </Table>
                 </CardContent>

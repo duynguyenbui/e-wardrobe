@@ -15,3 +15,8 @@ export enum SHIPPING_STATUS {
   Delivered = 'delivered',
   Received = 'received',
 }
+
+export const CANCEL_ORDER_STATUS = {
+  SUCCESS: 'success',
+  FAILED: 'failed',
+}

@@ -31,6 +31,7 @@ import { Coupons } from './collections/Coupons'
 import { ShippingFees } from './collections/ShippingFees'
 import { ShippingStatuses } from './collections/ShippingStatus'
 import { Conversation } from './collections/Conversation'
+import { CANCEL_ORDER_STATUS } from './constants'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -84,7 +85,7 @@ export default buildConfig({
       beforeDashboard: ['./decorators/BeforeDashboard/index'],
       afterNavLinks: ['./decorators/AfterNavLink/index'],
       views: {
-        'statistics': {
+        statistics: {
           path: '/statistics',
           Component: './decorators/Views/Statistics/index',
         },
@@ -132,17 +133,98 @@ export default buildConfig({
   jobs: {
     access: {
       run: ({ req }: { req: PayloadRequest }): boolean => {
-        // Allow logged in users to execute this endpoint (default)
         if (req.user) return true
-
-        // If there is no logged in user, then check
-        // for the Vercel Cron secret to be present as an
-        // Authorization header:
         const authHeader = req.headers.get('authorization')
         return authHeader === `Bearer ${process.env.CRON_SECRET}`
       },
     },
-    tasks: [],
+    tasks: [
+      {
+        retries: 2,
+        slug: 'cancelOrder',
+        inputSchema: [{ name: 'orderId', type: 'text', required: true }],
+        outputSchema: [
+          {
+            name: 'orderID',
+            type: 'text',
+            required: true,
+          },
+          {
+            name: 'status',
+            type: 'text',
+            required: true,
+          },
+        ],
+        handler: async ({ input, job, req }) => {
+          const { payload } = req
+          const { orderId } = input
+
+          const order = await payload.findByID({
+            collection: 'orders',
+            id: orderId,
+            depth: 2,
+          })
+
+          if (!order) {
+            return {
+              output: {
+                orderId: orderId,
+                status: CANCEL_ORDER_STATUS.FAILED,
+              },
+            }
+          }
+
+          if (order.isPaid === false) {
+            await payload.update({
+              collection: 'orders',
+              id: orderId,
+              data: {
+                note:
+                  order.note +
+                  'NOTE: Đơn hàng đã bị hủy do chưa thanh toán sau 2 phút (Thông báo tự động)',
+              },
+            })
+
+            order.lineItems?.forEach((item: any) => {
+              const productVariantId = item.productVariant.id
+              const quantityToBuy = item.quantityToBuy
+
+              payload.update({
+                collection: 'productVariants',
+                id: productVariantId,
+                data: {
+                  quantity: item.productVariant.quantity + quantityToBuy,
+                },
+              })
+            })
+
+            return {
+              output: {
+                orderId: orderId,
+                status: CANCEL_ORDER_STATUS.SUCCESS,
+              },
+            }
+          }
+
+          return {
+            output: {
+              orderId: orderId,
+              status: CANCEL_ORDER_STATUS.FAILED,
+            },
+          }
+        },
+      },
+    ],
+    autoRun: [
+      {
+        cron: '* * * * *',
+        limit: 100,
+        queue: 'checkPayment',
+      },
+    ],
+    shouldAutoRun: async (payload) => {
+      return true
+    },
   },
   i18n: {
     supportedLanguages: { vi },

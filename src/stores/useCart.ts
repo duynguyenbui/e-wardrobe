@@ -2,8 +2,12 @@ import { ProductVariant } from '@/payload-types'
 import { create } from 'zustand'
 import { persist, createJSONStorage } from 'zustand/middleware'
 
-export type CartProductVariant = Pick<ProductVariant, 'id' | 'price' | 'quantity' | 'title' | 'discount'> & {
+export type CartProductVariant = Pick<
+  ProductVariant,
+  'id' | 'price' | 'quantity' | 'title' | 'discount'
+> & {
   quantityToBuy: number
+  isBuying: boolean
 }
 
 type CartStore = {
@@ -13,6 +17,7 @@ type CartStore = {
   clear: () => void
   minus: (variantId: string) => void
   plus: (variantId: string) => void
+  setIsBuying: (variantId: string, isBuying: boolean) => void
 }
 
 export const useCart = create<CartStore>()(
@@ -43,18 +48,29 @@ export const useCart = create<CartStore>()(
             }
           }
 
-          if (item.quantityToBuy > item.quantity) {
-            item.quantityToBuy = item.quantity
-          }
+          const quantityToBuy =
+            item.quantityToBuy > item.quantity ? item.quantity : item.quantityToBuy
 
-          return { items: [...state.items, item] }
+          return {
+            items: [
+              ...state.items,
+              {
+                ...item,
+                quantityToBuy,
+                isBuying: true, // luôn set khi thêm mới
+              },
+            ],
+          }
         })
       },
       remove: (item) =>
         set((state: CartStore) => ({
           items: state.items.filter((i) => i.id !== item.id),
         })),
-      clear: () => set({ items: [] }),
+      clear: () =>
+        set((state: CartStore) => ({
+          items: state.items.filter((i) => !i.isBuying),
+        })),
       minus: (variantId) =>
         set((state: CartStore) => ({
           items: state.items.map((i) =>
@@ -70,6 +86,10 @@ export const useCart = create<CartStore>()(
               ? { ...i, quantityToBuy: i.quantityToBuy + 1 }
               : i,
           ),
+        })),
+      setIsBuying: (variantId, isBuying) =>
+        set((state: CartStore) => ({
+          items: state.items.map((i) => (i.id === variantId ? { ...i, isBuying } : i)),
         })),
     }),
     {

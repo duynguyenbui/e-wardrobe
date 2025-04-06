@@ -5,10 +5,11 @@ import { Sheet, SheetContent, SheetTitle, SheetTrigger } from '@/components/ui/s
 import { Tooltip, TooltipContent, TooltipTrigger } from '@/components/ui/tooltip'
 import { useCart } from '@/stores/useCart'
 import { CartItem } from '../CartItem'
+import { Checkbox } from '@/components/ui/checkbox'
 import Link from 'next/link'
 
 export function Cart() {
-  const { items } = useCart()
+  const { items, setIsBuying } = useCart()
   const totalItems = items.reduce((sum, item) => sum + item.quantityToBuy, 0)
 
   return (
