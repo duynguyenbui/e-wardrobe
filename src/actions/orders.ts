@@ -335,8 +335,6 @@ export const createOrder = async (data: TCreateOrderValidator) => {
       queue: 'checkPayment',
       waitUntil: new Date(Date.now() + 1000 * 60 * 2),
     })
-
-    console.log(checkingStripe)
   }
 
   if (!order) {
@@ -364,10 +362,8 @@ export const createOrder = async (data: TCreateOrderValidator) => {
   }
 
   if (paymentMethod === 'cod') {
-    // handle cod payment
     return { success: true, message: 'Đơn hàng đã được tạo thành công' }
   } else {
-    // handle online payment
     const stripeLineItems: Stripe.Checkout.SessionCreateParams.LineItem[] = []
 
     lineItems.forEach((item: any) => {

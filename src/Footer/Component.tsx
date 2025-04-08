@@ -8,6 +8,7 @@ import { ThemeSelector } from '@/providers/Theme/ThemeSelector'
 import { CMSLink } from '@/components/Link'
 import AdminIndicator from '@/components/Indicators'
 import Image from 'next/image'
+import { MountainIcon } from 'lucide-react'
 export async function Footer() {
   const footerData: Footer = await getCachedGlobal('footer', 1)()
   const navItems = footerData?.navItems || []
@@ -16,7 +17,7 @@ export async function Footer() {
     <footer className="mt-auto border-t border-border bg-black dark:bg-card text-white">
       <div className="container py-8 gap-8 flex flex-col md:flex-row md:justify-between">
         <Link className="flex items-center" href="/">
-          <Image src="/logo.png" alt="eWardrobe Logo" width={100} height={100} />
+          <MountainIcon className="h-10 w-10 text-blue-800" />
         </Link>
 
         <div className="flex flex-col-reverse items-start md:flex-row gap-4 md:items-center">

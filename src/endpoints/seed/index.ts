@@ -496,6 +496,13 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
           {
             link: {
               type: 'custom',
+              label: 'Bán chạy nhất',
+              url: '/best-seller',
+            },
+          },
+          {
+            link: {
+              type: 'custom',
               label: 'Mã giảm giá',
               url: '/coupons',
             },
@@ -526,13 +533,6 @@ export const seed = async ({ payload, req }: { payload: Payload; req: PayloadReq
               type: 'custom',
               label: 'Đăng ký',
               url: '/register',
-            },
-          },
-          {
-            link: {
-              type: 'custom',
-              label: 'Tài khoản',
-              url: '/account',
             },
           },
           {

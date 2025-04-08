@@ -1,6 +1,4 @@
 'use client'
-
-import React from 'react'
 import {
   Carousel,
   CarouselContent,
@@ -30,8 +28,8 @@ export default function Variants({ variants }: VariantsProps) {
       <div>
         <h2 className="text-2xl font-bold">Phiên bản</h2>
         <p className="text-sm text-muted-foreground">
-          Chọn một phiên bản để thêm vào giỏ hàng. Nếu bạn cần giúp đỡ về kích cỡ, hãy sử dụng công cụ
-          khuyến nghị kích cỡ bên dưới.
+          Chọn một phiên bản để thêm vào giỏ hàng. Nếu bạn cần giúp đỡ về kích cỡ, hãy sử dụng công
+          cụ khuyến nghị kích cỡ bên dưới.
         </p>
       </div>
 
@@ -60,7 +58,11 @@ export default function Variants({ variants }: VariantsProps) {
           Khuyến nghị kích cỡ
           <PaintRollerIcon className="w-5 h-5 ml-2" />
         </Button>
-        <Button variant="default" onClick={() => router.push('/chat')}>
+        <Button
+          variant="default"
+          className="bg-gradient-to-r from-blue-600 to-indigo-400"
+          onClick={() => router.push('/chatbot')}
+        >
           Chat với AI Stylist
         </Button>
       </div>

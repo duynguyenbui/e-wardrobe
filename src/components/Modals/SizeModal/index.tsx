@@ -98,7 +98,7 @@ export const SizeSelectorModal = () => {
             </Button>
           </form>
         </div>
-        {sizes.length > 0 && (
+        {sizes.length > 0 ? (
           <div className="w-full space-y-4 mt-6">
             <h3 className="text-lg font-semibold text-center">Size Được Đề Xuất</h3>
             {sizes.map((size) => (
@@ -108,7 +108,13 @@ export const SizeSelectorModal = () => {
               </div>
             ))}
           </div>
-        )}
+        ) : isLoading === false && weight && height ? (
+          <div className="w-full mt-6">
+            <p className="text-center text-sm text-muted-foreground">
+              Không tìm thấy size phù hợp với số đo của bạn
+            </p>
+          </div>
+        ) : null}
       </DialogContent>
     </Dialog>
   )

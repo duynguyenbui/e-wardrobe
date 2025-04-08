@@ -28,7 +28,7 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
   return (
     <nav className="flex gap-3">
       {/* Desktop Navigation */}
-      <div className="hidden md:flex gap-3 items-center">
+      <div className="hidden md:flex gap-1 items-center">
         {filteredNavItems.map(({ link }, i) => (
           <CMSLink key={i} {...link} appearance="link" />
         ))}
@@ -38,7 +38,7 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
         </Link>
         {user && (
           <div
-            className="flex items-center gap-2 cursor-pointer"
+            className="flex items-center gap-1 cursor-pointer"
             onClick={() => router.push('/account')}
           >
             <UserIcon className="w-5 text-primary" />
@@ -60,9 +60,9 @@ export const HeaderNav: React.FC<{ data: HeaderType }> = ({ data }) => {
           </SheetTrigger>
           <SheetContent className="w-[300px] sm:w-[200pxpx]">
             <Cart />
-            <div className="flex flex-col gap-4 justify-center mt-2">
+            <div className="flex flex-col gap-1 justify-center mt-2">
               {filteredNavItems.map(({ link }, i) => (
-                <CMSLink key={i} {...link} appearance="link" />
+                <CMSLink key={i} {...link} appearance="link"/>
               ))}
             </div>
           </SheetContent>

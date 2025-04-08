@@ -74,7 +74,7 @@ export const ProductCard: React.FC<{
         </div>
         <CardTitle className="line-clamp-2">
           <Link
-            className="hover:underline decoration-primary/30 underline-offset-2"
+            className="hover:underline bg-gradient-to-r from-blue-600 to-indigo-400 inline-block text-transparent bg-clip-text"
             href={href}
             ref={link.ref}
           >

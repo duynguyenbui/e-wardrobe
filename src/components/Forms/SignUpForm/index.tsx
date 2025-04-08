@@ -27,10 +27,9 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { Calendar } from '@/components/ui/calendar'
-import { CalendarIcon } from 'lucide-react'
+import { CalendarIcon, MountainIcon } from 'lucide-react'
 import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover'
 import { cn } from '@/utilities/ui'
-import { CloudLightningIcon } from 'lucide-react'
 
 const SignUpForm = () => {
   const { create } = useAuth()
@@ -64,12 +63,15 @@ const SignUpForm = () => {
   )
 
   return (
-    <section className="py-5">
+    <section className="py-3">
       <div className="container">
         <div className="flex flex-col gap-4">
           <div className="mx-auto w-full max-w-sm rounded-md p-6 shadow-xl border">
             <div className="mb-6 flex flex-col items-center space-y-2">
-              <img src="/logo.png" alt="Logo" className="w-20 h-20" />
+              <div className="flex gap-2 items-center">
+                <MountainIcon className="h-10 w-10 text-blue-800" />
+                <h1 className="text-2xl font-bold text-muted-foreground">E-Wardrobe</h1>
+              </div>
               <p className="text-muted-foreground">Đăng ký tài khoản trong vòng 2 phút.</p>
             </div>
             <div>

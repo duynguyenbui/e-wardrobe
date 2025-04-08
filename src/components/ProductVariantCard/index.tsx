@@ -56,17 +56,23 @@ const ProductVariantCard: React.FC<{
           onClick={() => open({ modal: ModalType.ADD_TO_CART, data: productVariant })}
         >
           <div>
-            <h3 className="text-lg font-semibold line-clamp-1">{title}</h3>
+            <h3 className="text-xl text-blue-600 font-bold line-clamp-1 transition-colors duration-200 group-hover:text-blue-800">
+              {title}
+            </h3>
             <p className="text-sm text-muted-foreground line-clamp-2 mt-1">{description}</p>
           </div>
           <Badge className="w-28">SL: {quantity}</Badge>
         </div>
         <div className="flex items-center justify-between">
           <Fragment>
-            <span className={cn(discount > 0 && 'line-through text-zinc-500 text-sm mr-2')}>
+            <span
+              className={cn(discount > 0 && 'line-through text-sm mr-2', 'text-red-500 font-bold')}
+            >
               ₫{formatVND(price)}
             </span>
-            {discount > 0 && <span>₫{formatVND(discountedPrice)}</span>}
+            {discount > 0 && (
+              <span className="text-red-500 font-bold">₫{formatVND(discountedPrice)}</span>
+            )}
           </Fragment>
           <div className="flex items-center space-x-2">
             <div className="text-sm">
@@ -80,8 +86,11 @@ const ProductVariantCard: React.FC<{
         </div>
         {showAddToCart && (
           <Button
-            onClick={() => add({ id, title, price, quantity, quantityToBuy: 1, discount, isBuying: true })}
-            className="w-full"
+            onClick={() =>
+              add({ id, title, price, quantity, quantityToBuy: 1, discount, isBuying: true })
+            }
+            className="w-full bg-blue-600 hover:bg-blue-700 text-white border-0"
+            disabled={quantity <= 0}
           >
             Thêm vào giỏ hàng
             <ShoppingBasket className="size-4" />

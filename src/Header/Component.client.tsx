@@ -8,6 +8,7 @@ import type { Header } from '@/payload-types'
 
 import { HeaderNav } from './Nav'
 import Image from 'next/image'
+import { MountainIcon } from 'lucide-react'
 interface HeaderClientProps {
   data: Header
 }
@@ -30,9 +31,9 @@ export const HeaderClient: React.FC<HeaderClientProps> = ({ data }) => {
 
   return (
     <header className="container relative z-20" {...(theme ? { 'data-theme': theme } : {})}>
-      <div className="mb-4 flex justify-between">
+      <div className="mb-4 mt-4 flex justify-between">
         <Link href="/">
-          <Image src="/logo.png" alt="eWardrobe logo" width={120} height={120} />
+          <MountainIcon className="h-10 w-10 text-blue-800" />
         </Link>
         <HeaderNav data={data} />
       </div>

@@ -7,6 +7,7 @@ import { useCart } from '@/stores/useCart'
 import { CartItem } from '../CartItem'
 import { Checkbox } from '@/components/ui/checkbox'
 import Link from 'next/link'
+import { cn } from '@/utilities/ui'
 
 export function Cart() {
   const { items, setIsBuying } = useCart()
@@ -45,7 +46,13 @@ export function Cart() {
                 </div>
               ))}
               <div className="flex flex-col gap-2 mt-auto pt-6 border-t">
-                <Link href="/orders" className={buttonVariants({ variant: 'default', size: 'lg' })}>
+                <Link
+                  href="/orders"
+                  className={cn(
+                    buttonVariants({ variant: 'default', size: 'lg' }),
+                    'bg-gradient-to-tr from-blue-500 to-indigo-400',
+                  )}
+                >
                   Tiến hành thanh toán
                 </Link>
               </div>
